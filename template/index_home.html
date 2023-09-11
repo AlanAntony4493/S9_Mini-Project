@@ -1,0 +1,707 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SMYM Mukkoottuthara</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'img/logo1.png' %}" rel="icon">
+  <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-lg-between">
+
+      <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li class="dropdown"><a href="#"><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="#about">SMYM Mukkoottuthara</a></li>
+              <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM</span> <i class="bi bi-chevron-right"></i></a>
+                <!-- <ul>
+                  <li><a href="#">SMYM-LOGO</a></li>
+                  <li><a href="#">SMYM-FLAG</a></li>
+                  <li><a href="#">SMYM-ANTHEM</a></li>
+                  <li><a href="#">SMYM-SLOGAN</a></li>
+                </ul> -->
+              </li>
+              <!-- <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li> -->
+            </ul>
+          </li>
+  
+          <li><a class="nav-link scrollto" href="#services">Services</a></li> 
+          <li><a class="nav-link scrollto " href="gallery.html">Gallery</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          {% if user.is_authenticated %}
+          <li><a class="nav-link scrollto" href="{% url 'logout' %}">Log Out</a></li>
+          {% else %}
+          <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+          {% endif %}
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+      <a href="#about" class="get-started-btn scrollto">Support Us</a>
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center justify-content-center">
+    <div class="container" data-aos="fade-up">
+
+      <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="150">
+        <div class="col-xl-6 col-lg-8" style="padding-right:none;">
+          <h1 class="head2">SMYM</h1>
+          <h1 class="head2"> MUKKOOTTUTHARA</h1>
+          <h2 class="heading">Youth in the Society for God's Kingdom...</h2>
+        </div>
+      </div>
+
+    <!-- <div class="row gy-4 mt-5 justify-content-center" data-aos="zoom-in" data-aos-delay="250">
+        
+      <div class="col-xl-2 col-md-4">
+        <a href="blood_bank.html" target="_blank"> <div class="icon-box">
+            <i class="bi bi-droplet-fill"></i>
+            <h3><a href="assets/blood bank.pdf" target="_blank">Voluntary Blood Donors List</a></h3>
+          </div></a>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <div class="icon-box">
+            <i class="bi bi-calendar-event"></i>
+            <h3><a href="#services">Upcoming Events</a></h3>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <div class="icon-box">
+            <i class="bi bi-signpost-split-fill"></i>
+            <h3><a href="#services">Career Guidance Forum</a></h3>
+          </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <a href="gallery.html"><div class="icon-box">
+            <i class="bi bi-images"></i>
+            <h3><a href="gallery.html">Gallery</a></h3>
+          </div></a>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <div class="icon-box">
+            <i class="bi bi-youtube"></i>
+            <h3><a href="https://www.youtube.com/c/SMYMMukkoottuthara/featured" target="_blank">Youtube</a></h3>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+            <img src="{% static 'img/about_3.jpg' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content" data-aos="fade-right" data-aos-delay="100">
+            <h3>Syro-Malabar Youth Movement Mukkoottuthara</h3>
+          
+            <p>
+              Syro Malabar Youth Movement (SMYM) is the official youth movement of the Syro Malabar Church.
+              SMC has more than 1.6 million catholic youth scattered all over the world.
+              The SMYM champions and lives out its mission to follow the tradition and beliefs
+              of the Syro Malabar Church for the Kingdom of God and Society, to strive for the
+              integral development of the youth and to bind together the youth of the SMC.
+              SMYM has various programmes and activities for the holistic development of youth
+              aligning its members with the religious and social causes of the Church including
+              Campus programmes against substance abuse and formation of de-addiction clubs on campuses.
+
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+        <!-- ======= Testimonials Section ======= -->
+        <section id="testimonials" class="testimonials">
+          <div class="container" data-aos="zoom-in">
+    
+            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+              <div class="swiper-wrapper">
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <img src="{% static 'img/testimonials/pope.jpg' %}" class="testimonial-img" alt="">
+                    <h3>Pope Francis</h3>
+                    <h4></h4>
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      “My message for you, dear young people, the great message entrusted to the Church, is Jesus! Yes, Jesus Himself, in His infinite love for each of us, His salvation and the new life He has bestowed upon us.”
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                  </div>
+                </div><!-- End testimonial item -->
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <img src="{% static 'img/testimonials/carlo.jfif' %}" class="testimonial-img" alt="">
+                    <h3>Bl. Carlo Acutis</h3>
+                    <h4>Cyber Apostle</h4>
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      Our goal must be the infinite and not the finite. The Infinity is our homeland. We are always expected in Heaven.
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                  </div>
+                </div><!-- End testimonial item -->
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <img src="{% static 'img/testimonials/St. John Paul II.jfif' %}" class="testimonial-img" alt="">
+                    <h3>St. John Paul II</h3>
+                    <h4>Patron saint of world youth day</h4>
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      Dear young people, let yourselves be taken over by the light of christ and spread that light wherever you are.
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+
+                    </p>
+                  </div>
+                </div><!-- End testimonial item -->
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <img src="{% static 'img/testimonials/don-bosco.jpg' %}" class="testimonial-img" alt="">
+                    <h3>Saint John Bosco</h3>
+                    <h4>Apostle of Youth</h4>
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      Be good. This will make your angel happy. When sorrows and misfortunes, physical or spiritual, afflict you, turn to your guardian angel with strong trust and he will help you.                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                  </div>
+                </div><!-- End testimonial item -->
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+    
+          </div>
+        </section><!-- End Testimonials Section -->
+
+ 
+
+    <!-- ======= Achievements Section ======= -->
+    <section id="features" class="features">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Achievements</h2>
+          <p>Major Achievements</p>
+        </div>
+
+        <div class="row">
+          <div class="image col-lg-6" style='background-image: url("{% static 'img/best_unit.jpg' %}");' data-aos="fade-right"></div>
+          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
+            <div class="icon-box mt-5 mt-lg-0" data-aos="zoom-in" data-aos-delay="150">
+              <i class="bi bi-trophy-fill"></i>
+              <h4>Best Unit in Kanjirappally Diocese</h4>
+              <p>SMYM Mukkoottuthara Unit was selected as the best unit among the 147 units in kanjirappllly diocese 3 times.</p>
+            </div>
+            <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+              <i class="bi bi-trophy-fill"></i>
+              <h4>Utsav Champions in Kanjirappllly Diocese</h4>
+              <p>SMYM Mukkoottuthara became the champions in utsav diocese level competition.</p>
+            </div>
+            <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+              <i class="bi bi-trophy-fill"></i>
+              <h4>Runners Up Utsav-2021</h4>
+              <p>SMYM Mukkoottuthara became the champions in utsav Foronae level competition.</p>
+            </div>
+            <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+              <i class="bi bi-trophy-fill"></i>
+              <h4>Runners up Utsav 2022</h4>
+              <p>SMYM Mukkoottuthara became the champions in utsav Foronae level competition.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Achievements Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2 style="font-size: 18px;">Services</h2>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <a href="" target="_blank">
+                <div class="icon-box">
+                  <div class="icon"><i class="bi bi-people-fill"></i></i></div>
+                    <h4><a href="#team">Executive Team</a></h4>
+                    <p>Contact Current Executive Members, Former Directors and Executive Members.</p>
+                  </div>
+            </a>
+         </div>
+            
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+           
+           <a href="{% url 'by_law' %}" target="_blank">
+            <div class="icon-box">
+              <div class="icon"><img src="{% static 'img/logo1.png' %}" alt="logo" height="30px" width="30px"></div>
+              <h4><a href="{% url 'by_law' %}">SMYM</a></h4>
+              <p style="color:#444444">Syro Malabar Youth Movement By-law, Jurisdiction, Aim, Slogan, Emblem, Flag, Way Of Action and More..</p>
+            </div>
+          </div></a>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
+            <a href="{% url 'event' %}">
+            <div class="icon-box">
+              <div class="icon"><i class="bi bi-calendar2-event"></i></div>
+              <h4><a href="{% url 'event' %}">Events</a></h4>
+              <p>Upcoming Events, Quiz programs, Finished Events and More..</p>
+            </div>
+          </div>
+          </a>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box">
+              <div class="icon"><i class="bi bi-person-rolodex"></i></div>
+              <h4><a href="{% url 'parish_user' %}">Parish Directory</a></h4>
+              <p>Contact Details of Parish Members Based on Prayer Groups.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+          <a href="blood_user" target="_blank">
+            <div class="icon-box">
+              <div class="icon"><img src="{% static 'img/blood.png' %}" alt="logo" height="30px" width="30px"></div>
+              <h4><a href="{% url 'blood_user' %}">Blood Donors</a></h4>
+              <p>Blood Donor's Details and Blood Donation Form</p>
+            </div>
+          </div></a>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+            <div class="icon-box">
+              <div class="icon"><i class="bi bi-trophy-fill"></i></div>
+              <h4><a href="">Achievements</a></h4>
+              <p>Individual Achievements, Rank Holders and More..</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+           <a href="gallery.html">
+            <div class="icon-box">
+              <div class="icon"><i class="bi bi-images"></i></div>
+              <h4><a href="gallery.html">Gallery</a></h4>
+              <p>Photos of different Activities conducted by Smym Mukkoottuthara</p>
+            </div>
+          </div></a>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box">
+              <div class="icon"><i class="bi bi-airplane-engines-fill"></i></div>
+              <h4><a href="">Career Guidance Forum</a></h4>
+              <p>Contacts of Experts in Various Fields( Includes IT, Bank, Overseas Studies and More..), career predictor test
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Cta Section ======= -->
+    <section id="cta" class="cta">
+      <div class="container" data-aos="zoom-in">
+
+        <div class="text-center">
+          <br><br>
+          <h3 style="font-family: cursive; color:rgb(255, 0, 0)">ECCLESIA</h3>
+        <p><i class="bx bxs-quote-alt-left quote-icon-left" ></i>-Come Let's Celebrate This Night With Jesus<i class="bx bxs-quote-alt-right quote-icon-right"></i></p>  
+          <p style="color:yellow;">"ECCLESIA" was a one night camp organized by SMYM Mukkoottuthara in association with SMYM kanjirappllly Diocese.</p>
+          <br><br>
+        </div>
+
+      </div>
+    </section><!-- End Cta Section -->
+
+    <section id="team" class="team">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Team</h2>
+          <p>Executive Team</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="100">
+              <div class="member-img">
+                <img src="{% static 'img/team/rajeshachan.jpg' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="tel:+91 94972 02584"><i class="bi bi-telephone-forward-fill"></i></a>
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Rev.Fr. Rajesh Kottoor</h4>
+                <span>Director</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="100">
+              <div class="member-img">
+                <img src="{% static 'img/team/girl_alter.png' %}" class="img-fluid" alt="">
+                <div class="social">
+                   
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Rev. Sr. Flowerton </h4>
+                <span>Animator</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="200">
+              <div class="member-img">
+                <img src="{% static 'img/team/sobin.png' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="tel:+91 85900 38485"><i class="bi bi-telephone-forward-fill"></i></a>
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Sobin Joseph Chacko</h4>
+                <span>President</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="300">
+              <div class="member-img">
+                <img src="{% static 'img/team/riya.jpg' %}" class="img-fluid" alt="">
+                <div class="social">
+                   
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Riya Saji</h4>
+                <span>Vice President</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="300">
+              <div class="member-img">
+                <img src="{% static 'img/team/abhi.png' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="tel:+91 8078529691"><i class="bi bi-telephone-forward-fill"></i></a>
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Abhi Binoy</h4>
+                <span>General Secretery</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="300">
+              <div class="member-img">
+                <img src="{% static 'img/team/minto.JPG' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="tel:+91 94955 54987"><i class="bi bi-telephone-forward-fill"></i></a>
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Minto Kuruvila</h4>
+                <span>Accountant</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="300">
+              <div class="member-img">
+                <img src="{% static 'img/team/girl_alter.png' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Sona Mol Binoy</h4>
+                <span>Secretary</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="300">
+              <div class="member-img">
+                <img src="{% static 'img/team/abu.png' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="tel:+91 85907 94245"><i class="bi bi-telephone-forward-fill"></i></a>
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Christin Abu</h4>
+                <span>Media Coordinator</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="400">
+              <div class="member-img">
+                <img src="{% static 'img/team/anite.jpg' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Anite Maria Antony</h4>
+                <span>Councillor</span>
+                <span><b><i>(Kanjirappally Diocese Vice President)</i></b></span> 
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="300">
+              <div class="member-img">
+                <img src="{% static 'img/team/alan.jpg' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="tel:+1234567890"><i class="bi bi-telephone-forward-fill"></i></a>
+                  <a href="mailto:alanantony96696@gmail.com"><i class="bi bi-envelope"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Alan Antony</h4>
+                <span>Councillor</span>
+              </div>
+            </div>
+          </div>
+       
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+        <!-- ======= Cta Section 2======= -->
+        <section id="cta" class="cta2">
+          <div class="container" data-aos="zoom-in">
+    
+            <div class="text-center">
+              <br><br>
+              <h3 style="font-family: cursive; color:rgb(255, 0, 0)">"ഓണം വരവായ് -2022" </h3>
+              <p style="color:white;">-Unit Onam Celebration</p>
+              <p style="color:yellow;">Onam Celebration for Youth and Sunday School Children Organized by SMYM Mukkoottuthara</p>
+              <br><br>
+            </div>
+    
+          </div>
+        </section><!-- End Cta Section 2-->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Contact</h2>
+          <p>Contact Us</p>
+        </div>
+
+        <div>
+          <!-- <iframe style="border:0; width: 100%; height: 270px;" src="https://www.google.com/maps/place/SMYM+Mukkoottuthara/@9.4466165,76.8736392,17z/data=!3m1!4b1!4m5!3m4!1s0x3b06464c770856f7:0xef1406e0f36e3a08!8m2!3d9.4466561!4d76.8756757" frameborder="0" allowfullscreen></iframe> -->
+          <iframe  style="border:0; width: 100%; height: 270px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4841.088646308318!2d76.87609938771877!3d9.446477727733999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b06464c770856f7%3A0xef1406e0f36e3a08!2sSMYM%20Mukkoottuthara!5e0!3m2!1sen!2sin!4v1667451427744!5m2!1sen!2sin" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <div class="row mt-5">
+
+          <div class="col-lg-4">
+            <div class="info">
+              <div class="address">
+                <i class="bi bi-geo-alt"></i>
+                <h4>Location:</h4>
+                <p>CVWG+J8W, Mukkoottuthara, Kerala 686510</p>
+              </div>
+
+              <div class="email">
+                <i class="bi bi-envelope"></i>
+                <h4>Email:</h4>
+                <p>smymmukkoottuthara@gmail.com</p>
+              </div>
+
+              <div class="phone">
+                <i class="bi bi-phone"></i>
+                <h4>Call:</h4>
+                <p>+91 8078529691 </p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-8 mt-5 mt-lg-0">
+
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="col-md-6 form-group mt-3 mt-md-0">
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+              </div>
+              <div class="form-group mt-3">
+                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-info">
+              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+              <p>
+                St Thomas Church <br>
+                Mukkoottuthara,<br>
+                PIN: 686510<br><br>
+                <strong>Phone:</strong> +91 8078529691<br>
+                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#services">Services</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#services">Upcoming Events</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
+            </ul>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

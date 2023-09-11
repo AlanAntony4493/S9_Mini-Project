@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>SMYM Mukkoottuthara</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+   <!-- Favicons -->
+   <link href="{% static 'img/logo1.png' %}" rel="icon">
+   <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
+ 
+   <!-- Google Fonts -->
+   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+ 
+   <!-- Vendor CSS Files -->
+   <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+   <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+   <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+   <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+   <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+   <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+ 
+   <!-- Template Main CSS File -->
+   <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+  <style>
+      /* Add some basic table styling */
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+      }
+  
+      table, th, td {
+          border: 1px solid #ddd;
+      }
+  
+      th, td {
+          padding: 8px;
+          text-align: left;
+      }
+  
+      th {
+          background-color: #f2f2f2;
+      }
+  
+      /* Style the approve and delete buttons */
+      button {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          cursor: pointer;
+      }
+  
+      button.delete-button {
+          background-color: #e74c3c;
+      }
+  
+      /* Make the table responsive */
+      @media screen and (max-width: 600px) {
+          table {
+              overflow-x: auto;
+          }
+      }
+  </style>
+  
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center justify-content-lg-between">
+
+      <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <a href="{% url 'index_admin' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{% url 'index_admin' %}">Home</a></li>
+          <li class="dropdown"><a href="{% url 'index_admin' %}#about"><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="{% url 'index_admin' %}#about">SMYM Mukkoottuthara</a></li>
+              <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM</span> <i class="bi bi-chevron-right"></i></a>
+                <!-- <ul>
+                  <li><a href="#">SMYM-LOGO</a></li>
+                  <li><a href="#">SMYM-FLAG</a></li>
+                  <li><a href="#">SMYM-ANTHEM</a></li>
+                  <li><a href="#">SMYM-SLOGAN</a></li>
+                </ul> -->
+              </li>
+              <!-- <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li> -->
+            </ul>
+          </li>
+          <ul>
+            <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+            {% else %}
+            <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+            {% endif %}
+        </ul>
+        
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+      <a href="#about" class="get-started-btn scrollto">Support Us</a>
+
+    </div>
+  </header><!-- End Header -->
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Manage And Approve Users</h2>
+        </div>
+
+      </div>
+    </section>
+    <!-- End Breadcrumbs -->
+
+      <table>
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>House Name</th>
+                <th>Prayer Group</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Phone Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_profile in user_profiles %}
+                <tr>
+                    <td>{{ user_profile.user.first_name }}</td>
+                    <td>{{ user_profile.middle_name }}</td>
+                    <td>{{ user_profile.user.last_name }}</td>
+                    <td>{{ user_profile.user.email }}</td>                
+                    <td>{{ user_profile.house_name }}</td>
+                    <td>{{ user_profile.get_prayer_group_display }}</td>
+                    <td>{{ user_profile.date_of_birth }}</td>
+                    <td>{{ user_profile.get_gender_display }}</td>
+                    <td>{{ user_profile.phone_number }}</td>
+                    <td>
+                        {% if user_profile.is_approved %}
+                            Approved
+                        {% else %}
+                            <form method="post" action="{% url 'approve_user' user_profile.user.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Approve</button>
+                            </form>
+                        {% endif %}
+                        <form method="post" action="{% url 'delete_user' user_profile.user.id %}" id="delete-user-form">
+                          {% csrf_token %}
+                          <button type="button" class="delete-button" onclick="confirmDelete()">Delete</button>
+                      </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+ 
+
+  </main><!-- End #main -->
+
+ <!-- ======= Footer ======= -->
+ <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-info">
+              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+              <p>
+                St Thomas Church <br>
+                Mukkoottuthara,<br>
+                PIN: 686510<br><br>
+                <strong>Phone:</strong> +91 8078529691<br>
+                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="event.php">Upcoming Events</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <script>
+    function confirmDelete() {
+        const confirmation = confirm("Are you sure you want to delete this user?");
+        if (confirmation) {
+            
+            document.getElementById("delete-user-form").submit();
+        }
+    }
+    </script>
+</body>
+
+</html>

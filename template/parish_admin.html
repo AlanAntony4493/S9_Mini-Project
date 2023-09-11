@@ -1,0 +1,356 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SMYM Mukkoottuthara</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{% static 'img/logo1.png' %}" rel="icon">
+    <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
+    <!-- JavaScript Files -->
+    <script src="{% static 'js/validation.js' %}"></script>
+  <style>
+    .event {
+      display: flex;
+      border: 1px solid #ddd;
+      margin: 10px;
+      padding: 10px;
+    }
+    .event-date {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #f2f2f2;
+      border-right: 1px solid #ddd;
+      padding: 5px;
+    }
+    .event-date .day {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .event-date .month {
+      font-size: 18px;
+      margin: 0;
+    }
+    .event-description {
+      flex: 3;
+      padding: 10px;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+  }
+  table {
+      width:50%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+  }
+  th {
+      background-color: #007BFF;
+      color: #fff;
+  }
+  tr:hover {
+      background-color: #f5f5f5;
+  }
+  @media screen and (max-width: 600px) {
+      table thead {
+          display: none;
+      }
+      table tbody tr {
+          margin-bottom: 10px;
+          display: block;
+          border: 1px solid #000; /* Dark border for rows */
+          border-radius: 5px;
+      }
+      table tbody td {
+          display: block;
+          text-align: center;
+          border-bottom: 1px solid #ddd; /* Light border for columns */
+          padding-left: 50%; /* Add left padding to create space for heading */
+          position: relative;
+      }
+      table tbody td:before {
+          content: attr(data-th);
+          position: absolute;
+          left: 10px; /* Adjust the left padding for heading */
+          width: 40%; /* Adjust the width of the heading */
+          padding-right: 10px; /* Add right padding to the heading */
+          white-space: nowrap;
+      }
+  }
+  {% comment %} form css {% endcomment %}
+  
+  .container1 {
+    max-width: 400px; /* Reduce the max-width to make the form smaller */
+    margin: 0;
+    padding: 20px;
+    margin-top: 50px;
+    background-color:#e6f7ff; /* Darker color code */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 50px; /* Add left margin of 50px */
+}
+  /* Style form labels and inputs */
+  .form-group {
+      margin-bottom: 15px; /* Reduce the margin to make the form smaller */
+  }
+  
+  label {
+      display: block;
+      font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+  }
+  
+  /* Style radio buttons in a single line */
+  .form-group.radio-group label {
+      display: inline-block;
+      margin-right: 15px; /* Add space between radio buttons */
+  }
+  
+  /* Style submit button */
+  .btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+  }
+  .error{
+    color: red;
+    font-size: smaller;
+  }
+  h2{
+    margin-left:40px;
+  }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center justify-content-lg-between">
+
+      <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <a href="{% url 'index_admin' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{% url 'index_admin' %}">Home</a></li>
+          <li class="dropdown"><a href="{% url 'index_admin' %}#about"><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="{% url 'index_admin' %}#about">SMYM Mukkoottuthara</a></li>
+              <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM</span> <i class="bi bi-chevron-right"></i></a>
+                <!-- <ul>
+                  <li><a href="#">SMYM-LOGO</a></li>
+                  <li><a href="#">SMYM-FLAG</a></li>
+                  <li><a href="#">SMYM-ANTHEM</a></li>
+                  <li><a href="#">SMYM-SLOGAN</a></li>
+                </ul> -->
+              </li>
+              <!-- <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li> -->
+            </ul>
+          </li>
+          <ul>
+            <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+            {% else %}
+            <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+            {% endif %}
+        </ul>
+        
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+      <a href="#about" class="get-started-btn scrollto">Support Us</a>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 style="align:center">Parish Directory</h2>
+          <hr>
+        </div>
+
+      </div>
+    </section>
+    <!-- End Breadcrumbs -->
+
+ 
+    <div class="container">
+
+      <!-- Prayer Groups -->
+      <section id="prayer-groups">
+          <h2>Prayer Groups</h2>
+          <table class="table">
+              <thead class="table-primary">
+                  <tr>
+                      <th>Serial Number</th>
+                      <th>Group Name</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for group in prayer_groups %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ group.name }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+
+          <!-- Add New Prayer Group Form -->
+          <div class="container1">
+              <h3>Add New Prayer Group</h3>
+              <form method="post" action="{% url 'parish_admin' %}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="new_group_name">New Prayer Group:</label>
+                      <input type="text" id="new_group_name" name="new_group_name" required>
+                  </div>
+                  <div class="form-group">
+                      <input type="submit" value="Add Prayer Group" class="btn btn-primary">
+                  </div>
+              </form>
+          </div>
+      </section>
+
+      <!-- Parish Directory -->
+      <section id="parish-directory">
+          <h2>Parish Directory</h2>
+          <table class="table">
+              <thead class="table-primary">
+                  <tr>
+                      <th>Serial Number</th>
+                      <th>Name</th>
+                      <th>House Name</th>
+                      <th>Contact</th>
+                      <th>Prayer Group</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for member in parish_members %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ member.name }}</td>
+                      <td>{{ member.house_name }}</td>
+                      <td>{{ member.contact }}</td>
+                      <td>{{ member.prayer_group.name }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+
+          <!-- Add New Member Form -->
+          <div class="container1">
+              <h3>Add Member to Parish Directory</h3>
+              <form method="post" action="{% url 'parish_admin' %}"enctype="multipart/form-data" onsubmit="validateAllInput(event)" id="directory">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="name">Name:</label>
+                      <input type="text" class="form-control" id="funame" name="funame" oninput="validateFullname()" required>
+                      <p class="error" id="fun"></p>
+                  </div>
+                  <div class="form-group">
+                      <label for="house_name">House Name:</label>
+                      <input type="text" class="form-control" id="Hname" name="Hname" oninput="validateHousename()" required>
+                      <p class="error" id="Hn"></p>
+                  </div>
+                  <div class="form-group">
+                      <label for="contact">Contact:</label>
+                      <input type="text" class="form-control" id="mob" name="mob" oninput="validatePhone()" required required>
+                      <p class="error" id="ph"></p>
+                  </div>
+                  <div class="form-group">
+                      <label for="prayer_group">Prayer Group:</label>
+                      <select id="prayer_group" name="prayer_group" required>
+                          <option value="" disabled selected>--- Select Prayer Group ---</option>
+                          {% for group in prayer_groups %}
+                          <option value="{{ group.id }}">{{ group.name }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <input type="submit" value="Add Member" class="btn btn-primary">
+                  </div>
+              </form>
+          </div>
+      </section>
+  </div>
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<!-- Your footer code goes here -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<!-- Include your JavaScript files here -->
+
+<!-- Template Main JS File -->
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
