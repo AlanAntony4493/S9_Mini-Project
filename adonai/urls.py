@@ -23,8 +23,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index, name='index'),
-   path('login', views.login_view, name='login'),
-   path('logout', views.logout, name='logout'),
+    path('login', views.login_view, name='login'),
+    path('logout', views.logout, name='logout'),
     path('event',views.event, name='event'),
     path('by_law',views.by_law, name="by_law"),
     path('register',views.register, name="register"),
@@ -37,6 +37,9 @@ urlpatterns = [
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('delete-donor/<int:pk>/', views.delete_donor, name='delete_donor'),
     path('blood_user/<str:blood_group>/', views.filtered_donor_list, name='filtered_donor_list'),
-path('approve_user/<int:user_id>/', views.approve_user, name='approve_user'),
- path('parish_user', views.parish_user, name='parish_user'),
+    path('approve_user/<int:user_id>/', views.approve_user, name='approve_user'),
+    path('parish_user', views.parish_user, name='parish_user'),
+    path('event_user', views.event_user, name='event_user'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -201,7 +201,12 @@
                     <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
                     <li><a class="nav-link scrollto " href="gallery.html">Gallery</a></li>
                     <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                    <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.first_name }})</a></li>
+                    {% else %}
                     <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+                    {% endif %} 
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav>
@@ -225,66 +230,29 @@
             <div class="container">
                 <div class="event-container">
                     <!-- Event with "View Detailed Poster" button -->
+                    {% for event in events %}
                     <div class="event">
                         <div class="image-container">
-                            <img src="{% static 'img/about_2.jpg' %}" alt="Event Poster" style="max-height: 200px; width: 100%;">
+                            <img src="{{ event.cover_poster.url }}" alt="Event Poster" style="max-height: 200px; width: 100%;">
                         </div>
                         <!-- Event Date and Description-->
                         <div class="event-date">
-                            <div class="day">20</div>
-                            <div class="month">Aug</div>
+                            <div class="day">{{ event.date|date:"d" }}</div>
+                            <div class="month">{{ event.date|date:"M" }}</div>
                         </div>
                         <div class="event-description">
-                            <p class="event-title"><b>Medical Camp</b>: "Medical camp in collaboration with MMT Hospital Mundakkayam"</p>
-                            <p class="event-time">9:45 AM - 12:30 AM</p>
-                            <p class="event-venue">Main Auditorium</p>
-                            <button class="view-image-btn" onclick="openModal('{% static 'img/about_2.jpg' %}')">View Detailed Poster</button>
+                            <p class="event-title"><b>{{ event.title }}</b>: {{ event.description }}</p>
+                            <p class="event-time">{{ event.start_time|time:"h:i A" }} - {{ event.end_time|time:"h:i A" }}</p>
+                            <p class="event-venue">{{ event.venue }}</p>
+                            <button class="view-image-btn" onclick="openModal('{{ event.detailed_poster.url }}')">View Detailed Poster</button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
-        <!-- End Events Section -->
-
-
-        {% comment %} form {% endcomment %}
-        <div class="container">
-          <div class="row">
-              <div class="col-md-6">
-                  <h2>Add New Event</h2>
-                  <div class="event-form">
-                      <form action="#" method="post">
-                          <label for="date">Date:</label>
-                           <input type="date" id="date" name="date" required min="{% now 'Y-m-d' %}">
-                          <label for="title">Title:</label>
-                          <input type="text" id="title" name="title" required>
-            
-                          <label for="description">Description:</label>
-                          <textarea id="description" name="description" rows="4" required></textarea>
-            
-                          <label for="start-time">Starting Time:</label>
-                          <input type="time" id="start-time" name="start-time" required>
-            
-                          <label for="end-time">Ending Time:</label>
-                          <input type="time" id="end-time" name="end-time" required>
-
-                          <label for="end-date">Ending Date:</label>
-                          <input type="date" id="end-date" name="end-date" required min="{{ tomorrow|date:'Y-m-d' }}">                          <label for="venue">Venue:</label>
-                          <input type="text" id="venue" name="venue" required>
-            
-                          <label for="cover-poster">Poster for Cover:</label>
-                          <input type="file" id="cover-poster" name="cover-poster" accept="image/*">
-                          <br><br>
-                          <label for="detailed-poster">Detailed Poster:  </label>
-                          <input type="file" id="detailed-poster" name="detailed-poster" accept="image/*" required>
-            
-                          <input type="submit" value="Submit">
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>      
-      
+        
+        <!-- End Events Section -->     
     </main>
 
     <!-- Footer -->
@@ -385,31 +353,6 @@
         });
     </script>
 
-    {% comment %} Event form {% endcomment %}
-
-    <script>
-      // JavaScript to enforce additional constraints
-  
-      // Function to validate the time inputs
-      function validateTimeInputs() {
-          const startTime = document.getElementById('start-time').value;
-          const endTime = document.getElementById('end-time').value;
-          const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  
-          if (startTime >= endTime || startTime <= currentTime || endTime <= currentTime) {
-              alert('Invalid time selection. Start and end times should be in 12-hour format, and end time should be after start time and after the current time.');
-              return false;
-          }
-          return true;
-      }
-  
-      // Attach the form submission event handler
-      document.querySelector('form').addEventListener('submit', function (e) {
-          if (!validateTimeInputs()) {
-              e.preventDefault(); // Prevent form submission if validation fails
-          }
-      });
-  </script>
 </body>
 
 </html>

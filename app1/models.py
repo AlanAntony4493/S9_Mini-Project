@@ -93,7 +93,6 @@ class Event(models.Model):
     description = models.TextField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    end_date = models.DateField()
     venue = models.CharField(max_length=100)
     cover_poster = models.ImageField(upload_to='event_covers', default='img/about.jpg')
     detailed_poster = models.ImageField(upload_to='detailed_posters')

@@ -225,25 +225,28 @@
             <div class="container">
                 <div class="event-container">
                     <!-- Event with "View Detailed Poster" button -->
+                    {% for event in events %}
                     <div class="event">
                         <div class="image-container">
-                            <img src="{% static 'img/about_2.jpg' %}" alt="Event Poster" style="max-height: 200px; width: 100%;">
+                            <img src="{{ event.cover_poster.url }}" alt="Event Poster" style="max-height: 200px; width: 100%;">
                         </div>
                         <!-- Event Date and Description-->
                         <div class="event-date">
-                            <div class="day">20</div>
-                            <div class="month">Aug</div>
+                            <div class="day">{{ event.date|date:"d" }}</div>
+                            <div class="month">{{ event.date|date:"M" }}</div>
                         </div>
                         <div class="event-description">
-                            <p class="event-title"><b>Medical Camp</b>: "Medical camp in collaboration with MMT Hospital Mundakkayam"</p>
-                            <p class="event-time">9:45 AM - 12:30 AM</p>
-                            <p class="event-venue">Main Auditorium</p>
-                            <button class="view-image-btn" onclick="openModal('{% static 'img/about_2.jpg' %}')">View Detailed Poster</button>
+                            <p class="event-title"><b>{{ event.title }}</b>: {{ event.description }}</p>
+                            <p class="event-time">{{ event.start_time|time:"h:i A" }} - {{ event.end_time|time:"h:i A" }}</p>
+                            <p class="event-venue">{{ event.venue }}</p>
+                            <button class="view-image-btn" onclick="openModal('{{ event.detailed_poster.url }}')">View Detailed Poster</button>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
+        
         <!-- End Events Section -->
 
 
@@ -268,9 +271,8 @@
 
                           <label for="end-time">Ending Time (24-hour format):</label>
                           <input type="time" id="end-time" name="end-time" required>
-
-                          <label for="end-date">Ending Date:</label>
-                          <input type="date" id="end-date" name="end-date" required min="{{ tomorrow|date:'Y-m-d' }}">                          <label for="venue">Venue:</label>
+                       
+                          <label for="venue">Venue:</label>
                           <input type="text" id="venue" name="venue" required>
             
                           <label for="cover-poster">Poster for Cover:</label>

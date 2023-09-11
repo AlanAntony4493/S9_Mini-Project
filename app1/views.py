@@ -82,9 +82,14 @@ def index_admin(request):
 def index(request):
     return render(request, "index.html")
 
+# event admin
 from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from .models import Event
+
+from datetime import datetime, timedelta
+from django.shortcuts import render, redirect
+from .models import Event  # Import your Event model
 
 def event(request):
     tomorrow = datetime.now() + timedelta(days=1)
@@ -97,10 +102,9 @@ def event(request):
         description = request.POST['description']
         start_time = request.POST['start-time']
         end_time = request.POST['end-time']
-        end_date = request.POST['end-date']
         venue = request.POST['venue']
-        cover_poster = request.FILES['cover-poster']  # Use square brackets []
-        detailed_poster = request.FILES['detailed-poster']  # Use square brackets []
+        cover_poster = request.FILES.get('cover-poster')
+        detailed_poster = request.FILES.get('detailed-poster')
 
         event = Event(
             date=date,
@@ -108,7 +112,6 @@ def event(request):
             description=description,
             start_time=start_time,
             end_time=end_time,
-            end_date=end_date,
             venue=venue,
             cover_poster=cover_poster,
             detailed_poster=detailed_poster
@@ -118,7 +121,11 @@ def event(request):
         # Redirect to a success page or event list (replace 'event-list' with your actual URL pattern)
         return redirect('event')  
 
-    return render(request, "event.html", context)
+    # Fetch existing events for display
+    events = Event.objects.all()
+    context['events'] = events
+
+    return render(request, 'event.html', context)
 
 
 def by_law(request):
@@ -193,7 +200,9 @@ def user_admin(request):
     else:
         return redirect('login')
 
-
+def event_user(request):
+    events = Event.objects.all()
+    return render(request, 'event_user.html',{'events': events})
 
 def blood_user(request):
     donors = Donor.objects.all()

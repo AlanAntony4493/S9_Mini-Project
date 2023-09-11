@@ -30,7 +30,7 @@
 <body class="body">
     <div class="form-container">
         <div class="logo-container">
-          <a href="{% url 'login' %}"><img src="{% static 'img/logo1.png' %}" alt="Logo" class="logo"></a>
+          <a href="{% url 'index' %}"><img src="{% static 'img/logo1.png' %}" alt="Logo" class="logo"></a>
         </div>
         <form id="login-form" method="POST" action="{% url 'login' %}">
           {% csrf_token %}
