@@ -261,6 +261,40 @@ def parish_user(request):
     return render(request, 'parish_user.html', {'parish_members': parish_members})
 
 
-# report
+# views.py
+
+from django.shortcuts import render, redirect
+from django.contrib.admin.views.decorators import staff_member_required
+from .models import Report
+from django.utils.safestring import mark_safe
+
+@staff_member_required
 def report_admin(request):
-    return render(request, "report_admin.html")
+    if request.method == 'POST':
+        # Extract the data from the request and create a Report object
+        heading = request.POST.get('heading')
+        report_text = request.POST.get('report')
+        date = request.POST.get('date')
+        place = request.POST.get('place')
+        name = request.POST.get('name')
+
+        # Mark the report_text as safe HTML
+        report_text_safe = mark_safe(report_text)
+
+        Report.objects.create(
+            heading=heading,
+            report=report_text_safe,  # Use the marked safe HTML here
+            date=date,
+            place=place,
+            name=name
+        )
+
+        return redirect('report_admin')  # Redirect to a success page after submission
+
+    # Fetch all reports from the database (you can adjust this query as needed)
+    reports = Report.objects.all()
+    
+
+    return render(request, 'report_admin.html', {'reports': reports})
+
+

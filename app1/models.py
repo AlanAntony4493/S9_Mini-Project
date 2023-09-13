@@ -96,3 +96,15 @@ class Event(models.Model):
     venue = models.CharField(max_length=100)
     cover_poster = models.ImageField(upload_to='event_covers', default='img/about.jpg')
     detailed_poster = models.ImageField(upload_to='detailed_posters')
+
+# report
+
+class Report(models.Model):
+    heading = models.CharField(max_length=500)
+    report = models.TextField()
+    date = models.DateField()
+    place = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name

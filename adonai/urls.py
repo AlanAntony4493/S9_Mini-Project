@@ -19,6 +19,7 @@ from django.urls import path
 from app1 import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,6 +42,11 @@ urlpatterns = [
     path('parish_user', views.parish_user, name='parish_user'),
     path('event_user', views.event_user, name='event_user'),
     path('report_admin', views.report_admin, name='report_admin'),
+
+    path('password_reset/',auth_views.PasswordResetView.as_view(),name='password_reset'),
+     path('password_reset/done/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
+     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
+     path('reset/done/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
