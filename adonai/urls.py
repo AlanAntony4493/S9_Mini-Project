@@ -40,6 +40,7 @@ urlpatterns = [
     path('approve_user/<int:user_id>/', views.approve_user, name='approve_user'),
     path('parish_user', views.parish_user, name='parish_user'),
     path('event_user', views.event_user, name='event_user'),
+    path('report_admin', views.report_admin, name='report_admin'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -259,3 +259,8 @@ def parish_admin(request):
 def parish_user(request):
     parish_members = ParishDirectory.objects.all()
     return render(request, 'parish_user.html', {'parish_members': parish_members})
+
+
+# report
+def report_admin(request):
+    return render(request, "report_admin.html")
