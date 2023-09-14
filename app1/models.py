@@ -96,6 +96,7 @@ class Event(models.Model):
     venue = models.CharField(max_length=100)
     cover_poster = models.ImageField(upload_to='event_covers', default='img/about.jpg')
     detailed_poster = models.ImageField(upload_to='detailed_posters')
+    is_archived = models.BooleanField(default=False)
 
 # report
 

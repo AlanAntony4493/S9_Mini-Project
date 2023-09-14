@@ -281,7 +281,7 @@
 
         <div class="row">
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+          {% comment %} <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
             <a href="" target="_blank">
                 <div class="icon-box">
                   <div class="icon"><i class="bi bi-people-fill"></i></i></div>
@@ -289,7 +289,7 @@
                     <p>Contact Current Executive Members, Former Directors and Executive Members.</p>
                   </div>
             </a>
-         </div>
+         </div> {% endcomment %}
             
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
@@ -303,7 +303,7 @@
           </div></a>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
-            <a href="{% url 'event_user' %}">
+            <a href="{% url 'event' %}">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-calendar2-event"></i></div>
               <h4><a href="{% url 'event' %}">Events</a></h4>

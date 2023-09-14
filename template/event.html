@@ -181,6 +181,33 @@
             font-weight: bold;
             cursor: pointer;
         }
+
+        .margin-div {
+            margin-right: 50%; /* Default margin for smaller devices */
+        }
+
+        /* Add this media query for larger devices */
+        @media (min-width: 768px) {
+            .margin-div {
+                margin-right: 80%; /* Margin for larger devices */
+            }
+        }
+        /* Add styles for archive and delete buttons */
+        .archive-button,
+        .delete-button {
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 5px;
+        }
+
+        .archive-button:hover,
+        .delete-button:hover {
+            background-color: #c9302c;
+        }
     </style>
 </head>
 
@@ -263,6 +290,10 @@
                             <p class="event-title"><b>{{ event.title }}</b>: {{ event.description }}</p>
                             <p class="event-time">{{ event.start_time|time:"h:i A" }} - {{ event.end_time|time:"h:i A" }}</p>
                             <p class="event-venue">{{ event.venue }}</p>
+                            {% if user.is_superuser %}
+                            <button class="delete-button" onclick="deleteEvent('{{ event.id }}')">Delete</button>
+                            <button class="archive-button" onclick="archiveEvent('{{ event.id }}')">Archive</button>
+                            {% endif %}
                             <button class="view-image-btn" onclick="openModal('{{ event.detailed_poster.url }}')">View Detailed Poster</button>
                         </div>
                     </div>
@@ -311,8 +342,52 @@
                 </div>
             </div>
         </div>
-        {% endif %}
+       
+
+        <!-- ======= Breadcrumbs ======= -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Archived Events</h2>
+                </div>
+            </div>
+        </section>
+        <!-- End Breadcrumbs -->
+        <section>  
+            <!-- Archived Events Button -->
+        <div class="margin-div">
+            <button class="view-image-btn" onclick="toggleArchivedEvents()">View Archived Events</button><br><br>
+        </div>
+        
     
+    <!-- Archived Events (Initially Hidden) -->
+    <div id="archivedEventsContainer" style="display: none;">
+        <div class="event-container">
+            <!-- Display archived events -->
+            {% for archived_event in archived_events %}
+                <div class="event">
+                    <div class="image-container">
+                        <img src="{{ archived_event.cover_poster.url }}" alt="Event Poster" style="max-height: 200px; width: 100%;">
+                    </div>
+                    <!-- Event Date and Description -->
+                    <div class="event-date">
+                        <div class="day">{{ archived_event.date|date:"d" }}</div>
+                        <div class="month">{{ archived_event.date|date:"M" }}</div>
+                    </div>
+                    <div class="event-description">
+                        <p class="event-title"><b>{{ archived_event.title }}</b>: {{ archived_event.description }}</p>
+                        <p class="event-time">{{ archived_event.start_time|time:"h:i A" }} - {{ archived_event.end_time|time:"h:i A" }}</p>
+                        <p class="event-venue">{{ archived_event.venue }}</p>
+                        <button class="delete-button" onclick="unarchiveEvent('{{ archived_event.id }}')">Unarchive</button>
+                        <button class="view-image-btn" onclick="openModal('{{ archived_event.detailed_poster.url }}')">View Detailed Poster</button>                        <button class="delete-button" onclick="deleteEvent('{{ event.id }}')">Delete</button>
+                    </div>
+                </div>
+            {% endfor %}
+         </div>
+        </div>
+    </section>
+{% endif %}
+ 
     </main>
 
   <!-- ======= Footer ======= -->
@@ -378,6 +453,7 @@
     </div>
 
     <!-- JavaScript for Modal (include this script in your HTML) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Get the modal element
         var modal = document.getElementById("myModal");
@@ -414,6 +490,88 @@
         window.addEventListener("popstate", function (event) {
             closeModal();
         });
+                // JavaScript for toggling archived events
+        function toggleArchivedEvents() {
+                var archivedEventsContainer = document.getElementById("archivedEventsContainer");
+                var button = document.getElementById("viewArchivedEventsButton");
+                if (archivedEventsContainer.style.display === "none" || archivedEventsContainer.style.display === "") {
+                        archivedEventsContainer.style.display = "block";
+                        button.innerText = "Hide Archived Events";
+                } else {
+                 archivedEventsContainer.style.display = "none";
+                 button.innerText = "View Archived Events";
+            }
+         }
+        
+              // JavaScript for handling the archive event via form submission
+      function archiveEvent(eventId) {
+        if (confirm("Are you sure you want to archive this event?")) {
+            // Create a hidden form and submit it
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "/archive_event/" + eventId + "/");
+            form.style.display = "none"; // Make the form hidden
+    
+            // Add a CSRF token input field
+            var csrfInput = document.createElement("input");
+            csrfInput.setAttribute("type", "hidden");
+            csrfInput.setAttribute("name", "csrfmiddlewaretoken");
+            csrfInput.setAttribute("value", "{{ csrf_token }}");
+    
+            form.appendChild(csrfInput);
+            document.body.appendChild(form);
+    
+            // Submit the form
+            form.submit();
+        }
+    }
+    
+    // JavaScript for handling the permanent deletion of an event via form submission
+    function deleteEvent(eventId) {
+        if (confirm("Are you sure you want to permanently delete this event?")) {
+            // Create a hidden form and submit it
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "/delete_event/" + eventId + "/");
+            form.style.display = "none"; // Make the form hidden
+    
+            // Add a CSRF token input field
+            var csrfInput = document.createElement("input");
+            csrfInput.setAttribute("type", "hidden");
+            csrfInput.setAttribute("name", "csrfmiddlewaretoken");
+            csrfInput.setAttribute("value", "{{ csrf_token }}");
+    
+            form.appendChild(csrfInput);
+            document.body.appendChild(form);
+    
+            // Submit the form
+            form.submit();
+        }
+    }
+
+     // JavaScript for handling the unarchive event via form submission
+     function unarchiveEvent(eventId) {
+        if (confirm("Are you sure you want to unarchive this event?")) {
+            // Create a hidden form and submit it
+            var form = document.createElement("form");
+            form.setAttribute("method", "post");
+            form.setAttribute("action", "/unarchive_event/" + eventId + "/"); // Change the action URL accordingly
+            form.style.display = "none"; // Make the form hidden
+
+            // Add a CSRF token input field
+            var csrfInput = document.createElement("input");
+            csrfInput.setAttribute("type", "hidden");
+            csrfInput.setAttribute("name", "csrfmiddlewaretoken");
+            csrfInput.setAttribute("value", "{{ csrf_token }}"); // Add the CSRF token here
+
+            form.appendChild(csrfInput);
+            document.body.appendChild(form);
+
+            // Submit the form
+            form.submit();
+        }
+    }
+
     </script>
 </body>
 

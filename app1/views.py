@@ -82,17 +82,14 @@ def index_admin(request):
 def index(request):
     return render(request, "index.html")
 
-# event admin
-from datetime import datetime, timedelta
-from django.shortcuts import render, redirect
-from .models import Event
+# event
 
-from datetime import datetime, timedelta
-from django.shortcuts import render, redirect
-from .models import Event  # Import your Event model
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Event
+from django.utils import timezone
 
 def event(request):
-    tomorrow = datetime.now() + timedelta(days=1)
+    tomorrow = timezone.now() + timezone.timedelta(days=1)
     context = {'tomorrow': tomorrow}
 
     if request.method == 'POST':
@@ -118,14 +115,38 @@ def event(request):
         )
         event.save()
 
-        # Redirect to a success page or event list (replace 'event-list' with your actual URL pattern)
-        return redirect('event')  
+        # Redirect to a success page or event list (replace 'event' with your actual URL pattern)
+        return redirect('event')
 
-    # Fetch existing events for display
+    # Fetch existing events, including archived ones
     events = Event.objects.all()
-    context['events'] = events
+
+    # Separate archived and non-archived events
+    non_archived_events = events.filter(is_archived=False)
+    archived_events = events.filter(is_archived=True)
+
+    context['events'] = non_archived_events
+    context['archived_events'] = archived_events
 
     return render(request, 'event.html', context)
+
+def archive_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    event.is_archived = True
+    event.save()
+    return redirect('event')
+
+def unarchive_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    event.is_archived = False
+    event.save()
+    return redirect('event') 
+
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    event.delete()
+    return redirect('event')
+
 
 
 def by_law(request):
@@ -206,14 +227,6 @@ def user_admin(request):
     else:
         return redirect('login')
 
-def event_user(request):
-    events = Event.objects.all()
-    return render(request, 'event_user.html',{'events': events})
-
-def blood_user(request):
-    donors = Donor.objects.all()
-    return render(request, 'blood_user.html', {'donors': donors})
-
 def filtered_donor_list(request, blood_group):
     donors = Donor.objects.filter(blood_group=blood_group)
     return render(request, 'blood_user.html', {'donors': donors})
@@ -264,12 +277,6 @@ def parish_admin(request):
     parish_members = ParishDirectory.objects.select_related('prayer_group').all()
 
     return render(request, 'parish_admin.html', {'prayer_groups': prayer_groups, 'parish_members': parish_members, 'error_message': error_message})
-# parish directory user
-
-def parish_user(request):
-    parish_members = ParishDirectory.objects.all()
-    return render(request, 'parish_user.html', {'parish_members': parish_members})
-
 
 # report
 
@@ -307,3 +314,7 @@ def report_admin(request):
     reports = Report.objects.all().order_by('-date')
 
     return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})
+
+
+def gallery(request):
+    return render(request, 'gallery.html')
