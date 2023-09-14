@@ -8,15 +8,9 @@
     <title>SMYM Mukkoottuthara</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
-
-    <!-- Favicons -->
     <link href="{% static 'img/logo1.png' %}" rel="icon">
     <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
     <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
@@ -34,86 +28,71 @@
     <!-- JavaScript Files -->
     <script src="{% static 'js/validation.js' %}"></script>
   <style>
-    .event {
-      display: flex;
-      border: 1px solid #ddd;
-      margin: 10px;
-      padding: 10px;
-    }
-    .event-date {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #f2f2f2;
-      border-right: 1px solid #ddd;
-      padding: 5px;
-    }
-    .event-date .day {
-      font-size: 40px;
-      font-weight: bold;
-      margin: 0;
-    }
-    .event-date .month {
-      font-size: 18px;
-      margin: 0;
-    }
-    .event-description {
-      flex: 3;
-      padding: 10px;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-  }
-  table {
-      width:50%;
+    /* Default styles for larger screens */
+    table {
+      width: 90%;
       border-collapse: collapse;
       border-spacing: 0;
-      margin: 20px;
+      margin-left: 40px;
+      margin-right: 40px;
+      margin-bottom: 40px;
       background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  th, td {
+    }
+    
+    th, td {
       padding: 12px 15px;
       text-align: left;
       border-bottom: 1px solid #ddd;
-  }
-  th {
+    }
+    
+    th {
       background-color: #007BFF;
-      color: #fff;
-  }
-  tr:hover {
+      {% comment %} color: #fff; {% endcomment %}
+    }
+    
+    tr:hover {
       background-color: #f5f5f5;
-  }
-  @media screen and (max-width: 600px) {
+    }
+    
+    /* Media query for screens with a max width of 600px (small screens) */
+    @media screen and (max-width: 600px) {
+      table {
+        width: 90%; /* Make the table take up the full width of the screen */
+        margin-left: 20px; /* Remove the left margin on smaller screens */
+      }
+    
+      /* Hide the table header on small screens */
       table thead {
-          display: none;
+        display: none;
       }
+    
+      /* Adjust the table rows and cells for small screens */
       table tbody tr {
-          margin-bottom: 10px;
-          display: block;
-          border: 1px solid #000; /* Dark border for rows */
-          border-radius: 5px;
+        margin-bottom: 10px;
+        display: block;
+        border: 1px solid #000; /* Dark border for rows */
+        border-radius: 5px;
       }
+    
       table tbody td {
-          display: block;
-          text-align: center;
-          border-bottom: 1px solid #ddd; /* Light border for columns */
-          padding-left: 50%; /* Add left padding to create space for heading */
-          position: relative;
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid #ddd; /* Light border for columns */
+        padding-left: 0; /* Remove left padding to use the full width */
+        position: relative;
       }
+    
       table tbody td:before {
-          content: attr(data-th);
-          position: absolute;
-          left: 10px; /* Adjust the left padding for heading */
-          width: 40%; /* Adjust the width of the heading */
-          padding-right: 10px; /* Add right padding to the heading */
-          white-space: nowrap;
+        content: attr(data-th);
+        position: absolute;
+        left: 10px; /* Adjust the left padding for heading */
+        width: 40%; /* Adjust the width of the heading */
+        padding-right: 10px; /* Add right padding to the heading */
+        white-space: nowrap;
       }
-  }
+    }
   {% comment %} form css {% endcomment %}
   
   .container1 {
@@ -170,115 +149,192 @@
   h2{
     margin-left:40px;
   }
+
+  /* CSS for the filter container */
+.filter-container {
+    max-width: 200px;
+    margin: 20px 20px 20px 40px;
+    float: left;
+}
+
+.filter-container p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.filter-container .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style for the selected option in the filter dropdown */
+.filter-container .form-group select option[selected] {
+    font-weight: bold;
+    color: #007BFF; /* Change the color to your preference */
+    background-color: #f2f2f2; /* Change the background color to your preference */
+}
+
+/* Style for the hover effect on options in the filter dropdown */
+.filter-container .form-group select option:hover {
+    background-color: #007BFF; /* Change the background color on hover to your preference */
+    color: #fff; /* Change the text color on hover to your preference */
+}
+
+/* Style for the disabled option in the filter dropdown */
+.filter-container .form-group select option[disabled] {
+    color: #ccc;
+}
+section {
+  padding: 19px 0;
+  overflow: hidden;
+}
   </style>
 
 </head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
-    <div class="container d-flex align-items-center justify-content-lg-between">
-
-      <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <a href="{% url 'index_admin' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
-
-      <nav id="navbar" class="navbar order-last order-lg-0">
-        <ul>
-          <li><a class="nav-link scrollto active" href="{% url 'index_admin' %}">Home</a></li>
-          <li class="dropdown"><a href="{% url 'index_admin' %}#about"><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="{% url 'index_admin' %}#about">SMYM Mukkoottuthara</a></li>
-              <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM</span> <i class="bi bi-chevron-right"></i></a>
-                <!-- <ul>
-                  <li><a href="#">SMYM-LOGO</a></li>
-                  <li><a href="#">SMYM-FLAG</a></li>
-                  <li><a href="#">SMYM-ANTHEM</a></li>
-                  <li><a href="#">SMYM-SLOGAN</a></li>
-                </ul> -->
-              </li>
-              <!-- <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li> -->
-            </ul>
-          </li>
-          <ul>
-            <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
-            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-            {% if user.is_authenticated %}
-            <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
-            {% else %}
-            <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
-            {% endif %}
-        </ul>
-        
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-      <a href="#about" class="get-started-btn scrollto">Support Us</a>
-
-    </div>
-  </header><!-- End Header -->
+        <!-- ======= Header ======= -->
+        <header id="header" class="fixed-top header-inner-pages">
+          <div class="container d-flex align-items-center justify-content-lg-between">
+      
+            <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+      
+            <nav id="navbar" class="navbar order-last order-lg-0">
+              <ul>
+                <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+                <li class="dropdown"><a href=""><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+                  <ul>
+                    <li><a href="{% url 'index' %}#about">SMYM Mukkoottuthara</a></li>
+                    <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM BY Law</span> <i class="bi bi-chevron-right"></i></a>
+                      <!-- <ul>
+                        <li><a href="#">SMYM-LOGO</a></li>
+                        <li><a href="#">SMYM-FLAG</a></li>
+                        <li><a href="#">SMYM-ANTHEM</a></li>
+                        <li><a href="#">SMYM-SLOGAN</a></li>
+                      </ul> -->
+                    </li>
+                    <!-- <li><a href="#">Drop Down 2</a></li>
+                    <li><a href="#">Drop Down 3</a></li>
+                    <li><a href="#">Drop Down 4</a></li> -->
+                  </ul>
+                </li>
+                <ul>
+                  <li><a class="nav-link scrollto" href="">Gallery</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
+                  {% if user.is_superuser %}
+                      <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                      <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+                  {% elif user.is_authenticated %}
+                      <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.first_name }})</a></li>
+                  {% else %}
+                      <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+                  {% endif %}
+      
+              </ul>
+              
+              <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+      
+            <a href="#about" class="get-started-btn scrollto">Support Us</a>
+      
+          </div>
+   </header><!-- End Header -->
 
   <main id="main">
-
+    {% if user.is_superuser %}
     <!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">
       <div class="container">
-
         <div class="d-flex justify-content-between align-items-center">
-          <h2 style="align:center">Parish Directory</h2>
-          <hr>
+          <h2 style="align:center">Parish Directory And Prayer Groups</h2>
         </div>
-
       </div>
     </section>
     <!-- End Breadcrumbs -->
-
+    {% endif %}
  
     <div class="container">
+      {% if user.is_superuser %}
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 style="align:center">Manage Prayer Groups</h2>
+      </div>
+    </div>
+  </section>
+  <!-- End Breadcrumbs -->
+        <!-- Prayer Groups -->
+        <section id="prayer-groups">
+            <table class="table">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Group Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in prayer_groups %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ group.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
-      <!-- Prayer Groups -->
-      <section id="prayer-groups">
-          <h2>Prayer Groups</h2>
-          <table class="table">
-              <thead class="table-primary">
-                  <tr>
-                      <th>Serial Number</th>
-                      <th>Group Name</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {% for group in prayer_groups %}
-                  <tr>
-                      <td>{{ forloop.counter }}</td>
-                      <td>{{ group.name }}</td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
-          </table>
+            <!-- Add New Prayer Group Form -->
+            <div class="container1">
+                <h3>Add New Prayer Group</h3>
+                {% if error_message %}
+                  <p id="error_message">{{error_message}}</p>
+                {% endif %}
+                
+                <form method="post" action="{% url 'parish_admin' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="new_group_name">New Prayer Group:</label>
+                        <input type="text" id="new_group_name" name="new_group_name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add Prayer Group" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </section>
+    {% endif %}
 
-          <!-- Add New Prayer Group Form -->
-          <div class="container1">
-              <h3>Add New Prayer Group</h3>
-              <form method="post" action="{% url 'parish_admin' %}">
-                  {% csrf_token %}
-                  <div class="form-group">
-                      <label for="new_group_name">New Prayer Group:</label>
-                      <input type="text" id="new_group_name" name="new_group_name" required>
-                  </div>
-                  <div class="form-group">
-                      <input type="submit" value="Add Prayer Group" class="btn btn-primary">
-                  </div>
-              </form>
+        <!-- ======= Breadcrumbs ======= -->
+        <section class="breadcrumbs">
+          <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 style="align:center">Parish Directory</h2>
+            </div>
           </div>
+        </section>
+        <!-- End Breadcrumbs -->
+      <section style="margin-bottom: 0px !important;">
+        <div class="filter-container" style="max-width: 200px; margin-bottom:0; float: left;">
+          <p>Filter by Prayer Group</p>
+          <div class="form-group">
+              <select id="filter-prayer-group-select" onchange="filterParishDirectory()">
+                  <option value="" selected>Show All</option>
+                  {% for group in prayer_groups %}
+                      <option value="{{ group.name }}">{{ group.name }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+      </div>
       </section>
-
       <!-- Parish Directory -->
-      <section id="parish-directory">
-          <h2>Parish Directory</h2>
+      <section id="parish-directory" style="margin-top:0px !important;">
           <table class="table">
               <thead class="table-primary">
                   <tr>
@@ -289,7 +345,7 @@
                       <th>Prayer Group</th>
                   </tr>
               </thead>
-              <tbody>
+              <tbody id="parish-directory-table">
                   {% for member in parish_members %}
                   <tr>
                       <td>{{ forloop.counter }}</td>
@@ -299,10 +355,23 @@
                       <td>{{ member.prayer_group.name }}</td>
                   </tr>
                   {% endfor %}
+                  <tr id="no-results" style="display: none;">
+                    <td colspan="5">Sorry,no members of the selected prayer gorup is found</td>
+                  </tr>
               </tbody>
           </table>
 
           <!-- Add New Member Form -->
+          {% if user.is_superuser %}
+          <!-- ======= Breadcrumbs ======= -->
+          <section class="breadcrumbs">
+            <div class="container">
+              <div class="d-flex justify-content-between align-items-center">
+                <h2 style="align:center">Manage Parish Directory</h2>
+              </div>
+            </div>
+          </section>
+      <!-- End Breadcrumbs -->
           <div class="container1">
               <h3>Add Member to Parish Directory</h3>
               <form method="post" action="{% url 'parish_admin' %}"enctype="multipart/form-data" onsubmit="validateAllInput(event)" id="directory">
@@ -337,19 +406,101 @@
               </form>
           </div>
       </section>
+      {% endif %}
   </div>
 </main><!-- End #main -->
 
-<!-- ======= Footer ======= -->
-<!-- Your footer code goes here -->
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-info">
+              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+              <p>
+                St Thomas Church <br>
+                Mukkoottuthara,<br>
+                PIN: 686510<br><br>
+                <strong>Phone:</strong> +91 8078529691<br>
+                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook" target="_blank"><i class="bx bxl-facebook"></i></a>
+                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram" target="_blank"><i class="bx bxl-instagram"></i></a>
+                {% comment %} <a href="#" target="blank" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> {% endcomment %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Parish Directory</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}">Upcoming Events</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
+            </ul>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
 
 <div id="preloader"></div>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
-<!-- Include your JavaScript files here -->
 
 <!-- Template Main JS File -->
+<script>
+  function filterParishDirectory() {
+    var prayerGroup = document.getElementById("filter-prayer-group-select").value;
+    var tbody = document.getElementById("parish-directory-table");
+    var rows = tbody.getElementsByTagName("tr");
+    var noResultsRow = document.getElementById("no-results");
+
+    // Assume no results initially
+    var hasResults = false;
+
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var cells = row.getElementsByTagName("td");
+
+        if (cells.length >= 5) {  // Ensure there's a cell with prayer group data (5th column)
+            var cell = cells[4];  // 5th column (Prayer Group)
+
+            if (prayerGroup === "" || cell.innerHTML === prayerGroup) {
+                row.style.display = "";  // Show the row
+                hasResults = true;      // Mark that results were found
+            } else {
+                row.style.display = "none";  // Hide the row
+            }
+        }
+    }
+
+    // Show or hide the "No results" message based on whether results were found
+    noResultsRow.style.display = hasResults ? "none" : "";
+}
+</script>
 <script src="{% static 'js/main.js' %}"></script>
 </body>
 

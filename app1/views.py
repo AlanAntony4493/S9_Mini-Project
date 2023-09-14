@@ -56,7 +56,7 @@ def login_view(request):
                 return redirect('index_admin')
             elif user.registration.is_approved:
                 login(request, user)
-                return redirect('index_home')
+                return redirect('index')
             else:
                 messages.error(request, 'User is not approved yet. Please wait for approval.')
         else:
@@ -134,10 +134,15 @@ def by_law(request):
 def index_home(request):
     return render(request,"index_home.html")
 
-from .models import Donor  # Import the Donor model
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render, redirect
+from .models import Donor
+
 def blood_admin(request):
     donors = Donor.objects.all()
-    if request.method == 'POST':
+    is_superuser = request.user.is_superuser if request.user.is_authenticated else False
+
+    if request.method == 'POST' and is_superuser:
         name = request.POST.get('funame')
         age = request.POST.get('age')
         gender = request.POST.get('gender')
@@ -155,8 +160,9 @@ def blood_admin(request):
 
         # messages.success(request, 'Donor data submitted successfully.')
         return redirect('blood_admin')  
- 
-    return render(request, 'blood_admin.html', {'donors': donors})
+
+    return render(request, 'blood_admin.html', {'donors': donors, 'is_superuser': is_superuser})
+
     
 
 def approve_user(request, user_id):
@@ -221,15 +227,20 @@ def delete_donor(request,pk):
 
 from django.shortcuts import render, redirect
 from .models import PrayerGroup, ParishDirectory
+from django.db import IntegrityError
 
 def parish_admin(request):
+    error_message = None  # Initialize error message to None
     if request.method == 'POST':
-        # Check which form was submitted based on the presence of specific POST data
+       # Check which form was submitted based on the presence of specific POST data
         if 'new_group_name' in request.POST:
             # Process the POST data to add a new prayer group
             new_group_name = request.POST.get('new_group_name')
             if new_group_name:
-                PrayerGroup.objects.create(name=new_group_name)
+                try:
+                    PrayerGroup.objects.create(name=new_group_name)
+                except IntegrityError:
+                    error_message = "A prayer group with this name already exists."
         else:
             # Process the POST data to add a new member to the parish directory
             name = request.POST.get('funame')
@@ -252,8 +263,7 @@ def parish_admin(request):
     # Fetch the list of parish members along with their associated prayer groups
     parish_members = ParishDirectory.objects.select_related('prayer_group').all()
 
-    return render(request, 'parish_admin.html', {'prayer_groups': prayer_groups, 'parish_members': parish_members})
-
+    return render(request, 'parish_admin.html', {'prayer_groups': prayer_groups, 'parish_members': parish_members, 'error_message': error_message})
 # parish directory user
 
 def parish_user(request):
@@ -261,40 +271,39 @@ def parish_user(request):
     return render(request, 'parish_user.html', {'parish_members': parish_members})
 
 
-# views.py
+# report
 
 from django.shortcuts import render, redirect
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
 from .models import Report
-from django.utils.safestring import mark_safe
 
-@staff_member_required
 def report_admin(request):
     if request.method == 'POST':
-        # Extract the data from the request and create a Report object
-        heading = request.POST.get('heading')
-        report_text = request.POST.get('report')
-        date = request.POST.get('date')
-        place = request.POST.get('place')
-        name = request.POST.get('name')
+        if request.user.is_staff:  # Check if the user is a staff member (admin)
+            heading = request.POST.get('heading')
+            report_text = request.POST.get('report')
+            date = request.POST.get('date')
+            place = request.POST.get('place')
+            name = request.POST.get('name')
 
-        # Mark the report_text as safe HTML
-        report_text_safe = mark_safe(report_text)
+            Report.objects.create(
+                heading=heading,
+                report=report_text,
+                date=date,
+                place=place,
+                name=name
+            )
 
-        Report.objects.create(
-            heading=heading,
-            report=report_text_safe,  # Use the marked safe HTML here
-            date=date,
-            place=place,
-            name=name
-        )
+            # messages.success(request, 'Report successfully added.')
+            return redirect('report_admin')  # Redirect after successful submission
+        else:
+            messages.error(request, 'You do not have permission to access this page.')
+            return redirect('login')  # Redirect to the login page for non-admin users
 
-        return redirect('report_admin')  # Redirect to a success page after submission
+    # Fetch the latest report entry from the database based on the latest date
+    latest_report = Report.objects.latest('date')
 
-    # Fetch all reports from the database (you can adjust this query as needed)
-    reports = Report.objects.all()
-    
+    # Fetch all reports for the dropdown
+    reports = Report.objects.all().order_by('-date')
 
-    return render(request, 'report_admin.html', {'reports': reports})
-
-
+    return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})

@@ -3,33 +3,32 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>SMYM Mukkoottuthara</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <title>SMYM Mukkoottuthara</title>
 
-   <!-- Favicons -->
-   <link href="{% static 'img/logo1.png' %}" rel="icon">
-   <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
- 
-   <!-- Google Fonts -->
-   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
- 
-   <!-- Vendor CSS Files -->
-   <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
-   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-   <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
-   <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
-   <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
-   <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
-   <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
- 
-   <!-- Template Main CSS File -->
-   <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <meta content="" name="description">
+
+    <meta content="" name="keywords">    
+    <link href="{% static 'img/logo1.png' %}" rel="icon">
+    <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
    {% comment %} js files {% endcomment %}
    <script src="{% static 'js/validation.js' %}"></script>
+
   <style>
     .event {
       display: flex;
@@ -64,53 +63,72 @@
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
   }
+  /* Default styles for larger screens */
   table {
-      width: 100%;
-      border-collapse: collapse;
-      border-spacing: 0;
-      margin: 20px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-bottom: 40px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
+  
   th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
   }
+  
   th {
-      background-color: #007BFF;
-      color: #fff;
+    background-color: #007BFF;
+    color: #fff;
   }
+  
   tr:hover {
-      background-color: #f5f5f5;
+    background-color: #f5f5f5;
   }
+  
+  /* Media query for screens with a max width of 600px (small screens) */
   @media screen and (max-width: 600px) {
-      table thead {
-          display: none;
-      }
-      table tbody tr {
-          margin-bottom: 10px;
-          display: block;
-          border: 1px solid #000; /* Dark border for rows */
-          border-radius: 5px;
-      }
-      table tbody td {
-          display: block;
-          text-align: center;
-          border-bottom: 1px solid #ddd; /* Light border for columns */
-          padding-left: 50%; /* Add left padding to create space for heading */
-          position: relative;
-      }
-      table tbody td:before {
-          content: attr(data-th);
-          position: absolute;
-          left: 10px; /* Adjust the left padding for heading */
-          width: 40%; /* Adjust the width of the heading */
-          padding-right: 10px; /* Add right padding to the heading */
-          white-space: nowrap;
-      }
+    table {
+      width: 90%; /* Make the table take up the full width of the screen */
+      margin-left: 20px; /* Remove the left margin on smaller screens */
+    }
+  
+    /* Hide the table header on small screens */
+    table thead {
+      display: none;
+    }
+  
+    /* Adjust the table rows and cells for small screens */
+    table tbody tr {
+      margin-bottom: 10px;
+      display: block;
+      border: 1px solid #000; /* Dark border for rows */
+      border-radius: 5px;
+    }
+  
+    table tbody td {
+      display: block;
+      text-align: center;
+      border-bottom: 1px solid #ddd; /* Light border for columns */
+      padding-left: 0; /* Remove left padding to use the full width */
+      position: relative;
+    }
+  
+    table tbody td:before {
+      content: attr(data-th);
+      position: absolute;
+      left: 10px; /* Adjust the left padding for heading */
+      width: 40%; /* Adjust the width of the heading */
+      padding-right: 10px; /* Add right padding to the heading */
+      white-space: nowrap;
+    }
   }
+  
   {% comment %} form css {% endcomment %}
   
   .container1 {
@@ -165,60 +183,132 @@
   .btn:hover {
     background-color:#b3d8ff; 
 }
-  
+
   </style>
 
 </head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top header-inner-pages">
-    <div class="container d-flex align-items-center justify-content-lg-between">
-
-      <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <a href="{% url 'index_admin' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
-
-      <nav id="navbar" class="navbar order-last order-lg-0">
-        <ul>
-          <li><a class="nav-link scrollto active" href="{% url 'index_admin' %}">Home</a></li>
-          <li class="dropdown"><a href="{% url 'index_admin' %}#about"><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="{% url 'index_admin' %}#about">SMYM Mukkoottuthara</a></li>
-              <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM</span> <i class="bi bi-chevron-right"></i></a>
-                <!-- <ul>
-                  <li><a href="#">SMYM-LOGO</a></li>
-                  <li><a href="#">SMYM-FLAG</a></li>
-                  <li><a href="#">SMYM-ANTHEM</a></li>
-                  <li><a href="#">SMYM-SLOGAN</a></li>
-                </ul> -->
-              </li>
-              <!-- <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li> -->
-            </ul>
-          </li>
-          <ul>
-            <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
-            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-            {% if user.is_authenticated %}
-            <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
-            {% else %}
-            <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
-            {% endif %}
-        </ul>
-        
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-      <a href="#about" class="get-started-btn scrollto">Support Us</a>
-
-    </div>
-  </header><!-- End Header -->
+        <!-- ======= Header ======= -->
+        <header id="header" class="fixed-top header-inner-pages">
+          <div class="container d-flex align-items-center justify-content-lg-between">
+      
+            <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+      
+            <nav id="navbar" class="navbar order-last order-lg-0">
+              <ul>
+                <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+                <li class="dropdown"><a href=""><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+                  <ul>
+                    <li><a href="{% url 'index' %}#about">SMYM Mukkoottuthara</a></li>
+                    <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM BY Law</span> <i class="bi bi-chevron-right"></i></a>
+                      <!-- <ul>
+                        <li><a href="#">SMYM-LOGO</a></li>
+                        <li><a href="#">SMYM-FLAG</a></li>
+                        <li><a href="#">SMYM-ANTHEM</a></li>
+                        <li><a href="#">SMYM-SLOGAN</a></li>
+                      </ul> -->
+                    </li>
+                    <!-- <li><a href="#">Drop Down 2</a></li>
+                    <li><a href="#">Drop Down 3</a></li>
+                    <li><a href="#">Drop Down 4</a></li> -->
+                  </ul>
+                </li>
+                <ul>
+                  <li><a class="nav-link scrollto" href="">Gallery</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
+                  {% if user.is_superuser %}
+                      <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                      <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+                  {% elif user.is_authenticated %}
+                      <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.first_name }})</a></li>
+                  {% else %}
+                      <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+                  {% endif %}
+      
+              </ul>
+              
+              <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+      
+            <a href="#about" class="get-started-btn scrollto">Support Us</a>
+      
+          </div>
+        </header><!-- End Header -->
 
   <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Blood Donors</h2>
+        </div>
+
+      </div>
+    </section>
+    <!-- End Breadcrumbs -->
+    <div class="filter-container" style="max-width: 200px; margin: 20px 20px 20px 40px; float: left;">
+      <p>Filter by Blood Group</p>
+      <div class="form-group">
+          <select id="filter-blood-group-select" onchange="filterDonors()">
+              <option value="" selected>Show All</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+          </select>
+      </div>
+  </div>
+
+  {% comment %} table display {% endcomment %}
+    <table>
+      <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Blood Group</th>
+            <th>Contact</th>
+            {% if user.is_superuser %}
+            <th>Actions</th>
+            {% endif %}
+          </tr>
+      </thead>
+      <tbody id="donor-table">
+        {% for donor in donors %}
+            <tr>
+                <td>{{ donor.name }}</td>
+                <td>{{ donor.age }}</td>
+                <td>{{ donor.get_gender_display }}</td>
+                <td>{{ donor.get_blood_group_display }}</td>
+                <td>{{ donor.contact }}</td>
+                {% if user.is_superuser %}
+                <td>
+                  <form method="post" action="{% url 'delete_donor' donor.id %}">
+                    {% csrf_token %}
+                    <button type="button" class="delete-button" onclick="confirmDelete()">Delete</button>
+                  </form>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr id="no-results" style="display: none;">
+          <td colspan="6">Sorry, no donors with the searched blood group found.</td>
+        </tr>
+    </tbody>
+    </table>
+
+{% if user.is_superuser %}
 
     <!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">
@@ -232,137 +322,111 @@
     </section>
     <!-- End Breadcrumbs -->
 
-    <table>
-      <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Blood Group</th>
-            <th>Contact</th>
-            <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-        {% for donor in donors %}
-            <tr>
-                <td>{{ donor.name }}</td>
-                <td>{{ donor.age }}</td>
-                <td>{{ donor.get_gender_display }}</td>
-                <td>{{ donor.get_blood_group_display }}</td>
-                <td>{{ donor.contact }}</td>
-                <td>
-                  <form method="post" action="{% url 'delete_donor' donor.id %}">
-                    {% csrf_token %}
-                    <button type="button" class="delete-button" onclick="confirmDelete()">Delete</button>
-                </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-  
-
   <div class="container1">
-    <h3 style="color:red">Add New members</h3>
-    <form method="POST" enctype="multipart/form-data" onsubmit="validateAll(event)" id="donor">
-      {% csrf_token %}
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="funame" name="funame" oninput="validateFullname()" required>
-            <p class="error" id="fun"></p>
-        </div>
-        <div class="form-group">
-            <label for="age">Age:</label>
-            <input type="number" class="form-control" id="age" name="age" oninput="validateAge()" required>
-            <p class="error" id="age-error"></p>
-        </div>
-        <div class="form-group">
-          <label for="gender">Gender:</label>
-          <select id="gender" name="gender" required>
-              <option value="" disabled selected>---select prayer group---</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-          </select>
-      </div>
-        <div class="form-group">
-            <label for="blood-group">Blood Group:</label>
-            <select id="blood-group" name="blood-group" required>
-                <option value="" disabled selected>---select prayer group---</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
+      <h3 style="color:red">Add New members</h3>
+      <form method="POST" enctype="multipart/form-data" onsubmit="validateAll(event)" id="donor">
+        {% csrf_token %}
+          <div class="form-group">
+              <label for="name">Name:</label>
+              <input type="text" class="form-control" id="funame" name="funame" oninput="validateFullname()" required>
+              <p class="error" id="fun"></p>
+          </div>
+          <div class="form-group">
+              <label for="age">Age:</label>
+              <input type="number" class="form-control" id="age" name="age" oninput="validateAge()" required>
+              <p class="error" id="age-error"></p>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>---select gender---</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
             </select>
         </div>
-        <div class="form-group">
-            <label for="contact">Contact:</label>
-            <input type="text" class="form-control" id="mob" name="mob" oninput="validatePhone()" required required>
-            <p class="error" id="ph"></p>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn">Submit</button>
-        </div>
-    </form>
-</div>
+          <div class="form-group">
+              <label for="blood-group">Blood Group:</label>
+              <select id="blood-group" name="blood-group" required>
+                  <option value="" disabled selected>---select blood group---</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="contact">Contact:</label>
+              <input type="text" class="form-control" id="mob" name="mob" oninput="validatePhone()" required required>
+              <p class="error" id="ph"></p>
+          </div>
+          <div class="form-group">
+              <button type="submit" class="btn">Submit</button>
+          </div>
+      </form>
+  </div>
+  {% endif %}
 
 
 </main><!-- End #main -->
 
- <!-- ======= Footer ======= -->
- <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
+<!-- ======= Footer ======= -->
+<footer id="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row">
 
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-info">
-              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
-              <p>
-                St Thomas Church <br>
-                Mukkoottuthara,<br>
-                PIN: 686510<br><br>
-                <strong>Phone:</strong> +91 8078529691<br>
-                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
-              </p>
-              <div class="social-links mt-3">
-                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-              </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-info">
+            <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+            <p>
+              St Thomas Church <br>
+              Mukkoottuthara,<br>
+              PIN: 686510<br><br>
+              <strong>Phone:</strong> +91 8078529691<br>
+              <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+            </p>
+            <div class="social-links mt-3">
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook" target="_blank"><i class="bx bxl-facebook"></i></a>
+              <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram" target="_blank"><i class="bx bxl-instagram"></i></a>
+              {% comment %} <a href="#" target="blank" class="google-plus"><i class="bx bxl-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> {% endcomment %}
             </div>
           </div>
-
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="event.php">Upcoming Events</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
-            </ul>
-          </div>
-
         </div>
+
+        <div class="col-lg-2 col-md-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#">Home</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
+            <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'parish_admin' %}">Parish Directory</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Blood Bank</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}">Upcoming Events</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+            <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
+          </ul>
+        </div>
+
+
       </div>
     </div>
+  </div>
 
-  </footer><!-- End Footer -->
+</footer><!-- End Footer -->
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -385,7 +449,38 @@
             document.forms[0].submit();
         }
     }
+
+{% comment %} Filter Donors {% endcomment %}
+function filterDonors() {
+  var bloodGroup = document.getElementById("filter-blood-group-select").value;
+  var tbody = document.getElementById("donor-table");
+  var rows = tbody.getElementsByTagName("tr");
+  var noResultsRow = document.getElementById("no-results");
+
+  // Assume no results initially
+  var hasResults = false;
+
+  for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var cells = row.getElementsByTagName("td");
+
+      if (cells.length >= 4) {  // Ensure there's a cell with blood group data (4th column)
+          var cell = cells[3];  // 4th column (Blood Group)
+
+          if (bloodGroup === "" || cell.innerHTML === bloodGroup) {
+              row.style.display = "";  // Show the row
+              hasResults = true;      // Mark that results were found
+          } else {
+              row.style.display = "none";  // Hide the row
+          }
+      }
+  }
+
+  // Show or hide the "No results" message based on whether results were found
+  noResultsRow.style.display = hasResults ? "none" : "";
+}
 </script>
+
 
 </body>
 

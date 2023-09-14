@@ -185,31 +185,55 @@
 </head>
 
 <body>
-    <!-- ======= Header ======= -->
-    <header id="header" class="fixed-top header-inner-pages">
-        <div class="container d-flex align-items-center justify-content-lg-between">
-            <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
-            <nav id="navbar" class="navbar order-last order-lg-0">
+        <!-- ======= Header ======= -->
+        <header id="header" class="fixed-top header-inner-pages">
+            <div class="container d-flex align-items-center justify-content-lg-between">
+        
+              <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+              <!-- Uncomment below if you prefer to use an image logo -->
+              <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+        
+              <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
-                    <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
-                    <li class="dropdown"><a href="#"><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
-                        <ul>
-                            <li><a href="{% url 'index' %}#about">SMYM Mukkoottuthara</a></li>
-                            <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM</span> <i class="bi bi-chevron-right"></i></a>
-                        </ul>
-                    </li>
-                    <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
-                    <li><a class="nav-link scrollto " href="gallery.html">Gallery</a></li>
+                  <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+                  <li class="dropdown"><a href=""><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                      <li><a href="{% url 'index' %}#about">SMYM Mukkoottuthara</a></li>
+                      <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM BY Law</span> <i class="bi bi-chevron-right"></i></a>
+                        <!-- <ul>
+                          <li><a href="#">SMYM-LOGO</a></li>
+                          <li><a href="#">SMYM-FLAG</a></li>
+                          <li><a href="#">SMYM-ANTHEM</a></li>
+                          <li><a href="#">SMYM-SLOGAN</a></li>
+                        </ul> -->
+                      </li>
+                      <!-- <li><a href="#">Drop Down 2</a></li>
+                      <li><a href="#">Drop Down 3</a></li>
+                      <li><a href="#">Drop Down 4</a></li> -->
+                    </ul>
+                  </li>
+                  <ul>
+                    <li><a class="nav-link scrollto" href="">Gallery</a></li>
                     <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
-                    <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+                    <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
+                    {% if user.is_superuser %}
+                        <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                        <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+                    {% elif user.is_authenticated %}
+                        <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.first_name }})</a></li>
+                    {% else %}
+                        <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+                    {% endif %}
+        
                 </ul>
+                
                 <i class="bi bi-list mobile-nav-toggle"></i>
-            </nav>
-            <a href="#about" class="get-started-btn scrollto">Support Us</a>
-        </div>
-    </header>
-    <!-- End Header -->
-
+              </nav><!-- .navbar -->
+        
+              <a href="#about" class="get-started-btn scrollto">Support Us</a>
+        
+            </div>
+          </header><!-- End Header -->
     <main id="main">
         <!-- ======= Breadcrumbs ======= -->
         <section class="breadcrumbs">
@@ -249,98 +273,102 @@
         
         <!-- End Events Section -->
 
-
-        {% comment %} form {% endcomment %}
+        <!-- Event form -->
+        {% if user.is_superuser %}
         <div class="container">
-          <div class="row">
-              <div class="col-md-6">
-                  <h2>Add New Event</h2>
-                  <div class="event-form">
-                      <form action="#" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                          <label for="date">Date:</label>
-                           <input type="date" id="date" name="date" required min="{% now 'Y-m-d' %}">
-                          <label for="title">Title:</label>
-                          <input type="text" id="title" name="title" required>
-            
-                          <label for="description">Description:</label>
-                          <textarea id="description" name="description" rows="4" required></textarea>
-            
-                          <label for="start-time">Starting Time (24-hour format):</label>
-                          <input type="time" id="start-time" name="start-time" required>
-
-                          <label for="end-time">Ending Time (24-hour format):</label>
-                          <input type="time" id="end-time" name="end-time" required>
-                       
-                          <label for="venue">Venue:</label>
-                          <input type="text" id="venue" name="venue" required>
-            
-                          <label for="cover-poster">Poster for Cover:</label>
-                          <input type="file" id="cover-poster" name="cover-poster" accept="image/*">
-                          <br><br>
-                          <label for="detailed-poster">Detailed Poster:  </label>
-                          <input type="file" id="detailed-poster" name="detailed-poster" accept="image/*" required>
-            
-                          <input type="submit" value="Submit">
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>      
-      
-    </main>
-
-    <!-- Footer -->
-    <footer id="footer">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="footer-info">
-                            <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
-                            <p>
-                                St Thomas Church <br>
-                                Mukkoottuthara,<br>
-                                PIN: 686510<br><br>
-                                <strong>Phone:</strong> +91 8078529691<br>
-                                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
-                            </p>
-                            <div class="social-links mt-3">
-                                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook"><i class="bx bxl-facebook"></i></a>
-                                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram"><i class="bx bxl-instagram"></i></a>
-                                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Add New Event</h2>
+                    <div class="event-form">
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" required min="{% now 'Y-m-d' %}">
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" required>
+    
+                            <label for="description">Description:</label>
+                            <textarea id="description" name="description" rows="4" required></textarea>
+    
+                            <label for="start-time">Starting Time (24-hour format):</label>
+                            <input type="time" id="start-time" name="start-time" required>
+    
+                            <label for="end-time">Ending Time (24-hour format):</label>
+                            <input type="time" id="end-time" name="end-time" required>
+    
+                            <label for="venue">Venue:</label>
+                            <input type="text" id="venue" name="venue" required>
+    
+                            <label for="cover-poster">Poster for Cover:</label>
+                            <input type="file" id="cover-poster" name="cover-poster" accept="image/*">
+                            <br><br>
+                            <label for="detailed-poster">Detailed Poster:  </label>
+                            <input type="file" id="detailed-poster" name="detailed-poster" accept="image/*" required>
+    
+                            <input type="submit" value="Submit">
+                        </form>
                     </div>
-
-                    <div class="col-lg-2 col-md-6 footer-links">
-                        <h4>Useful Links</h4>
-                        <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}">Home</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 footer-links">
-                        <h4>Our Services</h4>
-                        <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="event.php">Upcoming Events</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
-                        </ul>
-                    </div>
-
                 </div>
             </div>
         </div>
+        {% endif %}
+    
+    </main>
 
-    </footer>
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
 
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-info">
+              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+              <p>
+                St Thomas Church <br>
+                Mukkoottuthara,<br>
+                PIN: 686510<br><br>
+                <strong>Phone:</strong> +91 8078529691<br>
+                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook" target="_blank"><i class="bx bxl-facebook"></i></a>
+                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram" target="_blank"><i class="bx bxl-instagram"></i></a>
+                {% comment %} <a href="#" target="blank" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> {% endcomment %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'parish_admin' %}">Parish Directory</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Upcoming Events</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
+            </ul>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
@@ -387,32 +415,6 @@
             closeModal();
         });
     </script>
-
-    {% comment %} Event form {% endcomment %}
-
-    <script>
-      // JavaScript to enforce additional constraints
-  
-      // Function to validate the time inputs
-      function validateTimeInputs() {
-          const startTime = document.getElementById('start-time').value;
-          const endTime = document.getElementById('end-time').value;
-          const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  
-          if (startTime >= endTime || startTime <= currentTime || endTime <= currentTime) {
-              alert('Invalid time selection. Start and end times should be in 12-hour format, and end time should be after start time and after the current time.');
-              return false;
-          }
-          return true;
-      }
-  
-      // Attach the form submission event handler
-      document.querySelector('form').addEventListener('submit', function (e) {
-          if (!validateTimeInputs()) {
-              e.preventDefault(); // Prevent form submission if validation fails
-          }
-      });
-  </script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@
   <title>SMYM Mukkoottuthara</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  
 
   <!-- Favicons -->
   <link href="{% static 'img/logo1.png' %}" rel="icon">
@@ -38,7 +39,7 @@
 
       <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
       <!-- Uncomment below if you prefer to use an image logo -->
-      <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+      <a href="{% url 'index_admin' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
@@ -59,16 +60,20 @@
               <li><a href="#">Drop Down 4</a></li> -->
             </ul>
           </li>
-  
-          <li><a class="nav-link scrollto" href="#services">Services</a></li> 
-          <li><a class="nav-link scrollto " href="gallery.html">Gallery</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          {% if user.is_authenticated %}
-          <li><a class="nav-link scrollto" href="{% url 'logout' %}">Log Out</a></li>
-          {% else %}
-          <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
-          {% endif %}
+          <ul>
+            <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+            {% if user.is_superuser %}
+                <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+            {% elif user.is_authenticated %}
+                <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.first_name }})</a></li>
+            {% else %}
+                <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+            {% endif %}
+
         </ul>
+        
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
@@ -276,7 +281,7 @@
         <div class="row">
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-            <a href="" target="_blank">
+            <a href="#team" target="_blank">
                 <div class="icon-box">
                   <div class="icon"><i class="bi bi-people-fill"></i></i></div>
                     <h4><a href="#team">Executive Team</a></h4>
@@ -297,45 +302,47 @@
           </div></a>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
-            <a href="{% url 'event_user' %}">
+            <a href="{% url 'event' %}">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-calendar2-event"></i></div>
-              <h4><a href="{% url 'event_user' %}">Events</a></h4>
+              <h4><a href="{% url 'event' %}">Events</a></h4>
               <p>Upcoming Events, Quiz programs, Finished Events and More..</p>
             </div>
           </div>
           </a>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
+            <a href="{% url 'parish_admin' %}">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-person-rolodex"></i></div>
-              <h4><a href="{% url 'parish_user' %}">Parish Directory</a></h4>
+              <h4><a href="{% url 'parish_admin' %}">Parish Directory</a></h4>
               <p>Contact Details of Parish Members Based on Prayer Groups.</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-          <a href="blood_user" target="_blank">
+          <a href="{% url 'blood_admin' %}" target="_blank">
             <div class="icon-box">
               <div class="icon"><img src="{% static 'img/blood.png' %}" alt="logo" height="30px" width="30px"></div>
-              <h4><a href="{% url 'blood_user' %}">Blood Donors</a></h4>
+              <h4><a href="{% url 'blood_admin' %}">Blood Donors</a></h4>
               <p>Blood Donor's Details and Blood Donation Form</p>
             </div>
           </div></a>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+            <a href="{% url 'report_admin' %}" target="_blank">
             <div class="icon-box">
-              <div class="icon"><i class="bi bi-trophy-fill"></i></div>
-              <h4><a href="">Achievements</a></h4>
-              <p>Individual Achievements, Rank Holders and More..</p>
+              <div class="icon"><i class="bi bi-card-text"></i></div>
+              <h4><a href="{% url 'report_admin' %}">Reports</a></h4>
+              <p>Detailed Reports of Programmes Conducted</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-           <a href="gallery.html">
+           <a href="">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-images"></i></div>
-              <h4><a href="gallery.html">Gallery</a></h4>
+              <h4><a href="">Gallery</a></h4>
               <p>Photos of different Activities conducted by Smym Mukkoottuthara</p>
             </div>
           </div></a>
@@ -664,23 +671,18 @@
               <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#services">Services</a></li>
-              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
             </ul>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Our Services</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#services">Upcoming Events</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'parish_admin' %}">Parish Directory</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}">Upcoming Events</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
-              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
             </ul>
           </div>
-
-
         </div>
       </div>
     </div>
