@@ -184,56 +184,60 @@
 
   </main><!-- End #main -->
 
- <!-- ======= Footer ======= -->
- <footer id="footer">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
+<!-- ======= Footer ======= -->
+<footer id="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row">
 
-          <div class="col-lg-3 col-md-6">
-            <div class="footer-info">
-              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
-              <p>
-                St Thomas Church <br>
-                Mukkoottuthara,<br>
-                PIN: 686510<br><br>
-                <strong>Phone:</strong> +91 8078529691<br>
-                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
-              </p>
-              <div class="social-links mt-3">
-                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-              </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-info">
+            <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+            <p>
+              St Thomas Church <br>
+              Mukkoottuthara,<br>
+              PIN: 686510<br><br>
+              <strong>Phone:</strong> +91 8078529691<br>
+              <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+            </p>
+            <div class="social-links mt-3">
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook" target="_blank"><i class="bx bxl-facebook"></i></a>
+              <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram" target="_blank"><i class="bx bxl-instagram"></i></a>
+              {% comment %} <a href="#" target="blank" class="google-plus"><i class="bx bxl-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> {% endcomment %}
             </div>
           </div>
-
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Our Services</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="event.php">Upcoming Events</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
-            </ul>
-          </div>
-
         </div>
+
+        <div class="col-lg-2 col-md-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#">Home</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
+            <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'parish_admin' %}">Parish Directory</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}#">Upcoming Events</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+            <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
+          </ul>
+        </div>
+
+
       </div>
     </div>
+  </div>
 
-  </footer><!-- End Footer -->
+</footer><!-- End Footer -->
 
   <div id="preloader"></div>
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

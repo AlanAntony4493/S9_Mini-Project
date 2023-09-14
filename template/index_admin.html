@@ -62,7 +62,7 @@
           </li>
           <ul>
             <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
-            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+            <li><a class="nav-link scrollto" href="#services">Services</a></li>
             {% if user.is_authenticated %}
             <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
             <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
@@ -327,6 +327,7 @@
           </div></a>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+            <a href="{% url 'report_admin' %}">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-card-text"></i></div>
               <h4><a href="{% url 'report_admin' %}">Reports</a></h4>
@@ -335,10 +336,10 @@
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-           <a href="gallery.html">
+           <a href="">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-images"></i></div>
-              <h4><a href="gallery.html">Gallery</a></h4>
+              <h4><a href="">Gallery</a></h4>
               <p>Photos of different Activities conducted by Smym Mukkoottuthara</p>
             </div>
           </div></a>
@@ -676,7 +677,7 @@
             <h4>Our Services</h4>
             <ul>
               <li><i class="bx bx-chevron-right"></i> <a href="#services">Parish Directory</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="assets/blood bank.pdf">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#services">Upcoming Events</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
               <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
