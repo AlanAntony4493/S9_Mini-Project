@@ -291,14 +291,14 @@ def report_admin(request):
             report_text = request.POST.get('report')
             date = request.POST.get('date')
             place = request.POST.get('place')
-            name = request.POST.get('name')
+            funame = request.POST.get('funame')
 
             Report.objects.create(
                 heading=heading,
                 report=report_text,
                 date=date,
                 place=place,
-                name=name
+                name=funame
             )
 
             # messages.success(request, 'Report successfully added.')
@@ -318,3 +318,7 @@ def report_admin(request):
 
 def gallery(request):
     return render(request, 'gallery.html')
+
+# career 
+def career_forum(request):
+    return render(request, 'career_forum.html')

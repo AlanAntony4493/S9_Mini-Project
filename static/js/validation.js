@@ -216,7 +216,7 @@ function validateFullname() {
   const nameRegex = /^(?!\s)[A-Za-z\s]+(?<!\s)$/;
 
   if (!nameRegex.test(unameInput.value)) {
-      unameError.textContent = "Invalid name (only alphabetic characters sss allowed, minimum 3 characters)";
+      unameError.textContent = "Invalid name (only alphabetic characters allowed, minimum 3 characters)";
       return false
   } else {
       unameError.textContent = "";
@@ -263,3 +263,79 @@ function validateAllInput(event) {
       // At least one validation failed, display an error message or handle it accordingly
   }
 }
+
+// function to validate house name
+function validatePlacename() {
+  const unameInput = document.getElementById("place");
+  const unameError = document.getElementById("p-error");
+  
+  const nameRegex = /^[A-Za-z][A-Za-z ]*$/;
+  
+  if (!nameRegex.test(unameInput.value)) {
+      unameError.textContent = "Invalid place name (only alphabetic characters, minimum length 1 alphabet, and must start with an alphabet)";
+      return false
+  } else {
+    console.log("shnamed")
+      unameError.textContent = "";
+      return true
+  }
+}
+
+// report validation
+function validateReport() {
+  const reportTextarea = document.getElementById("report");
+  const reportError = document.getElementById("report-error");
+  
+  // Remove leading and trailing whitespaces for validation
+  const reportValue = reportTextarea.value;
+  
+  // Check if the report has at least 300 characters
+  if (reportValue.length < 300) {
+    reportError.textContent = "Report must contain at least 300 characters.";
+    return false;
+  }
+
+  // Remove leading and trailing whitespaces and check the length
+  const trimmedReport = reportValue.trim();
+  if (trimmedReport.length !== reportValue.length) {
+    reportError.textContent = "Report should not start or end with whitespace.";
+    return false;
+  }
+
+  // If all conditions pass, the report is valid
+  reportError.textContent = "";
+  return true;
+}
+// heading validatio
+function validateHeading() {
+  const headingInput = document.getElementById("heading");
+  const headingError = document.getElementById("heading-error");
+  
+  // Remove leading and trailing whitespaces for validation
+  const headingValue = headingInput.value;
+  
+  // Check if the heading has at least 1 character and doesn't start or end with whitespace
+  if (headingValue.length < 1 || headingValue.trim() !== headingValue) {
+    headingError.textContent = "Invalid heading (at least 1 character, no leading or trailing whitespace)";
+    return false;
+  }
+
+  // If all conditions pass, the heading is valid
+  headingError.textContent = "";
+  return true;
+}
+
+
+function validateAllInputReport(event) {
+  event.preventDefault(); // Prevent the default form submission
+
+  if (validateFullname() && validatePlacename() && validateReport() && validateHeading()) {
+      // All validations passed, allow form submission
+      console.log("submitted")
+      document.getElementById("report-form").submit(); // Submit the form
+  } else {
+    console.log("not submitted")
+      // At least one validation failed, display an error message or handle it accordingly
+  }
+}
+

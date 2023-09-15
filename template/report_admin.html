@@ -24,6 +24,8 @@
 
     <!-- Template Main CSS File -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% comment %}  js file {% endcomment %}
+    <script src="{% static 'js/validation.js' %}"></script>
 
     <style>
       .container-main {
@@ -365,12 +367,12 @@
               data-report="{{ latest_report.report|safe }}"
               data-date="{{ latest_report.date }}"
               data-place="{{ latest_report.place }}"
-              data-name="{{ latest_report.name }}">
+              data-name="{{ latest_report.funame }}">
               Show Latest
               </option>
                 {% for report in reports %}
                 <option value="{{ report.date }}" data-heading="{{ report.heading }}" data-report="{{ report.report|safe }}"
-                    data-date="{{ report.date }}" data-place="{{ report.place }}" data-name="{{ report.name }}">
+                    data-date="{{ report.date }}" data-place="{{ report.place }}" data-name="{{ report.funame }}">
                     {{ report.date }} - {{ report.heading }}
                 </option>
                 {% endfor %}
@@ -390,15 +392,17 @@
         </section>
         <div class="container-form-wrap">
           <div class="form-container">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" action="{% url 'report_admin' %}" enctype="multipart/form-data" onsubmit="return validateAllInputReport(event)" id="report-form">
               {% csrf_token %}
               <div class="form-group">
                 <label for="heading">Heading:</label>
-                <input type="text" id="heading" name="heading" required>
+                <input type="text" id="heading" name="heading" oninput="validateHeading()" required>
+                <p class="error" id="heading-error"></p>
               </div>
               <div class="form-group">
                 <label for="report">Enter Report:</label>
-                <textarea id="report" name="report" rows="5" required></textarea>
+                <textarea id="report" name="report" rows="5" oninput="validateReport()" required></textarea>
+                <p class="error" id="report-error"></p>
               </div>
               <div class="form-group">
                 <label for="date">Date:</label>
@@ -406,11 +410,13 @@
               </div>
               <div class="form-group">
                 <label for="place">Place:</label>
-                <input type="text" id="place" name="place" required>
+                <input type="text" id="place" name="place" oninput="validatePlacename()" required>
+                <p class="error" id="p-error"></p>
               </div>
               <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="funame" name="funame" oninput="validateFullname()" required>
+                <p class="error" id="fun"></p>
               </div>
               <div class="form-group">
                 <input type="submit" value="Submit Report" class="btn btn-primary">
