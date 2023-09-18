@@ -338,16 +338,23 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
 from .models import PrayerGroup, ParishDirectory
+from django.db.models import Q
 
 def parish_admin(request):
+    error_message = None
+
     if request.method == 'POST':
         if 'new_group_name' in request.POST:
             new_group_name = request.POST.get('new_group_name')
             if new_group_name:
-                try:
-                    PrayerGroup.objects.create(name=new_group_name)
-                except IntegrityError:
+                # Check if the group name already exists (case-insensitive)
+                if PrayerGroup.objects.filter(Q(name__iexact=new_group_name) & ~Q(is_deleted=True)).exists():
                     error_message = "A prayer group with this name already exists."
+                else:
+                    try:
+                        PrayerGroup.objects.create(name=new_group_name)
+                    except IntegrityError:
+                        error_message = "An error occurred while creating the prayer group."
         else:
             form_name = request.POST.get('name')
             form_house_name = request.POST.get('house_name')
@@ -407,6 +414,7 @@ def parish_admin(request):
         'error_message': error_message,
     })
 
+
 from django.shortcuts import redirect
 from django.contrib import messages
 
@@ -443,7 +451,6 @@ def retrieve_deleted_entity(request, entity_type, entity_id):
 
     # Redirect back to the 'parish_admin' page
     return redirect('parish_admin')
-
 
 
 def gallery(request):
@@ -546,3 +553,33 @@ def report_admin(request):
 
     return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})
 
+
+
+
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import ParishDirectory
+
+def update_parish(request, member_id):
+    parish_member = get_object_or_404(ParishDirectory, id=member_id)
+    prayer_groups = PrayerGroup.objects.all()
+
+    if request.method == 'POST':
+        # Retrieve form data
+        name = request.POST.get('name')
+        house_name = request.POST.get('house_name')
+        contact = request.POST.get('contact')
+        prayer_group_id = request.POST.get('prayer_group')
+
+        # Update the Parish Directory record
+        parish_member.name = name
+        parish_member.house_name = house_name
+        parish_member.contact = contact
+        parish_member.prayer_group_id = prayer_group_id
+        parish_member.save()
+
+        return redirect('parish_admin')  # Redirect to the parish_admin page after update
+
+    return render(request, 'update_parish.html', {'parish_member': parish_member, 'prayer_groups': prayer_groups})

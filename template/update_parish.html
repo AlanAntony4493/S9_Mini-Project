@@ -1,0 +1,36 @@
+{% extends 'parish_admin.html' %}
+
+{% block content %}
+  <h2 id="update">Update Parish Member</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="member_id" value="{{ parish_member.id }}">
+    
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control" name="name" value="{{ parish_member.name }}">
+    </div>
+
+    <div class="form-group">
+      <label for="house_name">House Name:</label>
+      <input type="text" class="form-control" name="house_name" value="{{ parish_member.house_name }}">
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Contact:</label>
+      <input type="text" class="form-control" name="contact" value="{{ parish_member.contact }}">
+    </div>
+
+    <div class="form-group">
+      <label for="prayer_group">Prayer Group:</label>
+      <select class="form-control" name="prayer_group">
+        <option value="{{ parish_member.prayer_group.id }}" selected>{{ parish_member.prayer_group.name }}</option>
+        {% for group in prayer_groups %}
+        <option value="{{ group.name }}">{{ group.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+{% endblock %}
