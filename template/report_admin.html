@@ -80,7 +80,7 @@
         border-radius: 10px;
         margin-top: 0px;
         padding: 20px;
-        max-width: 90%;
+        width: 230px;
         min-width: 90%;
         word-wrap: break-word;
         text-align: justify;
@@ -124,7 +124,7 @@
             margin-top: 0;
             margin-bottom: 10px;
             min-width: auto;
-            max-width: 100%;
+            width:200px;
             font-size: 15px;
         }
 
@@ -334,7 +334,17 @@
           </div>
         </section>
         <!-- End Breadcrumbs -->
-
+  {% if user.is_superuser %} 
+        {% if messages %}
+        <div class="alert alert-danger">
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+  {% endif %}
         <!-- report_admin.html -->
         <div class="container-main">
           <div class="inner-container">
@@ -367,12 +377,12 @@
               data-report="{{ latest_report.report|safe }}"
               data-date="{{ latest_report.date }}"
               data-place="{{ latest_report.place }}"
-              data-name="{{ latest_report.funame }}">
+              data-name="{{ latest_report.name }}">
               Show Latest
               </option>
                 {% for report in reports %}
                 <option value="{{ report.date }}" data-heading="{{ report.heading }}" data-report="{{ report.report|safe }}"
-                    data-date="{{ report.date }}" data-place="{{ report.place }}" data-name="{{ report.funame }}">
+                    data-date="{{ report.date }}" data-place="{{ report.place }}" data-name="{{ report.name }}">
                     {{ report.date }} - {{ report.heading }}
                 </option>
                 {% endfor %}
@@ -396,12 +406,12 @@
               {% csrf_token %}
               <div class="form-group">
                 <label for="heading">Heading:</label>
-                <input type="text" id="heading" name="heading" oninput="validateHeading()" required>
+                <input type="text" id="heading" name="heading" oninput="validateHeading()" autocomplete="off" required>
                 <p class="error" id="heading-error"></p>
               </div>
               <div class="form-group">
                 <label for="report">Enter Report:</label>
-                <textarea id="report" name="report" rows="5" oninput="validateReport()" required></textarea>
+                <textarea id="report" name="report" rows="5" oninput="validateReport()" autocomplete="off" required></textarea>
                 <p class="error" id="report-error"></p>
               </div>
               <div class="form-group">
@@ -410,12 +420,12 @@
               </div>
               <div class="form-group">
                 <label for="place">Place:</label>
-                <input type="text" id="place" name="place" oninput="validatePlacename()" required>
+                <input type="text" id="place" name="place" oninput="validatePlacename()" autocomplete="off" required>
                 <p class="error" id="p-error"></p>
               </div>
               <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="funame" name="funame" oninput="validateFullname()" required>
+                <input type="text" id="funame" name="funame" oninput="validateFullname()" autocomplete="off" required>
                 <p class="error" id="fun"></p>
               </div>
               <div class="form-group">
@@ -425,6 +435,7 @@
           </div>
         </div>
         {% endif %}
+
     </main>
 
 <!-- ======= Footer ======= -->

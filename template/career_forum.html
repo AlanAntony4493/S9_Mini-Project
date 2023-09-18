@@ -61,16 +61,68 @@
             text-decoration: underline;
         }
 
-        /* Style for User Profile Icon and Username */
-        .user-profile {
-            font-weight: bold;
-            margin-bottom: 5px;
+        /* Oval-shaped image container */
+        .image-container {
+            width: 100px; /* Adjust the width to your preference */
+            height: 100px; /* Adjust the height to your preference */
+            border-radius: 50%; /* Makes it oval */
+            overflow: hidden; /* Hide overflowing content */
+            float: left; /* Float the image container to the left */
+            margin-right: 20px; /* Spacing between image and text */
+        }
+
+        /* Make the image container round */
+        .round-image {
+            border-radius: 50%;
+        }
+
+        /* Oval image to fill the container */
+        .oval-image {
+            width: 100%; /* Make the image fill the container */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Remove any default inline styles */
+            border-radius: 50%; /* Ensure the image stays oval */
+        }
+
+        /* Align text to the top and parallel to the image */
+        .resource-person-description {
+            overflow: hidden; /* Hide overflowing content */
+        }
+
+        .container-resource-person {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* CSS for larger screens */
+        @media screen and (min-width: 992px) {
+            #career-guidance-container {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+            #resource-persons {
+                margin-top: 0;
+            }
+        }
+
+        /* CSS for smaller screens */
+        @media screen and (max-width: 991px) {
+            #career-guidance-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            #resource-persons {
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
- <!-- ======= Header ======= -->
+    <!-- ======= Header ======= -->
+     <!-- ======= Header ======= -->
  <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-lg-between">
 
@@ -121,89 +173,125 @@
 
     </div>
 </header><!-- End Header -->
+    <!-- End Header -->
 
     <main id="main">
-      <!-- ======= Breadcrumbs ======= -->
-      <section class="breadcrumbs">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2>Career Guidance Forum</h2>
-            </div>
-        </div>
-    <section>
-
-
-        <!-- Career Guidance Forum Section -->
-        <section>
+        <!-- ======= Breadcrumbs ======= -->
+        <section class="breadcrumbs">
             <div class="container">
-                <div class="row">
-                    <!-- Questions and Answers -->
-                    <div class="col-lg-8">
-                        <div class="container-resource-person">
-                            <h1>Career Guidance Forum</h1>
-
-                            <ul id="qaList">
-                                <!-- Example Question and Answer -->
-                                <li class="custom-icon">
-                                    <div class="question">
-                                        <h3>Example Question:</h3>
-                                        <p class="question-content">This is an example question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        <p class="author">Abin</p>
-                                    </div>
-                                    <ul class="answers">
-                                        <li>
-                                            <div class="answer">
-                                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
-                                                <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <!-- Repeat this structure for more questions and answers -->
-                            </ul>
-
-                            <h2>Ask a Question</h2>
-                            <form id="askForm">
-                                <label for="question">Your Question:</label><br>
-                                <textarea id="question" name="question" rows="4" cols="50" required></textarea><br>
-                                <input type="submit" value="Submit Question">
-                            </form>
-
-                            <!-- Answer a Question Form -->
-                            <h2>Answer a Question</h2>
-                            <form id="answerForm">
-                                <label for="answer">Your Answer:</label><br>
-                                <textarea id="answer" name="answer" rows="4" cols="50" required></textarea><br>
-                                <input type="submit" value="Submit Answer">
-                            </form>
-                        </div>
-                    </div>
-                    <!-- Resource Persons -->
-                    <div class="col-lg-4">
-                        <div class="container-resource-person">
-                            <h4>Resource Persons</h4>
-                            <div class="resource-person">
-                                <img src="abcd.webp" alt="Resource Person 1">
-                                <div class="resource-person-description">
-                                    <p>Name: John Doe</p>
-                                    <p>Job: CEO, Company XYZ</p>
-                                </div>
-                            </div>
-                            <div class="resource-person">
-                                <img src="abcd.webp" alt="Resource Person 2">
-                                <div class="resource-person-description">
-                                    <p>Name: Jane Smith</p>
-                                    <p>Job: CTO, Tech Solutions</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Career Guidance Forum</h2>
                 </div>
             </div>
         </section>
-    </main><!-- End #main -->
-
-    <!-- Your existing HTML content here -->
+    
+        <!-- Career Guidance Forum Section 1 -->
+        <div class="container">
+            <h1>Sharing Knowledge and Shaping Futures</h1>
+            <div class="row">
+                <!-- Questions and Answers -->
+                <div class="col-lg-8">
+                    <div class="container-resource-person" id="qa-section">
+                        <ul id="qaList">
+                            <!-- Example Question and Answer -->
+                            <li class="custom-icon">
+                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
+                                <div class="question">
+                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                                <ul class="answers">
+                                    <li>
+                                        <p style="font-style: italic;">Answers</p>
+                                        <div class="answer">
+                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
+                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Repeat this structure for more questions and answers -->
+                            <form id="answerForm" style="margin-top:50px">
+                                <div class="mb-3">
+                                    <label for="answerText" class="form-label">Your Answer</label>
+                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Answer</button>
+                            </form>
+                        </ul>
+    
+                        <!-- Answer a Question Form -->
+                        <h2>Answer a Question</h2>
+                        <form id="answerForm">
+                            <!-- ... Answer a Question Form ... -->
+                        </form>
+                    </div>
+                </div>
+    
+                <!-- Resource Persons -->
+                <div class="col-lg-4" style="margin-top:30px;">
+                    <div class="resource-person"  style="margin-bottom:40px;">
+                        <div class="image-container round-image">
+                            <img src="{% static 'img/team/sobin.png' %}" alt="Resource Person 1" class="oval-image">
+                        </div>
+                        <div class="resource-person-description">
+                            <p>Name: Jane Smith</p>
+                            <p>Job: CTO, Tech Solutions</p>
+                        </div>
+                    </div>
+    
+                    <!-- Repeat this structure for more resource persons -->
+                    
+                </div>
+            </div>
+        </div>
+    
+        <!-- Career Guidance Forum Section 2 (Duplicated) -->
+        <div class="container">
+            <h1>Sharing Knowledge and Shaping Futures</h1>
+            <div class="row">
+                <!-- Questions and Answers (Duplicated) -->
+                <div class="col-lg-8">
+                    <div class="container-resource-person" id="qa-section">
+                        <ul id="qaList">
+                            <!-- Example Question and Answer (Duplicated) -->
+                            <li class="custom-icon">
+                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
+                                <div class="question">
+                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                                <ul class="answers">
+                                    <li>
+                                        <p style="font-style: italic;">Answers</p>
+                                        <div class="answer">
+                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
+                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Repeat this structure for more questions and answers (Duplicated) -->
+                            <form id="answerForm" style="margin-top:50px">
+                                <div class="mb-3">
+                                    <label for="answerText" class="form-label">Your Answer</label>
+                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Answer</button>
+                            </form>
+                        </ul>
+    
+                        <!-- Answer a Question Form (Duplicated) -->
+                        <h2>Answer a Question</h2>
+                        <form id="answerForm">
+                            <!-- ... Answer a Question Form ... -->
+                        </form>
+                    </div>
+                </div>
+    
+                <!-- Resource Persons (Duplicated) -->
+                <!-- Duplicate the resource persons content here -->
+            </div>
+        </div>
+    </main>
 
     <!-- Vendor JS Files -->
     <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
@@ -216,6 +304,36 @@
 
     <!-- Template Main JS File -->
     <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        // JavaScript for responsive behavior
+        window.addEventListener('DOMContentLoaded', () => {
+            const careerGuidanceContainer = document.getElementById('career-guidance-container');
+            const resourcePersons = document.getElementById('resource-persons');
+
+            // Function to rearrange sections based on screen width
+            function rearrangeSections() {
+                if (window.innerWidth >= 992) {
+                    // Larger screens: Resource persons and questions side by side
+                    careerGuidanceContainer.style.display = 'flex';
+                    careerGuidanceContainer.style.alignItems = 'flex-start';
+                    careerGuidanceContainer.style.justifyContent = 'space-between';
+                    resourcePersons.style.marginTop = '0';
+                } else {
+                    // Smaller screens: Resource persons below questions
+                    careerGuidanceContainer.style.flexDirection = 'column';
+                    careerGuidanceContainer.style.alignItems = 'flex-start';
+                    resourcePersons.style.marginTop = '20px';
+                }
+            }
+
+            // Initial arrangement
+            rearrangeSections();
+
+            // Listen for window resize event to update layout
+            window.addEventListener('resize', rearrangeSections);
+        });
+    </script>
 </body>
 
 </html>

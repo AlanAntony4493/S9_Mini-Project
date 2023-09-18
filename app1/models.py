@@ -6,6 +6,8 @@ class Registration(models.Model):
     middle_name = models.CharField(max_length=50, blank=True)
     house_name = models.CharField(max_length=100, blank=True)
     is_approved = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)  # New field for user status
+    comments = models.TextField(blank=True) 
     
     PRAYER_GROUP_CHOICES = [
         ('Gethsemane', 'Gethsemane'),
@@ -68,9 +70,10 @@ class Donor(models.Model):
 
 # parish directory
 
-# Model for Prayer Groups
+# prayer group 
 class PrayerGroup(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    is_deleted = models.BooleanField(default=False)  # Add this field
 
     def __str__(self):
         return self.name
@@ -79,9 +82,10 @@ class PrayerGroup(models.Model):
 class ParishDirectory(models.Model):
     name = models.CharField(max_length=100)
     house_name = models.CharField(max_length=100)
-    contact = models.CharField(max_length=15, unique=True)  # Add unique=True here
+    contact = models.CharField(max_length=15, unique=True)
     prayer_group = models.ForeignKey(PrayerGroup, on_delete=models.CASCADE)
-
+    is_deleted = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.name
 
@@ -103,10 +107,25 @@ class Event(models.Model):
 class Report(models.Model):
     heading = models.CharField(max_length=500)
     report = models.TextField()
-    date = models.DateField()
+    date = models.DateField(unique=True)
     place = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
     
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
+class Question(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question_text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+class Answer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    answer_text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)

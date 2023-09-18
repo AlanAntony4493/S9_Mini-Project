@@ -19,6 +19,9 @@
     <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         /* Add custom styles here */
         /* Style for the form */
@@ -304,6 +307,12 @@
         
         <!-- End Events Section -->
 
+            {% if error_message %}
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+    {% endif %}
+
         <!-- Event form -->
         {% if user.is_superuser %}
         <div class="container">
@@ -311,32 +320,38 @@
                 <div class="col-md-6">
                     <h2>Add New Event</h2>
                     <div class="event-form">
-                        <form action="#" method="post" enctype="multipart/form-data">
+                        <form action="#" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                             {% csrf_token %}
                             <label for="date">Date:</label>
                             <input type="date" id="date" name="date" required min="{% now 'Y-m-d' %}">
+                            
                             <label for="title">Title:</label>
                             <input type="text" id="title" name="title" required>
-    
+                        
                             <label for="description">Description:</label>
                             <textarea id="description" name="description" rows="4" required></textarea>
-    
+                        
                             <label for="start-time">Starting Time (24-hour format):</label>
                             <input type="time" id="start-time" name="start-time" required>
-    
+                        
                             <label for="end-time">Ending Time (24-hour format):</label>
                             <input type="time" id="end-time" name="end-time" required>
-    
+                        
                             <label for="venue">Venue:</label>
                             <input type="text" id="venue" name="venue" required>
-    
+                        
                             <label for="cover-poster">Poster for Cover:</label>
                             <input type="file" id="cover-poster" name="cover-poster" accept="image/*">
                             <br><br>
-                            <label for="detailed-poster">Detailed Poster:  </label>
+                            <label for="detailed-poster">Detailed Poster:</label>
                             <input type="file" id="detailed-poster" name="detailed-poster" accept="image/*" required>
-    
+                        
                             <input type="submit" value="Submit">
+                            <div id="validation-errors" style="color: red;"></div>
+
+                            <!-- Add this input field to store the event ID -->
+                            <input type="hidden" id="event-id" name="event-id" value="{{ event.id }}">
+
                         </form>
                     </div>
                 </div>
@@ -360,33 +375,73 @@
         </div>
         
     
-    <!-- Archived Events (Initially Hidden) -->
-    <div id="archivedEventsContainer" style="display: none;">
-        <div class="event-container">
-            <!-- Display archived events -->
-            {% for archived_event in archived_events %}
-                <div class="event">
-                    <div class="image-container">
-                        <img src="{{ archived_event.cover_poster.url }}" alt="Event Poster" style="max-height: 200px; width: 100%;">
-                    </div>
-                    <!-- Event Date and Description -->
-                    <div class="event-date">
-                        <div class="day">{{ archived_event.date|date:"d" }}</div>
-                        <div class="month">{{ archived_event.date|date:"M" }}</div>
-                    </div>
-                    <div class="event-description">
-                        <p class="event-title"><b>{{ archived_event.title }}</b>: {{ archived_event.description }}</p>
-                        <p class="event-time">{{ archived_event.start_time|time:"h:i A" }} - {{ archived_event.end_time|time:"h:i A" }}</p>
-                        <p class="event-venue">{{ archived_event.venue }}</p>
-                        <button class="delete-button" onclick="unarchiveEvent('{{ archived_event.id }}')">Unarchive</button>
-                        <button class="view-image-btn" onclick="openModal('{{ archived_event.detailed_poster.url }}')">View Detailed Poster</button>                        <button class="delete-button" onclick="deleteEvent('{{ event.id }}')">Delete</button>
-                    </div>
+<!-- Archived Events (Initially Hidden) -->
+<div id="archivedEventsContainer" style="display: none;">
+    <div class="event-container">
+        <!-- Display archived events -->
+        {% for archived_event in archived_events %}
+            <div class="event">
+                <div class="image-container">
+                    <img src="{{ archived_event.cover_poster.url }}" alt="Event Poster" style="max-height: 200px; width: 100%;">
                 </div>
-            {% endfor %}
-         </div>
-        </div>
-    </section>
+                <!-- Event Date and Description -->
+                <div class="event-date">
+                    <div class="day">{{ archived_event.date|date:"d" }}</div>
+                    <div class="month">{{ archived_event.date|date:"M" }}</div>
+                </div>
+                <div class="event-description">
+                    <p class="event-title"><b>{{ archived_event.title }}</b>: {{ archived_event.description }}</p>
+                    <p class="event-time">{{ archived_event.start_time|time:"h:i A" }} - {{ archived_event.end_time|time:"h:i A" }}</p>
+                    <p class="event-venue">{{ archived_event.venue }}</p>
+                    <button class="delete-button" onclick="unarchiveEvent('{{ archived_event.id }}')">Unarchive</button>
+                    <button class="view-image-btn" onclick="openModal('{{ archived_event.detailed_poster.url }}')">View Detailed Poster</button>
+                    <button class="delete-button" onclick="deleteEvent('{{ archived_event.id }}')">Delete</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</section>
 {% endif %}
+
+<section>
+
+    {% if event %}
+<h2>Update Event</h2>
+
+<form action="{% url 'update_event' event.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="date">Date:</label>
+        <input type="date" name="date" value="{{ event.date }}">
+        
+        <label for="title">Title:</label>
+        <input type="text" name="title" value="{{ event.title }}">
+        
+        <label for="description">Description:</label>
+        <textarea name="description">{{ event.description }}</textarea>
+        
+        <label for="start-time">Start Time:</label>
+        <input type="time" name="start-time" value="{{ event.start_time }}">
+        
+        <label for="end-time">End Time:</label>
+        <input type="time" name="end-time" value="{{ event.end_time }}">
+        
+        <label for="venue">Venue:</label>
+        <input type="text" name="venue" value="{{ event.venue }}">
+        
+        <label for="cover-poster">Cover Poster:</label>
+        <input type="file" name="cover-poster">
+        
+        <label for="detailed-poster">Detailed Poster:</label>
+        <input type="file" name="detailed-poster">
+        
+        <button type="submit">Update Event</button>
+  </form>
+{% endif %}   
+      </div>
+    </div>
+</section>
+
  
     </main>
 
@@ -532,8 +587,9 @@
             // Create a hidden form and submit it
             var form = document.createElement("form");
             form.setAttribute("method", "post");
-            form.setAttribute("action", "/delete_event/" + eventId + "/");
+            form.setAttribute("action", "/del_event/" + eventId + "/");
             form.style.display = "none"; // Make the form hidden
+    
     
             // Add a CSRF token input field
             var csrfInput = document.createElement("input");
@@ -573,6 +629,49 @@
     }
 
     </script>
+    <script>
+        function validateForm() {
+            var title = document.getElementById('title').value;
+            var description = document.getElementById('description').value;
+            var startTime = document.getElementById('start-time').value;
+            var endTime = document.getElementById('end-time').value;
+            var venue = document.getElementById('venue').value;
+            var coverPoster = document.getElementById('cover-poster').value;
+            var detailedPoster = document.getElementById('detailed-poster').value;
+    
+            // Validate that all fields are filled
+            if (title.trim() === '' || description.trim() === '' || startTime.trim() === '' || endTime.trim() === '' || venue.trim() === '' || detailedPoster.trim() === '') {
+                // Display validation error as an alert box
+                alert('Please fill in all fields.');
+                return false;
+            }
+    
+            // Validate that start time is before end time
+            if (startTime >= endTime) {
+                // Display validation error as an alert box
+                alert('Starting time must be before ending time.');
+                return false;
+            }
+    
+            // Validate cover poster file extension
+            var coverExtension = coverPoster.split('.').pop().toLowerCase();
+            if (coverPoster.trim() !== '' && allowedExtensions.indexOf(coverExtension) === -1) {
+                // Display validation error as an alert box
+                alert('Cover poster file must be an image with a valid extension (jpg, jpeg, png, gif, bmp, tiff, webp, svg, ico, jfif, pjpeg, pjp, avif).');
+                return false;
+            }
+    
+            // Validate detailed poster file extension
+            var detailedExtension = detailedPoster.split('.').pop().toLowerCase();
+            if (detailedPoster.trim() !== '' && allowedExtensions.indexOf(detailedExtension) === -1) {
+                // Display validation error as an alert box
+                alert('Detailed poster file must be an image with a valid extension (jpg, jpeg, png, gif, bmp, tiff, webp, svg, ico, jfif, pjpeg, pjp, avif).');
+                return false;
+            }
+    
+            return true;
+        }
+    </script>    
 </body>
 
 </html>

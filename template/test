@@ -1,3 +1,58 @@
+# parish directory
+
+from django.shortcuts import render, redirect
+from .models import PrayerGroup, ParishDirectory
+from django.db import IntegrityError
+
+def parish_admin(request):
+    error_message = None
+
+    if request.method == 'POST':
+        if 'new_group_name' in request.POST:
+            new_group_name = request.POST.get('new_group_name')
+            if new_group_name:
+                try:
+                    PrayerGroup.objects.create(name=new_group_name)
+                except IntegrityError:
+                    error_message = "A prayer group with this name already exists."
+        else:
+            name = request.POST.get('funame')
+            house_name = request.POST.get('Hname')
+            contact = request.POST.get('mob')
+            prayer_group_id = request.POST.get('prayer_group')
+            if name and house_name and contact and prayer_group_id:
+                prayer_group = PrayerGroup.objects.get(pk=prayer_group_id)
+                ParishDirectory.objects.create(
+                    name=name,
+                    house_name=house_name,
+                    contact=contact,
+                    prayer_group=prayer_group
+                )
+    elif request.method == 'GET':
+        if 'soft_delete_group' in request.GET:
+            group_id = request.GET.get('soft_delete_group')
+            try:
+                group = PrayerGroup.objects.get(pk=group_id)
+                group.is_deleted = True
+                group.save()
+            except PrayerGroup.DoesNotExist:
+                error_message = "The selected prayer group does not exist."
+        elif 'soft_delete_member' in request.GET:
+            member_id = request.GET.get('soft_delete_member')
+            try:
+                member = ParishDirectory.objects.get(pk=member_id)
+                member.is_deleted = True
+                member.save()
+            except ParishDirectory.DoesNotExist:
+                error_message = "The selected parish member does not exist."
+
+    prayer_groups = PrayerGroup.objects.filter(is_deleted=False)
+    parish_members = ParishDirectory.objects.select_related('prayer_group').filter(is_deleted=False)
+
+    return render(request, 'parish_admin.html', {'prayer_groups': prayer_groups, 'parish_members': parish_members, 'error_message': error_message})
+
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -266,9 +321,7 @@ section {
           </div>
    </header><!-- End Header -->
 
-
   <main id="main">
-
     {% if user.is_superuser %}
     <!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">
@@ -280,16 +333,6 @@ section {
     </section>
     <!-- End Breadcrumbs -->
     {% endif %}
-
-    {% if messages %}
-    <div class="alert alert-danger">
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-  {% endif %}
  
     <div class="container">
       {% if user.is_superuser %}
@@ -336,7 +379,7 @@ section {
                   {% csrf_token %}
                   <div class="form-group">
                       <label for="new_group_name">New Prayer Group:</label>
-                      <input type="text" id="new_group_name" name="new_group_name" autocomplete="off" required oninput="validateGroupName()">
+                      <input type="text" id="new_group_name" name="new_group_name" required oninput="validateGroupName()">
                       <span id="group_name_error" class="text-danger"></span>
                   </div>
                   <div class="form-group">
@@ -346,31 +389,6 @@ section {
             </div>
         </section>
     {% endif %}
-
-            <!-- Table for deleted prayer groups -->
-        <h2>Deleted Prayer Groups</h2>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Serial Number</th>
-              <th>Group Name</th>
-              <th>Action</th>
-          </tr>
-          </thead>
-          <tbody>
-            {% for group in deleted_prayer_groups %}
-              <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ group.name }}</td>
-               <td> <a href="{% url 'retrieve_deleted_prayer_group' group.id %}" class="btn btn-success">Retrieve Group</a></td>
-              </tr>
-            {% empty %}
-              <tr>
-                <td colspan="2">No deleted prayer groups</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
 
         <!-- ======= Breadcrumbs ======= -->
         <section class="breadcrumbs">
@@ -404,9 +422,7 @@ section {
                       <th>House Name</th>
                       <th>Contact</th>
                       <th>Prayer Group</th>
-                      {% if user.is_superuser %}
                       <th>Action</th>
-                      {% endif %}
                   </tr>
               </thead>
               <tbody id="parish-directory-table">
@@ -417,11 +433,9 @@ section {
                       <td>{{ member.house_name }}</td>
                       <td>{{ member.contact }}</td>
                       <td>{{ member.prayer_group.name }}</td>
-                      {% if user.is_superuser %}
                       <td>
                         <a href="?soft_delete_member={{ member.id }}" class="delete-button" onclick="return confirmDelete();">Delete</a>
                     </td>
-                    {% endif %}
                   </tr>
                   {% endfor %}
                   <tr id="no-results" style="display: none;">
@@ -447,22 +461,22 @@ section {
                   {% csrf_token %}
                   <div class="form-group">
                       <label for="name">Name:</label>
-                      <input type="text" class="form-control" id="funame" name="funame" oninput="validateFullname()" autocomplete="off" required>
+                      <input type="text" class="form-control" id="funame" name="funame" oninput="validateFullname()" required>
                       <p class="error" id="fun"></p>
                   </div>
                   <div class="form-group">
                       <label for="house_name">House Name:</label>
-                      <input type="text" class="form-control" id="Hname" name="Hname" oninput="validateHousename()" autocomplete="off" required>
+                      <input type="text" class="form-control" id="Hname" name="Hname" oninput="validateHousename()" required>
                       <p class="error" id="Hn"></p>
                   </div>
                   <div class="form-group">
                       <label for="contact">Contact:</label>
-                      <input type="text" class="form-control" id="mob" name="mob" oninput="validatePhone()" autocomplete="off" required required>
+                      <input type="text" class="form-control" id="mob" name="mob" oninput="validatePhone()" required required>
                       <p class="error" id="ph"></p>
                   </div>
                   <div class="form-group">
                       <label for="prayer_group">Prayer Group:</label>
-                      <select id="prayer_group" name="prayer_group" autocomplete="off" required>
+                      <select id="prayer_group" name="prayer_group" required>
                           <option value="" disabled selected>--- Select Prayer Group ---</option>
                           {% for group in prayer_groups %}
                           <option value="{{ group.id }}">{{ group.name }}</option>
@@ -477,36 +491,6 @@ section {
       </section>
       {% endif %}
   </div>
-
-  <!-- Table for deleted parish members -->
-<h2>Deleted Parish Members</h2>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>House Name</th>
-      <th>Contact</th>
-      <th>Prayer Group</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for member in deleted_parish_members %}
-      <tr>
-        <td>{{ member.name }}</td>
-        <td>{{ member.house_name }}</td>
-        <td>{{ member.contact }}</td>
-        <td>{{ member.prayer_group.name }}</td>
-        <td> <a href="{% url 'retrieve_deleted_parish_member' member.id %}" class="btn btn-success">Retrieve Member</a></td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="4">No deleted parish members</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
 </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -632,28 +616,154 @@ section {
           submitButton.disabled = true; // Disable the submit button
       }
   }
-
-  
-// JavaScript function to display the retrieve error message as an alert
-function showRetrieveError(errorMessage) {
-  const retrieveErrorAlert = document.getElementById('retrieve-error-alert');
-  const retrieveErrorMessageSpan = document.getElementById('retrieve-error-message');
-
-  // Set the error message in the alert box
-  retrieveErrorMessageSpan.innerText = errorMessage;
-
-  // Display the alert box
-  retrieveErrorAlert.style.display = 'block';
-}
-
-// Check if there is a retrieve error message to display on page load
-const initialRetrieveErrorMessage = "{{ retrieve_error_message }}";
-if (initialRetrieveErrorMessage) {
-  showRetrieveError(initialRetrieveErrorMessage);
-}
-
 </script>
 <script src="{% static 'js/main.js' %}"></script>
 </body>
 
 </html>
+
+
+
+
+
+
+# parish directory
+
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import IntegrityError
+from .models import PrayerGroup, ParishDirectory
+
+def parish_admin(request):
+    error_message = None
+
+    if request.method == 'POST':
+        if 'new_group_name' in request.POST:
+            new_group_name = request.POST.get('new_group_name')
+            if new_group_name:
+                try:
+                    PrayerGroup.objects.create(name=new_group_name)
+                except IntegrityError:
+                    error_message = "A prayer group with this name already exists."
+        else:
+            form_name = request.POST.get('name')
+            form_house_name = request.POST.get('house_name')
+            form_contact = request.POST.get('contact')
+            prayer_group_id = request.POST.get('prayer_group')
+
+            if form_name and form_house_name and form_contact and prayer_group_id:
+                prayer_group = PrayerGroup.objects.get(pk=prayer_group_id)
+                ParishDirectory.objects.create(
+                    name=form_name,
+                    house_name=form_house_name,
+                    contact=form_contact,
+                    prayer_group=prayer_group
+                )
+
+    elif request.method == 'GET':
+        if 'soft_delete_group' in request.GET:
+            group_id = request.GET.get('soft_delete_group')
+            try:
+                group = PrayerGroup.objects.get(pk=group_id)
+                group.is_deleted = True
+                group.save()
+
+                # Soft delete all related Parish Members
+                ParishDirectory.objects.filter(prayer_group=group).update(is_deleted=True)
+
+            except PrayerGroup.DoesNotExist:
+                error_message = "The selected prayer group does not exist."
+
+            # Redirect back to the parish_admin page after group deletion
+            return HttpResponseRedirect(reverse('parish_admin'))
+
+        elif 'soft_delete_member' in request.GET:
+            member_id = request.GET.get('soft_delete_member')
+            try:
+                member = ParishDirectory.objects.get(pk=member_id)
+                member.is_deleted = True
+                member.save()
+
+            except ParishDirectory.DoesNotExist:
+                error_message = "The selected parish member does not exist."
+
+            # Redirect back to the parish_admin page after member deletion
+            return HttpResponseRedirect(reverse('parish_admin'))
+
+    prayer_groups = PrayerGroup.objects.filter(is_deleted=False)
+    parish_members = ParishDirectory.objects.select_related('prayer_group').filter(is_deleted=False)
+
+    return render(request, 'parish_admin.html', {'prayer_groups': prayer_groups, 'parish_members': parish_members, 'error_message': error_message})
+
+
+
+
+    # parish directory
+
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db import IntegrityError
+from .models import PrayerGroup, ParishDirectory
+
+def parish_admin(request):
+    error_message = None
+
+    if request.method == 'POST':
+        if 'new_group_name' in request.POST:
+            new_group_name = request.POST.get('new_group_name')
+            if new_group_name:
+                try:
+                    PrayerGroup.objects.create(name=new_group_name)
+                except IntegrityError:
+                    error_message = "A prayer group with this name already exists."
+        else:
+            form_name = request.POST.get('name')
+            form_house_name = request.POST.get('house_name')
+            form_contact = request.POST.get('contact')
+            prayer_group_id = request.POST.get('prayer_group')
+
+            if form_name and form_house_name and form_contact and prayer_group_id:
+                prayer_group = PrayerGroup.objects.get(pk=prayer_group_id)
+                ParishDirectory.objects.create(
+                    name=form_name,
+                    house_name=form_house_name,
+                    contact=form_contact,
+                    prayer_group=prayer_group
+                )
+
+    elif request.method == 'GET':
+        if 'soft_delete_group' in request.GET:
+            group_id = request.GET.get('soft_delete_group')
+            try:
+                group = PrayerGroup.objects.get(pk=group_id)
+                group.is_deleted = True
+                group.save()
+
+                # Soft delete all related Parish Members
+                ParishDirectory.objects.filter(prayer_group=group).update(is_deleted=True)
+
+            except PrayerGroup.DoesNotExist:
+                error_message = "The selected prayer group does not exist."
+
+            # Redirect back to the parish_admin page after group deletion
+            return HttpResponseRedirect(reverse('parish_admin'))
+
+        elif 'soft_delete_member' in request.GET:
+            member_id = request.GET.get('soft_delete_member')
+            try:
+                member = ParishDirectory.objects.get(pk=member_id)
+                member.is_deleted = True
+                member.save()
+
+            except ParishDirectory.DoesNotExist:
+                error_message = "The selected parish member does not exist."
+
+            # Redirect back to the parish_admin page after member deletion
+            return HttpResponseRedirect(reverse('parish_admin'))
+
+    prayer_groups = PrayerGroup.objects.filter(is_deleted=False)
+    parish_members = ParishDirectory.objects.select_related('prayer_group').filter(is_deleted=False)
+
+    return render(request, 'parish_admin.html', {'prayer_groups': prayer_groups, 'parish_members': parish_members, 'error_message': error_message})
