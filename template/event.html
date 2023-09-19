@@ -19,6 +19,8 @@
     <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
     <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -294,8 +296,8 @@
                             <p class="event-time">{{ event.start_time|time:"h:i A" }} - {{ event.end_time|time:"h:i A" }}</p>
                             <p class="event-venue">{{ event.venue }}</p>
                             {% if user.is_superuser %}
-                            <button class="delete-button" onclick="deleteEvent('{{ event.id }}')">Delete</button>
-                            <button class="archive-button" onclick="archiveEvent('{{ event.id }}')">Archive</button>
+                            {% comment %} <button class="delete-button" onclick="deleteEvent('{{ event.id }}')">Delete</button> {% endcomment %}
+                            <button class="archive-button" onclick="archiveEvent('{{ event.id }}')"><i class="fa fa-trash-o" style="font-size:24px"></i></button>
                             {% endif %}
                             <button class="view-image-btn" onclick="openModal('{{ event.detailed_poster.url }}')">View Detailed Poster</button>
                         </div>
@@ -306,7 +308,6 @@
         </section>
         
         <!-- End Events Section -->
-
             {% if error_message %}
     <div class="alert alert-danger">
         {{ error_message }}
@@ -357,21 +358,11 @@
                 </div>
             </div>
         </div>
-       
-
-        <!-- ======= Breadcrumbs ======= -->
-        <section class="breadcrumbs">
-            <div class="container">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Archived Events</h2>
-                </div>
-            </div>
-        </section>
-        <!-- End Breadcrumbs -->
+   
         <section>  
             <!-- Archived Events Button -->
         <div class="margin-div">
-            <button class="view-image-btn" onclick="toggleArchivedEvents()">View Archived Events</button><br><br>
+            <button class="view-image-btn" onclick="toggleArchivedEvents()">View Bin <i class='fa fa-trash-o' style='font-size:20px'></i></button><br><br>
         </div>
         
     
@@ -393,7 +384,7 @@
                     <p class="event-title"><b>{{ archived_event.title }}</b>: {{ archived_event.description }}</p>
                     <p class="event-time">{{ archived_event.start_time|time:"h:i A" }} - {{ archived_event.end_time|time:"h:i A" }}</p>
                     <p class="event-venue">{{ archived_event.venue }}</p>
-                    <button class="delete-button" onclick="unarchiveEvent('{{ archived_event.id }}')">Unarchive</button>
+                    <button class="delete-button" onclick="unarchiveEvent('{{ archived_event.id }}')">Restore</button>
                     <button class="view-image-btn" onclick="openModal('{{ archived_event.detailed_poster.url }}')">View Detailed Poster</button>
                     <button class="delete-button" onclick="deleteEvent('{{ archived_event.id }}')">Delete</button>
                 </div>
@@ -403,46 +394,6 @@
 </div>
 </section>
 {% endif %}
-
-<section>
-
-    {% if event %}
-<h2>Update Event</h2>
-
-<form action="{% url 'update_event' event.id %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="date">Date:</label>
-        <input type="date" name="date" value="{{ event.date }}">
-        
-        <label for="title">Title:</label>
-        <input type="text" name="title" value="{{ event.title }}">
-        
-        <label for="description">Description:</label>
-        <textarea name="description">{{ event.description }}</textarea>
-        
-        <label for="start-time">Start Time:</label>
-        <input type="time" name="start-time" value="{{ event.start_time }}">
-        
-        <label for="end-time">End Time:</label>
-        <input type="time" name="end-time" value="{{ event.end_time }}">
-        
-        <label for="venue">Venue:</label>
-        <input type="text" name="venue" value="{{ event.venue }}">
-        
-        <label for="cover-poster">Cover Poster:</label>
-        <input type="file" name="cover-poster">
-        
-        <label for="detailed-poster">Detailed Poster:</label>
-        <input type="file" name="detailed-poster">
-        
-        <button type="submit">Update Event</button>
-  </form>
-{% endif %}   
-      </div>
-    </div>
-</section>
-
- 
     </main>
 
   <!-- ======= Footer ======= -->
@@ -551,16 +502,16 @@
                 var button = document.getElementById("viewArchivedEventsButton");
                 if (archivedEventsContainer.style.display === "none" || archivedEventsContainer.style.display === "") {
                         archivedEventsContainer.style.display = "block";
-                        button.innerText = "Hide Archived Events";
+                        button.innerText = "Hide Bin";
                 } else {
                  archivedEventsContainer.style.display = "none";
-                 button.innerText = "View Archived Events";
+                 button.innerText = "View Bin";
             }
          }
         
               // JavaScript for handling the archive event via form submission
       function archiveEvent(eventId) {
-        if (confirm("Are you sure you want to archive this event?")) {
+        if (confirm("Are you sure you want to move this event to bin")) {
             // Create a hidden form and submit it
             var form = document.createElement("form");
             form.setAttribute("method", "post");
@@ -607,7 +558,7 @@
 
      // JavaScript for handling the unarchive event via form submission
      function unarchiveEvent(eventId) {
-        if (confirm("Are you sure you want to unarchive this event?")) {
+        if (confirm("click ok to restore event")) {
             // Create a hidden form and submit it
             var form = document.createElement("form");
             form.setAttribute("method", "post");

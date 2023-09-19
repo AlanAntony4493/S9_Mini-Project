@@ -145,46 +145,7 @@ def event(request):
 
     return render(request, 'event.html', context)
 
-def update_event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-
-    if request.method == 'POST':
-        # Retrieve data from the request and update the Event object
-        date = request.POST['date']
-        title = request.POST['title']
-        description = request.POST['description']
-        start_time = request.POST['start-time']
-        end_time = request.POST['end-time']
-        venue = request.POST['venue']
-        cover_poster = request.FILES.get('cover-poster')
-        detailed_poster = request.FILES.get('detailed-poster')
-
-        # Validate file extensions
-        cover_extension = cover_poster.name.split('.')[-1].lower() if cover_poster else None
-        detailed_extension = detailed_poster.name.split('.')[-1].lower() if detailed_poster else None
-
-        if (cover_extension not in ALLOWED_EXTENSIONS) or (detailed_extension not in ALLOWED_EXTENSIONS):
-            raise ValidationError('File must be an image with a valid extension (jpg, jpeg, png, gif, bmp, tiff, webp, svg, ico, jfif, pjpeg, pjp, avif).')
-
-        # Update the event fields
-        event.date = date
-        event.title = title
-        event.description = description
-        event.start_time = start_time
-        event.end_time = end_time
-        event.venue = venue
-        event.cover_poster = cover_poster
-        event.detailed_poster = detailed_poster
-
-        event.save()
-
-        # Redirect to the event list or display a success message
-        return redirect('event')
-
-    # Render the update form on a separate template or the same event.html template
-    context = {'event': event}
-    return render(request, 'event.html', context)
-
+from django.utils import timezone
 
 def archive_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
@@ -203,28 +164,6 @@ def del_event(request, event_id):
     event.delete()
     return redirect('event') 
 
-def update_event(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
-    
-    if request.method == 'POST':
-        # Retrieve updated data from the request
-        event.date = request.POST['date']
-        event.title = request.POST['title']
-        event.description = request.POST['description']
-        event.start_time = request.POST['start-time']
-        event.end_time = request.POST['end-time']
-        event.venue = request.POST['venue']
-        event.cover_poster = request.FILES.get('cover-poster', event.cover_poster)
-        event.detailed_poster = request.FILES.get('detailed-poster', event.detailed_poster)
-        event.save()
-        
-        # Return updated event data as JSON
-        return JsonResponse({'status': 'success', 'event_id': event.id, 'message': 'Event updated successfully'})
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request'})
-
-
-
 def by_law(request):
     return render(request,"by_law.html")
 
@@ -236,7 +175,7 @@ from django.shortcuts import render, redirect
 from .models import Donor
 
 def blood_admin(request):
-    donors = Donor.objects.all()
+    donors = Donor.objects.filter(is_deleted=False)
     is_superuser = request.user.is_superuser if request.user.is_authenticated else False
 
     if request.method == 'POST' and is_superuser:
@@ -259,6 +198,17 @@ def blood_admin(request):
         return redirect('blood_admin')  
 
     return render(request, 'blood_admin.html', {'donors': donors, 'is_superuser': is_superuser})
+
+from django.shortcuts import get_object_or_404, redirect, reverse  # Import the reverse function
+from .models import Donor
+
+def soft_delete_donor(request, donor_id):
+    donor = get_object_or_404(Donor, pk=donor_id)
+    donor.is_deleted = True
+    donor.save()
+
+    # Use reverse to get the URL for the blood_admin page
+    return redirect(reverse('blood_admin'))
 
 def approve_user(request, user_id):
     if request.user.is_superuser:
@@ -326,10 +276,10 @@ def filtered_donor_list(request, blood_group):
     donors = Donor.objects.filter(blood_group=blood_group)
     return render(request, 'blood_user.html', {'donors': donors})
 
-def delete_donor(request,pk):
-    donors= get_object_or_404(Donor, id=pk)
-    donors.delete()
-    return redirect('blood_admin')
+# def delete_donor(request,pk):
+#     donors= get_object_or_404(Donor, id=pk)
+#     donors.delete()
+#     return redirect('blood_admin')
 
 # views.py
 
@@ -356,9 +306,9 @@ def parish_admin(request):
                     except IntegrityError:
                         error_message = "An error occurred while creating the prayer group."
         else:
-            form_name = request.POST.get('name')
-            form_house_name = request.POST.get('house_name')
-            form_contact = request.POST.get('contact')
+            form_name = request.POST.get('funame')
+            form_house_name = request.POST.get('Hname')
+            form_contact = request.POST.get('mob')
             prayer_group_id = request.POST.get('prayer_group')
 
             if form_name and form_house_name and form_contact and prayer_group_id:
@@ -435,7 +385,7 @@ def retrieve_deleted_entity(request, entity_type, entity_id):
 
             # Check if the related prayer group is deleted
             if member.prayer_group.is_deleted:
-                retrieve_error_message = "The selected member exists in a prayer group that doesn't exist."
+                retrieve_error_message = "The chosen participant's prayer group is not active or dosen't exist"
             else:
                 member.is_deleted = False
                 member.save()
@@ -564,7 +514,7 @@ from .models import ParishDirectory
 
 def update_parish(request, member_id):
     parish_member = get_object_or_404(ParishDirectory, id=member_id)
-    prayer_groups = PrayerGroup.objects.all()
+    prayer_groups = PrayerGroup.objects.filter(is_deleted=False)
 
     if request.method == 'POST':
         # Retrieve form data
@@ -574,12 +524,18 @@ def update_parish(request, member_id):
         prayer_group_id = request.POST.get('prayer_group')
 
         # Update the Parish Directory record
+        prayer_group = PrayerGroup.objects.get(pk=prayer_group_id)
+        
         parish_member.name = name
         parish_member.house_name = house_name
         parish_member.contact = contact
-        parish_member.prayer_group_id = prayer_group_id
+        parish_member.prayer_group = prayer_group
         parish_member.save()
 
         return redirect('parish_admin')  # Redirect to the parish_admin page after update
 
     return render(request, 'update_parish.html', {'parish_member': parish_member, 'prayer_groups': prayer_groups})
+
+
+
+

@@ -381,7 +381,8 @@ section {
               </form>
             </div>
         </section>
-    {% endif %}
+    
+
 
     <section>
 {% comment %} Archive button {% endcomment %}
@@ -411,6 +412,7 @@ section {
           </tbody>
         </table>
       </section>
+      {% endif %}
         <!-- ======= Breadcrumbs ======= -->
         <section class="breadcrumbs">
           <div class="container">
@@ -484,7 +486,7 @@ section {
       <!-- End Breadcrumbs -->
           <div class="container1">
               <h3>Add Member to Parish Directory</h3>
-              <form method="post" action="{% url 'parish_admin' %}"enctype="multipart/form-data" onsubmit="validateAllInput(event)" id="directory">
+              <form method="post" action="{% url 'parish_admin' %}" enctype="multipart/form-data" onsubmit="validateAllInput(event)" id="directory">
                   {% csrf_token %}
                   <div class="form-group">
                       <label for="name">Name:</label>

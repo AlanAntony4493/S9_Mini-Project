@@ -62,6 +62,7 @@ class Donor(models.Model):
     blood_group = models.CharField(max_length=4, choices=BLOOD_GROUP_CHOICES)
     
     contact = models.CharField(max_length=20)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

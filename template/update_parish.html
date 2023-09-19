@@ -2,9 +2,114 @@
 
 {% block content %}
   <h2 id="update">Update Parish Member</h2>
-  <form method="post">
+  <form method="post" id="update_form_parish">
     {% csrf_token %}
-    <input type="hidden" name="member_id" value="{{ parish_member.id }}">
+    <input type="hidden" name="member_id" value="{{ parish_member.id }}" >
+    
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control" name="name" id="name" value="{{ parish_member.name }}" oninput="validateNameFull()">
+      <span id="name_error" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="house_name">House Name:</label>
+      <input type="text" class="form-control" name="house_name" id="house_name" value="{{ parish_member.house_name }}" oninput="validateHname()">
+      <span id="house_name_error" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Contact:</label>
+      <input type="text" class="form-control" name="contact" id="contact" value="{{ parish_member.contact }}" oninput="validateContact()">
+      <span id="contact_error" class="error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="prayer_group">Prayer Group:</label>
+<select class="form-control" name="prayer_group" id="prayer_group">
+    <option value="{{ parish_member.prayer_group.id }}" selected>{{ parish_member.prayer_group.name }}</option>
+    {% for group in prayer_groups %}
+    <option value="{{ group.id }}">{{ group.name }}</option>
+    {% endfor %}
+ </select>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="validateParishUpdate(event)">Update</button>
+  </form>
+
+<script>
+  // validate fullname
+function validateNameFull() {
+  const nameInput = document.getElementById("name");
+  const nameError = document.getElementById("name_error");
+
+  const nameRegex = /^(?!\s)[A-Za-z\s]+(?<!\s)$/;
+
+  if (!nameRegex.test(nameInput.value)) {
+    nameError.textContent = "Invalid name (only alphabetic characters allowed, minimum 3 characters)";
+    return false; // Validation failed
+  } else {
+    nameError.textContent = "";
+    return true; // Validation passed
+  }
+}
+
+// Function to validate mobile number
+function validateContact() {
+  const phoneInput = document.getElementById("contact");
+  const phoneError = document.getElementById("contact_error");
+
+  const phoneRegex = /^[0-9]{10}$/;
+
+  if (!phoneRegex.test(phoneInput.value)) {
+    phoneError.textContent = "Invalid mobile number (10 digits, no alphabets or special characters)";
+    return false; // Validation failed
+  } else {
+    phoneError.textContent = "";
+    return true; // Validation passed
+  }
+}
+
+// function to validate house name
+function validateHname() {
+  const houseNameInput = document.getElementById("house_name");
+  const houseNameError = document.getElementById("house_name_error");
+
+  const nameRegex = /^[A-Za-z][A-Za-z ]*$/;
+
+  if (!nameRegex.test(houseNameInput.value)) {
+    houseNameError.textContent = "Invalid name (only alphabetic characters, minimum length 1 alphabet, and must start with an alphabet)";
+    return false; // Validation failed
+  } else {
+    houseNameError.textContent = "";
+    return true; // Validation passed
+  }
+}
+
+
+function validateParishUpdate(event) {
+  event.preventDefault(); // Prevent the default form submission
+
+  if (validateNameFull() && validateHname() && validateContact()) {
+    // All validations passed, allow form submission
+    document.getElementById("update_form_parish").submit(); // Submit the form
+} else {
+  console.log("sdfsd")
+    // At least one validation failed, display an error message or handle it accordingly
+}
+}
+
+</script>
+
+{% endblock %}
+
+
+{% comment %} {% extends 'parish_admin.html' %}
+
+{% block content %}
+  <h2 id="update">Update Parish Member</h2>
+  <form method="post" id="update_form_parish">
+    {% csrf_token %}
+    <input type="hidden" name="member_id" value="{{ parish_member.id }}" >
     
     <div class="form-group">
       <label for="name">Name:</label>
@@ -30,7 +135,7 @@
         {% endfor %}
       </select>
     </div>
-
     <button type="submit" class="btn btn-primary">Update</button>
   </form>
-{% endblock %}
+{% endblock %} {% endcomment %}
+

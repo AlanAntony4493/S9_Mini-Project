@@ -338,3 +338,4 @@ function validateAllInputReport(event) {
       // At least one validation failed, display an error message or handle it accordingly
   }
 }
+
