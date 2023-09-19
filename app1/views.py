@@ -538,4 +538,19 @@ def update_parish(request, member_id):
 
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import Registration  # Import your Registration model
+
+@login_required
+def profile(request):
+    user = request.user
+    registration = Registration.objects.get(user=user)  # Retrieve Registration data
+
+    context = {
+        'user': user,
+        'registration': registration,
+    }
+    return render(request, 'profile.html', context)
+
 

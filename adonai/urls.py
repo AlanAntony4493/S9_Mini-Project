@@ -55,6 +55,7 @@ urlpatterns = [
     path('retrieve_deleted_prayer_group/<int:entity_id>/', views.retrieve_deleted_entity, {'entity_type': 'prayer_group'}, name='retrieve_deleted_prayer_group'),
     path('retrieve_deleted_parish_member/<int:entity_id>/', views.retrieve_deleted_entity, {'entity_type': 'parish_member'}, name='retrieve_deleted_parish_member'),
     path('update_parish/<int:member_id>/', views.update_parish, name='update_parish'),
+    path('profile/', views.profile, name='profile'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

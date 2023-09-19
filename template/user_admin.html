@@ -146,7 +146,7 @@
 
       <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
       <!-- Uncomment below if you prefer to use an image logo -->
-      <a href="{% url 'index_admin' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+      <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
@@ -169,7 +169,7 @@
           </li>
           <ul>
             <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
             {% if user.is_authenticated %}
             <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
             <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>

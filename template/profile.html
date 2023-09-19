@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+          <div class="d-flex justify-content-between align-items-center">
+            <h2 style="align:center">My Profile</h2>
+          </div>
+        </div>
+      </section>
+ <!-- End Breadcrumbs -->
+<section class="inner-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Profile Information</h3>
+            <hr>
+            <div class="mb-3">
+              <strong>Full Name:</strong>
+              <span class="ml-2">
+                {{ user.first_name }} {% if registration.middle_name %}{{ registration.middle_name }}{% endif %} {{ user.last_name }}
+              </span>
+            </div>
+            <div class="mb-3">
+              <strong>Email:</strong>
+              <span class="ml-2">{{ user.email }}</span>
+            </div>
+            <div class="mb-3">
+              <strong>Date of Birth:</strong>
+              <span class="ml-2">{{ registration.date_of_birth }}</span>
+            </div>
+            <div class="mb-3">
+              <strong>Gender:</strong>
+              <span class="ml-2">{{ registration.gender }}</span>
+            </div>
+            <div class="mb-3">
+              <strong>Prayer Group:</strong>
+              <span class="ml-2">{{ registration.prayer_group }}</span>
+            </div>
+            <div class="mb-3">
+              <strong>House Name:</strong>
+              <span class="ml-2">{{ registration.house_name }}</span>
+            </div>
+            <div class="mb-3">
+                <strong>Phone Number:</strong>
+                <span class="ml-2">{{ registration.phone_number }}</span>
+            </div>
+            <!-- Add other user and registration fields as needed -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
