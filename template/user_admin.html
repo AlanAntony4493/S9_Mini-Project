@@ -139,7 +139,7 @@
 </head>
 
 <body>
-
+{% if user.is_superuser %}
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top header-inner-pages">
     <div class="container d-flex align-items-center justify-content-lg-between">
@@ -168,11 +168,11 @@
             </ul>
           </li>
           <ul>
-            <li><a class="nav-link scrollto" href="gallery.html">Gallery</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'gallery' %}">Gallery</a></li>
             <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
-            {% if user.is_authenticated %}
+            {% if user.is_superuser %}
             <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()">Log Out</a></li>
             {% else %}
             <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
             {% endif %}
@@ -394,7 +394,18 @@
       }
     }
   </script>
-  
+  {% endif %}
+
+  <script>
+    function clearHistory() {
+        if (typeof history !== 'undefined' && typeof history.pushState !== 'undefined') {
+            history.pushState(null, '', window.location.href);
+            window.onpopstate = function () {
+                history.go(1);
+            };
+        }
+    }
+    </script>
 </body>
 
 </html>

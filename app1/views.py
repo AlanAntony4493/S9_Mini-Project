@@ -68,16 +68,14 @@ def login_view(request):
 
 
 
-
 from django.contrib.auth.models import User, auth
 def logout(request):
     auth.logout(request)
-    return redirect("index")
-
+    return redirect('index')
 
 def index_admin(request):
     if request.user.is_superuser:
-        return render(request, "index_admin.html")
+        return render(request, "index.html")
     else:
         return redirect('index')
 
@@ -168,7 +166,7 @@ def by_law(request):
     return render(request,"by_law.html")
 
 def index_home(request):
-    return render(request,"index_home.html")
+    return render(request,"index.html")
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect

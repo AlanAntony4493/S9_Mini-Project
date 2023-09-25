@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app1',
+    'channels',
 ]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

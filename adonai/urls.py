@@ -20,11 +20,14 @@ from app1 import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index, name='index'),
     path('login', views.login_view, name='login'),
+    # path('login/', LoginView.as_view(template_name="login.html",next_page="index"), name='login'),
     path('logout', views.logout, name='logout'),
     path('event',views.event, name='event'),
     path('archive_event/<int:event_id>/', views.archive_event, name='archive_event'),

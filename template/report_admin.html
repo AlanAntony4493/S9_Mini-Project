@@ -300,7 +300,7 @@
                   </ul>
                 </li>
                 <ul>
-                  <li><a class="nav-link scrollto" href="">Gallery</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'gallery' %}">Gallery</a></li>
                   <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
                   <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
                   {% if user.is_superuser %}

@@ -69,7 +69,7 @@
                 <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
             {% elif user.is_authenticated %}
             <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()">Log Out</a></li>
             {% else %}
                 <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
             {% endif %}
@@ -352,7 +352,7 @@
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-airplane-engines-fill"></i></div>
-              <h4><a href="{% url 'index' %}">Career Guidance Forum</a></h4>
+              <h4><a href="{% url 'career_forum' %}">Career Guidance Forum</a></h4>
               <p>Contacts of Experts in Various Fields( Includes IT, Bank, Overseas Studies and More..), career predictor test
               </p>
             </div>
@@ -710,7 +710,17 @@
 
   <!-- Template Main JS File -->
   <script src="{% static 'js/main.js' %}"></script>
-
+  <script>
+    function clearHistory() {
+        if (typeof history !== 'undefined' && typeof history.pushState !== 'undefined') {
+            history.pushState(null, '', window.location.href);
+            window.onpopstate = function () {
+                history.go(1);
+            };
+        }
+    }
+    </script>
+    
 </body>
 
 </html>

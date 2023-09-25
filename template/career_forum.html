@@ -150,7 +150,7 @@
                     </ul>
                 </li>
                 <ul>
-                    <li><a class="nav-link scrollto" href="">Gallery</a></li>
+                    <li><a class="nav-link scrollto" href="{% url 'gallery' %}">Gallery</a></li>
                     <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
                     <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
                     {% if user.is_superuser %}
@@ -225,6 +225,76 @@
                             <!-- ... Answer a Question Form ... -->
                         </form>
                     </div>
+
+                    <div class="container-resource-person" id="qa-section">
+                        <ul id="qaList">
+                            <!-- Example Question and Answer -->
+                            <li class="custom-icon">
+                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
+                                <div class="question">
+                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                                <ul class="answers">
+                                    <li>
+                                        <p style="font-style: italic;">Answers</p>
+                                        <div class="answer">
+                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
+                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Repeat this structure for more questions and answers -->
+                            <form id="answerForm" style="margin-top:50px">
+                                <div class="mb-3">
+                                    <label for="answerText" class="form-label">Your Answer</label>
+                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Answer</button>
+                            </form>
+                        </ul>
+    
+                        <!-- Answer a Question Form -->
+                        <h2>Answer a Question</h2>
+                        <form id="answerForm">
+                            <!-- ... Answer a Question Form ... -->
+                        </form>
+                    </div>
+
+                    <div class="container-resource-person" id="qa-section">
+                        <ul id="qaList">
+                            <!-- Example Question and Answer -->
+                            <li class="custom-icon">
+                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
+                                <div class="question">
+                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                                <ul class="answers">
+                                    <li>
+                                        <p style="font-style: italic;">Answers</p>
+                                        <div class="answer">
+                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
+                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Repeat this structure for more questions and answers -->
+                            <form id="answerForm" style="margin-top:50px">
+                                <div class="mb-3">
+                                    <label for="answerText" class="form-label">Your Answer</label>
+                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Answer</button>
+                            </form>
+                        </ul>
+    
+                        <!-- Answer a Question Form -->
+                        <h2>Answer a Question</h2>
+                        <form id="answerForm">
+                            <!-- ... Answer a Question Form ... -->
+                        </form>
+                    </div>
                 </div>
     
                 <!-- Resource Persons -->
@@ -245,7 +315,7 @@
             </div>
         </div>
     
-        <!-- Career Guidance Forum Section 2 (Duplicated) -->
+        {% comment %} <!-- Career Guidance Forum Section 2 (Duplicated) -->
         <div class="container">
             <h1>Sharing Knowledge and Shaping Futures</h1>
             <div class="row">
@@ -290,7 +360,7 @@
                 <!-- Resource Persons (Duplicated) -->
                 <!-- Duplicate the resource persons content here -->
             </div>
-        </div>
+        </div> {% endcomment %}
     </main>
 
     <!-- Vendor JS Files -->
