@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- ======= Breadcrumbs ======= -->
+<section class="breadcrumbs">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Reported Comments</h2>
+        </div>
+    </div>
+</section>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Comment</th>
+                <th>Number of Reports</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for answer in reported_answers %}
+            {% if not answer.is_deleted %}
+                <tr>
+                    <td>{{ answer.answer_text }}</td>
+                    <td>{{ answer.report_count }}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#reportedUsersAndReasonsModal{{ answer.id }}">View Reported Users and Reasons</a>
+                        <a href="{% url "career_forum" %}#answer-{{ answer.id }}" class="btn btn-secondary scrollto">View Answer</a>
+                    </td>
+                </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="3">No reported comments at the moment.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% for answer in reported_answers %}
+    <!-- Modal for Reported Users and Reasons -->
+    <div class="modal fade" id="reportedUsersAndReasonsModal{{ answer.id }}" tabindex="-1" role="dialog" aria-labelledby="reportedUsersAndReasonsModalLabel{{ answer.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportedUsersAndReasonsModalLabel{{ answer.id }}">Reported Users and Reasons</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in answer.answerreport_set.all %}
+                                <tr>
+                                    <td>{{ report.reporter.username }}</td>
+                                    <td>{{ report.reason }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2">No reported users and reasons for this comment.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

@@ -63,6 +63,8 @@ urlpatterns = [
     #  path('get-questions-and-answers/', views.get_questions_and_answers, name='get_questions_and_answers'),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
     path('edit_comment/<int:answer_id>/', views.edit_comment, name='edit_comment'),
+    path('report/comment/<int:answer_id>/', views.report_comment, name='report_comment'),
+    path('reported_comments/', views.reported_comments, name='reported_comments'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -87,7 +87,7 @@ def index(request):
 
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
-from .models import Event, Report
+from .models import AnswerReport, Event, Report
 from django.utils import timezone
 
 ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'svg', 'ico', 'jfif', 'pjpeg', 'pjp', 'avif']
@@ -758,3 +758,34 @@ def edit_comment(request, answer_id):
         return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+
+def report_comment(request, answer_id):
+    answer = get_object_or_404(Answer, id=answer_id)
+    reason = request.POST.get('reason', '')
+
+    if reason:
+        # Create an AnswerReport object and save it to the database
+        report = AnswerReport(answer=answer, reporter=request.user, reason=reason)
+        report.save()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+from django.shortcuts import render
+from django.db.models import Count, Subquery, OuterRef
+from .models import AnswerReport, Answer
+
+def reported_comments(request):
+    # Subquery to count reports for each answer
+    report_counts = AnswerReport.objects.filter(answer=OuterRef('pk')).values('answer').annotate(report_count=Count('id')).values('report_count')
+
+    # Query the reported answers with counts
+    reported_answers = Answer.objects.filter(
+        answerreport__in=Subquery(report_counts)
+    ).annotate(report_count=Subquery(report_counts)).distinct()
+
+    return render(request, 'reported_comments.html', {'reported_answers': reported_answers})

@@ -339,3 +339,146 @@ function validateAllInputReport(event) {
   }
 }
 
+
+
+
+
+// // validate Title for question field in career forum
+// function validateTitle() {
+//   const unameInput = document.getElementById("questionTitle");
+//   const unameError = document.getElementById("title-error");
+
+//   const nameRegex = /^(?!\s)[A-Za-z\s]{3,}(?<!\s)$/;
+
+//   if (!nameRegex.test(unameInput.value)) {
+//       unameError.textContent = "Invalid Title (only alphabetic characters allowed, minimum 3 characters)";
+//       return false
+//   } else {
+//       unameError.textContent = "";
+//       return true
+//   }
+// }
+
+// // validate AdditionalDetails for question field in career forum
+// function validateAdditionalDetails() {
+//   const unameInput = document.getElementById("additionalDetails");
+//   const unameError = document.getElementById("adddetails-error");
+
+//   const nameRegex = /^(?!\s)[\s\S]*\S$/;
+
+//   if (!nameRegex.test(unameInput.value)) {
+//       unameError.textContent = "Additional Description must contain at least 3 characters.";
+//       return false
+//   } else {
+//       unameError.textContent = "";
+//       return true
+//   }
+// }
+
+
+// // validate detailed description in career forum
+// function validateDescription() {
+//   const reportTextarea = document.getElementById("questionDescription");
+//   const reportError = document.getElementById("description-error");
+  
+//   // Remove leading and trailing whitespaces for validation
+//   const reportValue = reportTextarea.value.trim();
+  
+//   // Check if the report has at least 150 characters
+//   if (reportValue.length < 150) {
+//     reportError.textContent = "Description must contain at least 150 characters.";
+//     return false;
+//   } else {
+//     reportError.textContent = ""; // Clear the error message
+//     return true;
+//   }
+// }
+
+
+
+
+// function validateQuestionForm(event) {
+//   event.preventDefault(); // Prevent the default form submission
+
+//   if (validateTitle() && validateDescription() && validateAdditionalDetails()){
+//       // All validations passed, allow form submission
+//       document.getElementById("askQuestionForm").submit(); // Submit the form
+//   } else {
+//       // At least one validation failed, display an error message or handle it accordingly
+//       console.log("Validation failed");
+//   }
+// }
+
+
+
+
+// validate Title for question field in career forum
+function validateTitle() {
+  const unameInput = document.getElementById("questionTitle");
+  const unameError = document.getElementById("title-error");
+
+  const nameRegex = /^(?!\s)[A-Za-z\s]{3,}(?<!\s)$/;
+
+  if (!nameRegex.test(unameInput.value)) {
+      unameError.textContent = "Invalid Title (only alphabetic characters allowed, minimum 3 characters)";
+      return false;
+  } else {
+      unameError.textContent = "";
+      return true;
+  }
+}
+
+// validate AdditionalDetails for question field in career forum (optional)
+function validateAdditionalDetails() {
+  const unameInput = document.getElementById("additionalDetails");
+  const unameError = document.getElementById("adddetails-error");
+
+  // Check if the input has a value
+  if (unameInput.value.trim() === "") {
+    // No value provided, no need to validate
+    unameError.textContent = "";
+    return true;
+  }
+
+  // Validate if there's a value
+  const nameRegex = /^(?!\s)[\s\S]*\S$/;
+
+  if (!nameRegex.test(unameInput.value)) {
+      unameError.textContent = "Additional Description must contain at least 3 characters.";
+      return false;
+  } else {
+      unameError.textContent = "";
+      return true;
+  }
+}
+
+// validate detailed description in career forum
+function validateDescription() {
+  const reportTextarea = document.getElementById("questionDescription");
+  const reportError = document.getElementById("description-error");
+  
+  // Remove leading and trailing whitespaces for validation
+  const reportValue = reportTextarea.value.trim();
+  
+  // Check if the report has at least 150 characters
+  if (reportValue.length < 150) {
+    reportError.textContent = "Description must contain at least 150 characters.";
+    return false;
+  } else {
+    reportError.textContent = ""; // Clear the error message
+    return true;
+  }
+}
+
+function validateQuestionForm(event) {
+  event.preventDefault(); // Prevent the default form submission
+
+  if (validateTitle() && validateDescription() && validateAdditionalDetails()){
+      // All validations passed, allow form submission
+      document.getElementById("askQuestionForm").submit(); // Submit the form
+  } else {
+      // At least one validation failed, display an error message or handle it accordingly
+      console.log("Validation failed");
+  }
+}
+
