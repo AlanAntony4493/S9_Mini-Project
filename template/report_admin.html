@@ -568,6 +568,15 @@
           }
         });
       });
+
+
+       // Check if the page was reloaded due to the back button click
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+          // Reload the page
+          location.reload();
+      }
+  });
     </script>    
 </body>
 

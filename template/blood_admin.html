@@ -483,6 +483,14 @@ function filterDonors() {
   // Show or hide the "No results" message based on whether results were found
   noResultsRow.style.display = hasResults ? "none" : "";
 }
+
+ // Check if the page was reloaded due to the back button click
+ window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+      // Reload the page
+      location.reload();
+  }
+});
 </script>
 
 

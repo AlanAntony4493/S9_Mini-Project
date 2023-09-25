@@ -118,15 +118,25 @@ class Report(models.Model):
     
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
 
 class Question(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question_text = models.TextField()
-    created_at = models.DateTimeField(default=timezone.now)
+    title = models.CharField(max_length=150)
+    description = models.TextField()
+    additional_details = models.TextField(blank=True, null=True)
+    posted_date_time = models.DateTimeField(auto_now_add=True)
+    posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_deleted = models.BooleanField(default=False)  # Soft delete flag
+
+    def __str__(self):
+        return self.title
 
 class Answer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer_text = models.TextField()
-    created_at = models.DateTimeField(default=timezone.now)
+    posted_date_time = models.DateTimeField(auto_now_add=True)
+    posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_deleted = models.BooleanField(default=False)  # Soft delete flag
+
+    def __str__(self):
+        return self.answer_text
+

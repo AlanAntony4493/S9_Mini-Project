@@ -42,6 +42,14 @@ INSTALLED_APPS = [
     'channels',
 ]
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+ASGI_APPLICATION = "adonai.routing.application"
+
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 MIDDLEWARE = [
@@ -147,3 +155,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mailtoshowvalidationok@gmail.com'  
 EMAIL_HOST_PASSWORD = 'qtwpnirvgsxzhtdo'  
 DEFAULT_FROM_EMAIL = 'mailtoshowvalidationok@gmail.com'
+
+
+RAZOR_KEY_ID = 'rzp_test_ow3KlW5qy6Rqco'
+RAZOR_KEY_SECRET = 'yc9xKTnRSg4qwaOIGVVCGcTX'

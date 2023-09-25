@@ -29,6 +29,56 @@
 
   <!-- Template Main CSS File -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <style>
+    {% comment %} * {
+      box-sizing: border-box;
+      padding: 0px;
+      margin: 0px;
+      font-family: cursive;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+    body {
+      background-color: #f1f5f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    } {% endcomment %}
+    .card {
+      background-color: white;
+      padding: 25px;
+      border: 1px solid #bbbbbb;
+      border-radius: 5px;
+      box-shadow: 1px 1px 10px 0px rgb(0 0 0 / 25%);
+    }
+    .title {
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .muted {
+      color: #8e7f7f;
+      display: block;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .btn_container {
+      padding: 20px;
+      text-align: center;
+    }
+    .btn {
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 4px 8px;
+      background-color: #ffaaa7;
+      color: white;
+      font-size: 1.2em;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -53,7 +103,7 @@
                   <li><a href="#">SMYM-FLAG</a></li>
                   <li><a href="#">SMYM-ANTHEM</a></li>
                   <li><a href="#">SMYM-SLOGAN</a></li>
-                </ul> -->
+                </ul> 
               </li>
               <!-- <li><a href="#">Drop Down 2</a></li>
               <li><a href="#">Drop Down 3</a></li>
@@ -79,7 +129,8 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="#about" class="get-started-btn scrollto">Support Us</a>
+      <a href="#about"  id="pay-btn" class="get-started-btn scrollto">Support Us</a>
+      {% comment %} <button class="btn">Donate❤️</button> {% endcomment %}
 
     </div>
   </header><!-- End Header -->
@@ -719,7 +770,48 @@
             };
         }
     }
+
+    // Check if the page was reloaded due to the back button click
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+          // Reload the page
+          location.reload();
+      }
+  });
+  
     </script>
+
+  <!-- Razorpay's Javascript code. -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    var options = {
+       
+      // Enter the Key ID generated from the Dashboard
+      key: "{{ razorpay_merchant_key }}",
+       
+      // Amount is in currency subunits.
+      // Default currency is INR. Hence,
+      // 50000 refers to 50000 paise
+      amount: "{{ razorpay_amount }}",
+      currency: "{{ currency }}",
+       
+      // Your/store name.
+      name: "Smym Mukkoottuthara",
+       
+      // Pass the `id` obtained in the response of Step 1
+      order_id: "{{ razorpay_order_id }}",
+      callback_url: "{{ callback_url }}",
+    };
+     
+    // initialise razorpay with the options.
+    var rzp1 = new Razorpay(options);
+     
+    // add event listener to the payment button.
+    document.getElementById("pay-btn").onclick = function (e) {
+      rzp1.open();
+      e.preventDefault();
+    };
+  </script>
     
 </body>
 

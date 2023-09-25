@@ -1,0 +1,577 @@
+<!-- Inside your question <li> element -->
+    <li class="custom-icon">
+        <!-- ... other question content ... -->
+    
+        <!-- Visible answers container for the first 5 answers -->
+        <ul class="answers">
+            <!-- Loop through and display the first 5 answers -->
+            {% for answer in answers %}
+                {% if answer.question_id == question.id and forloop.counter <= 5 %}
+                    <li>
+                        <div class="answer">
+                            <div class="user-info">
+                                <span class="user-profile"><i class="bi bi-person-circle"></i>&nbsp;{{ answer.posted_by.first_name }} {{ answer.posted_by.last_name }}</span>
+                                <div class="dropdown">
+                                    <button class="dropdown-btn" onclick="toggleDropdown(event, this)">&#8942;</button> <!-- Three vertical dots -->
+                                    <div class="dropdown-content">
+                                        <a href="#" onclick="handleOptionClick(this)">Report Comment</a>
+                                        <a href="#" onclick="handleOptionClick(this)">Delete Comment</a>
+                                        <a href="#" onclick="handleOptionClick(this)">Edit Comment</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>{{ answer.answer_text }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    
+        <!-- Add a button to show more answers -->
+        <button class="show-more-button" onclick="showMoreAnswers(event, this)">Show More Answers</button>
+    
+        <!-- Hidden answers container for additional answers -->
+        <ul class="answers hidden-answers">
+            <!-- Loop through and display the remaining answers -->
+            {% for answer in answers %}
+                {% if answer.question_id == question.id and forloop.counter > 5 %}
+                    <li>
+                        <div class="answer hidden-answer">
+                            <div class="user-info">
+                                <span class="user-profile"><i class="bi bi-person-circle"></i>&nbsp;{{ answer.posted_by.first_name }} {{ answer.posted_by.last_name }}</span>
+                                <div class="dropdown">
+                                    <button class="dropdown-btn" onclick="toggleDropdown(event, this)">&#8942;</button> <!-- Three vertical dots -->
+                                    <div class="dropdown-content">
+                                        <a href="#" onclick="handleOptionClick(this)">Report Comment</a>
+                                        <a href="#" onclick="handleOptionClick(this)">Delete Comment</a>
+                                        <a href="#" onclick="handleOptionClick(this)">Edit Comment</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>{{ answer.answer_text }}</p>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
+    
+
+
+
+    <!-- modified and updated -->
+
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+        <title>SMYM Mukkoottuthara</title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+    
+        <!-- Favicons -->
+        <link href="{% static 'img/logo1.png' %}" rel="icon">
+        <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
+    
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+            rel="stylesheet">
+    
+        <!-- Vendor CSS Files -->
+        <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+        <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    
+        <!-- Template Main CSS File -->
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <style>
+            /* Your existing styles here */
+    
+            .question {
+                background-color: #f0f0f0;
+                padding: 10px;
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+                margin-top: 5px;
+                overflow-wrap: break-word;
+            }
+    
+            /* Style for Answers Container */
+            .answers {
+                max-height: 500px; /* Change this to the specific height you desire */
+                overflow-y: auto; /* Add a vertical scrollbar if needed */
+                list-style-type: none;
+                padding: 0;
+                overflow-wrap: break-word;
+                scrollbar-width: thin; /* Set the width of the scrollbar */
+                scrollbar-color: #888888 transparent; /* Set the color of the thumb and hide the track */
+            }
+    
+            .answers::-webkit-scrollbar-thumb {
+                background-color: #888888; /* Color of the thumb */
+                border: none; /* Remove the border */
+                border-radius: 0; /* Remove border radius */
+            }
+            
+            /* Style for the scrollbar track (the non-draggable part) */
+            .answers::-webkit-scrollbar-track {
+                background-color: transparent; /* Make the track transparent */
+                border: none; /* Remove any border */
+            }
+            
+            /* Optionally, you can style other browser-specific scrollbars like Firefox */
+            .answers::-webkit-scrollbar {
+                width: 4px; /* Width of the scrollbar */
+            }
+    
+            .answer {
+                {% comment %} background-color: #e0e0e0; {% endcomment %}
+                background-color: #d0e6f6;
+                padding: 10px;
+                border: 1px solid #ccc;
+                margin-top: 10px;
+                margin-bottom:20px;
+            }
+    
+            /* Style for Author Names */
+            .author {
+                font-weight: bold;
+                font-style: italic;
+                text-decoration: underline;
+            }
+    
+            /* Oval-shaped image container */
+            .image-container {
+                width: 100px; /* Adjust the width to your preference */
+                height: 100px; /* Adjust the height to your preference */
+                border-radius: 50%; /* Makes it oval */
+                overflow: hidden; /* Hide overflowing content */
+                float: left; /* Float the image container to the left */
+                margin-right: 20px; /* Spacing between image and text */
+            }
+    
+            /* Make the image container round */
+            .round-image {
+                border-radius: 50%;
+            }
+    
+            /* Oval image to fill the container */
+            .oval-image {
+                width: 100%; /* Make the image fill the container */
+                height: auto; /* Maintain aspect ratio */
+                display: block; /* Remove any default inline styles */
+                border-radius: 50%; /* Ensure the image stays oval */
+            }
+    
+            /* Align text to the top and parallel to the image */
+            .resource-person-description {
+                overflow: hidden; /* Hide overflowing content */
+            }
+    
+            .container-resource-person {
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+    
+            /* CSS for larger screens */
+            @media screen and (min-width: 992px) {
+                #career-guidance-container {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                }
+                #resource-persons {
+                    margin-top: 0;
+                }
+            }
+    
+            /* CSS for smaller screens */
+            @media screen and (max-width: 991px) {
+                #career-guidance-container {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                #resource-persons {
+                    margin-top: 20px;
+                }
+            }
+            .limited-width {
+                max-width: 100%; /* Allow paragraphs to take the full width of the container */
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+    
+                    /* Style for the dropdown container */
+            .dropdown {
+                position: flex-end;
+                display: inline-block;
+            }
+    
+            /* Style for the dropdown button (three dots) */
+            .dropdown-btn {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+            }
+    
+            /* Style for the dropdown menu items */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+    
+            .dropdown-content a {
+                color: #333;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+    
+            .dropdown-content a:hover {
+                background-color: #ddd;
+            }
+    
+            .user-info {
+                position: relative;
+                display: flex;
+                justify-content: space-between; /* Vertical alignment */
+            }
+            .dropdown-btn {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+            }
+    
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+                top: -100%; /* Position above the user-info container */
+                right: 0; /* Position to the right of the user-info container */
+            }
+    
+            
+    
+        </style>
+    </head>
+    
+    <body>
+        <!-- ======= Header ======= -->
+         <!-- ======= Header ======= -->
+     <header id="header" class="fixed-top header-inner-pages">
+        <div class="container d-flex align-items-center justify-content-lg-between">
+    
+            <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM"
+                    class="img-fluid" style="height:100px"></a>
+    
+            <nav id="navbar" class="navbar order-last order-lg-0">
+                <ul>
+                    <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+                    <li class="dropdown"><a href=""><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+                        <ul>
+                            <li><a href="{% url 'index' %}#about">SMYM Mukkoottuthara</a></li>
+                            <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM BY Law</span> <i
+                                        class="bi bi-chevron-right"></i></a>
+                                <!-- <ul>
+                                <li><a href="#">SMYM-LOGO</a></li>
+                                <li><a href="#">SMYM-FLAG</a></li>
+                                <li><a href="#">SMYM-ANTHEM</a></li>
+                                <li><a href="#">SMYM-SLOGAN</a></li>
+                            </ul> -->
+                            </li>
+                            <!-- <li><a href="#">Drop Down 2</a></li>
+                            <li><a href="#">Drop Down 3</a></li>
+                            <li><a href="#">Drop Down 4</a></li> -->
+                        </ul>
+                    </li>
+                    <ul>
+                        <li><a class="nav-link scrollto" href="{% url 'gallery' %}">Gallery</a></li>
+                        <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
+                        <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
+                        {% if user.is_superuser %}
+                        <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                        <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out (
+                                {{ user.username }})</a></li>
+                        {% elif user.is_authenticated %}
+                        <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out (
+                                {{ user.first_name }})</a></li>
+                        {% else %}
+                        <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+                        {% endif %}
+    
+                    </ul>
+    
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+    
+            <a href="#about" class="get-started-btn scrollto">Support Us</a>
+    
+        </div>
+    </header><!-- End Header -->
+        <!-- End Header -->
+    
+        <main id="main">
+            <!-- ======= Breadcrumbs ======= -->
+            <section class="breadcrumbs">
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Career Guidance Forum</h2>
+                        <a href="#ask-a-question" class="btn btn-primary scrollto">Ask Question</a>
+                    </div>
+                </div>
+            </section>
+        
+            <!-- Career Guidance Forum Section 1 -->
+            <div class="container">
+                <h1 style="font-family:URW Chancery L, cursive;">Sharing Knowledge and Shaping Futures</h1>
+                <div class="row">
+                    <!-- Questions and Answers -->
+                  <!-- Questions and Answers -->
+    <div class="col-lg-8">
+        <div class="container-resource-person" id="qa-section">
+            {% for question in questions %}
+            <div class="question">
+                <h2>Title: {{ question.title }}</h2>
+                <p>{{ question.description }}</p>
+                <p>{{ question.additional_details }}</p>
+    
+                <p style="font-style: italic;">Answers</p>
+    
+                <!-- Answers Container -->
+                <div class="answers-container">
+                    <ul class="answers">
+                        <!-- Loop through answers associated with this question -->
+                        {% for answer in answers %}
+                            {% if answer.question_id == question.id %}
+                            <li>
+                                <div class="answer">
+                                    <div class="user-info">
+                                        <span class="user-profile"><i class="bi bi-person-circle"></i>&nbsp;{{ answer.posted_by.first_name }} {{ answer.posted_by.last_name }}</span>
+                                        <div class="dropdown">
+                                            <button class="dropdown-btn" onclick="toggleDropdown(event, this)">&#8942;</button> <!-- Three vertical dots -->
+                                            <div class="dropdown-content">
+                                                <a href="#" onclick="handleOptionClick(this)">Report Comment</a>
+                                                <a href="#" onclick="handleOptionClick(this)">Delete Comment</a>
+                                                <a href="#" onclick="handleOptionClick(this)">Edit Comment</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>{{ answer.answer_text }}</p>
+                                </div>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+    
+                <!-- Answer Form for this question -->
+                <form action="{% url 'post_answer' %}" class="answerForm" method="post" data-question-id="{{ question.id }}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="answerText" class="form-label">Your Answer</label>
+                        <textarea class="form-control" name="answerText" rows="4" required></textarea>
+                    </div>
+                    <input type="hidden" name="questionId" value="{{ question.id }}">
+                    <button type="submit" class="btn btn-primary">Post Answer</button>
+                </form>
+    
+                <!-- "Show More" button for answers -->
+                <button class="show-more-button" onclick="showMoreAnswers(event, this)">Show More Answers</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+                    
+                    <!-- Ask a Question Section -->
+                    <section id="ask-a-question" class="bg-light">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h2 class="section-title">Ask a Career-Related Question</h2>
+                                    <!-- Separate div for Writing a good question -->
+                                    <div class="bg-secondary text-white p-3 mb-4">
+                                        <h3>Writing a Good Question</h3>
+                                        <p>You’re ready to ask a career-related question, and this form will help guide you through the process.</p>
+                                        <h4>Steps</h4>
+                                        <ol>
+                                            <li>Summarize your problem in a one-line title.</li>
+                                            <li>Describe your problem in more detail.</li>
+                                            <li>Include any additional details.</li>
+                                            <li>Review your question and post it to the site.</li>
+                                        </ol>
+                                    </div>
+                                    <!-- Form for asking a question -->
+                                    <form id="askQuestionForm" action="{% url 'post_question' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="questionTitle" class="form-label">Title (Required)</label>
+                                            <input type="text" class="form-control" id="questionTitle" name="questionTitle" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="questionDescription" class="form-label">Detailed Description (Required)</label>
+                                            <textarea class="form-control" id="questionDescription" name="questionDescription" rows="4" required></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="additionalDetails" class="form-label">Additional Details (Optional)</label>
+                                            <textarea class="form-control" id="additionalDetails" name="additionalDetails" rows="4"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Post Question</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>            
+        
+                    <!-- Resource Persons -->
+                    <div class="col-lg-4" style="">
+                        <h3>Resource Persons</h3>
+                        <div class="resource-person"  style="margin-bottom:40px;">
+                            <div class="image-container round-image">
+                                <img src="{% static 'img/team/sobin.png' %}" alt="Resource Person 1" class="oval-image">
+                            </div>
+                            <div class="resource-person-description">
+                                <p>Name: Jane Smith</p>
+                                <p>Job: CTO, Tech Solutions</p>
+                            </div>
+                        </div>
+        
+                        <!-- Repeat this structure for more resource persons -->
+                        
+                    </div>
+                </div>
+            </div>
+    
+    
+        </main>
+    
+        <!-- Vendor JS Files -->
+        <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+        <script src="{% static 'vendor/aos/aos.js' %}"></script>
+        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+        <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+        <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+        <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+    
+        <!-- Template Main JS File -->
+        <script src="{% static 'js/main.js' %}"></script>
+    
+        <!-- Include jQuery if not already included -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+        <script>
+            // JavaScript for responsive behavior
+            window.addEventListener('DOMContentLoaded', () => {
+                const careerGuidanceContainer = document.getElementById('career-guidance-container');
+                const resourcePersons = document.getElementById('resource-persons');
+    
+                // Function to rearrange sections based on screen width
+                function rearrangeSections() {
+                    if (window.innerWidth >= 992) {
+                        // Larger screens: Resource persons and questions side by side
+                        careerGuidanceContainer.style.display = 'flex';
+                        careerGuidanceContainer.style.alignItems = 'flex-start';
+                        careerGuidanceContainer.style.justifyContent = 'space-between';
+                        resourcePersons.style.marginTop = '0';
+                    } else {
+                        // Smaller screens: Resource persons below questions
+                        careerGuidanceContainer.style.flexDirection = 'column';
+                        careerGuidanceContainer.style.alignItems = 'flex-start';
+                        resourcePersons.style.marginTop = '20px';
+                    }
+                }
+    
+                // Initial arrangement
+                rearrangeSections();
+    
+                // Listen for window resize event to update layout
+                window.addEventListener('resize', rearrangeSections);
+            });
+    
+            // Check if the page was reloaded due to the back button click
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Reload the page
+                location.reload();
+            }
+        });
+        
+    </script>
+    <script>
+        // Handle dropdown toggle
+        function toggleDropdown(event, button) {
+            event.stopPropagation(); // Prevent the event from propagating to document click
+            const dropdownContent = button.nextElementSibling;
+            const isVisible = window.getComputedStyle(dropdownContent).display === 'block';
+    
+            // Close all other dropdowns before opening the current one
+            closeAllDropdowns();
+    
+            if (isVisible) {
+                dropdownContent.style.display = 'none';
+            } else {
+                dropdownContent.style.display = 'block';
+                // Add a click event listener to the document body to close the dropdown
+                document.body.addEventListener('click', closeDropdown);
+            }
+        }
+    
+        // Handle option click
+        function handleOptionClick(option) {
+            // Perform the desired action (e.g., report, delete, edit)
+            // ...
+    
+            // Close the dropdown
+            closeDropdown();
+        }
+    
+        // Close the currently open dropdown
+        function closeDropdown() {
+            const dropdowns = document.querySelectorAll('.dropdown-content');
+            dropdowns.forEach(function (dropdown) {
+                dropdown.style.display = 'none';
+            });
+    
+            // Remove the click event listener from the document body
+            document.body.removeEventListener('click', closeDropdown);
+        }
+    
+        // Close all dropdowns except the one being clicked
+        function closeAllDropdowns() {
+            const dropdowns = document.querySelectorAll('.dropdown-content');
+            dropdowns.forEach(function (dropdown) {
+                dropdown.style.display = 'none';
+            });
+        }
+    
+        // JavaScript for toggling the display of additional answers
+        function showMoreAnswers(event, button) {
+            event.stopPropagation(); // Prevent the event from propagating to document click
+            const answersContainer = button.previousElementSibling.querySelector('.answers-container'); // Get the answers container
+            answersContainer.classList.remove('hidden-answers'); // Show the hidden answers
+            button.style.display = 'none'; // Hide the "Show More" button
+        }
+    </script>
+    
+    
+    </body>
+    
+    </html>
+    

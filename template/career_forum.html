@@ -32,26 +32,50 @@
     <style>
         /* Your existing styles here */
 
-        /* Style for Questions */
         .question {
             background-color: #f0f0f0;
             padding: 10px;
             border: 1px solid #ccc;
             margin-bottom: 10px;
             margin-top: 5px;
+            overflow-wrap: break-word;
         }
 
-        /* Style for Answers */
+        /* Style for Answers Container */
         .answers {
+            max-height: 500px; /* Change this to the specific height you desire */
+            overflow-y: auto; /* Add a vertical scrollbar if needed */
             list-style-type: none;
             padding: 0;
+            overflow-wrap: break-word;
+            scrollbar-width: thin; /* Set the width of the scrollbar */
+            scrollbar-color: #888888 transparent; /* Set the color of the thumb and hide the track */
+        }
+
+        .answers::-webkit-scrollbar-thumb {
+            background-color: #888888; /* Color of the thumb */
+            border: none; /* Remove the border */
+            border-radius: 0; /* Remove border radius */
+        }
+        
+        /* Style for the scrollbar track (the non-draggable part) */
+        .answers::-webkit-scrollbar-track {
+            background-color: transparent; /* Make the track transparent */
+            border: none; /* Remove any border */
+        }
+        
+        /* Optionally, you can style other browser-specific scrollbars like Firefox */
+        .answers::-webkit-scrollbar {
+            width: 4px; /* Width of the scrollbar */
         }
 
         .answer {
-            background-color: #e0e0e0;
+            {% comment %} background-color: #e0e0e0; {% endcomment %}
+            background-color: #d0e6f6;
             padding: 10px;
             border: 1px solid #ccc;
             margin-top: 10px;
+            margin-bottom:20px;
         }
 
         /* Style for Author Names */
@@ -79,7 +103,7 @@
         /* Oval image to fill the container */
         .oval-image {
             width: 100%; /* Make the image fill the container */
-            height: auto; /* Maintain aspect ratio */
+            height: 100%; /* Maintain aspect ratio */
             display: block; /* Remove any default inline styles */
             border-radius: 50%; /* Ensure the image stays oval */
         }
@@ -117,6 +141,77 @@
                 margin-top: 20px;
             }
         }
+        .limited-width {
+            max-width: 100%; /* Allow paragraphs to take the full width of the container */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+                /* Style for the dropdown container */
+        .dropdown {
+            position: flex-end;
+            display: inline-block;
+        }
+
+        /* Style for the dropdown button (three dots) */
+        .dropdown-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the dropdown menu items */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            font-size:14px;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .user-info {
+            position: relative;
+            display: flex;
+            justify-content: space-between; /* Vertical alignment */
+        }
+        .dropdown-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: -100%; /* Position above the user-info container */
+            right: 0; /* Position to the right of the user-info container */
+        }
+        .post-time {
+            font-size: 12px;
+            color: #888; /* You can adjust the color to your preference */
+            margin-right: auto;
+            font-style: italic;
+
+        }
+        
+
     </style>
 </head>
 
@@ -181,124 +276,143 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Career Guidance Forum</h2>
+                    <a href="#ask-a-question" class="btn btn-primary scrollto">Ask Question</a>
                 </div>
             </div>
         </section>
     
         <!-- Career Guidance Forum Section 1 -->
         <div class="container">
-            <h1>Sharing Knowledge and Shaping Futures</h1>
+            <h1 style="font-family:URW Chancery L, cursive;">Sharing Knowledge and Shaping Futures</h1>
             <div class="row">
                 <!-- Questions and Answers -->
-                <div class="col-lg-8">
-                    <div class="container-resource-person" id="qa-section">
-                        <ul id="qaList">
-                            <!-- Example Question and Answer -->
-                            <li class="custom-icon">
-                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
-                                <div class="question">
-                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                                <ul class="answers">
-                                    <li>
-                                        <p style="font-style: italic;">Answers</p>
-                                        <div class="answer">
-                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
-                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- Repeat this structure for more questions and answers -->
-                            <form id="answerForm" style="margin-top:50px">
-                                <div class="mb-3">
-                                    <label for="answerText" class="form-label">Your Answer</label>
-                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Post Answer</button>
-                            </form>
-                        </ul>
-    
-                        <!-- Answer a Question Form -->
-                        <h2>Answer a Question</h2>
-                        <form id="answerForm">
-                            <!-- ... Answer a Question Form ... -->
-                        </form>
-                    </div>
+              <!-- Questions and Answers -->
+<div class="col-lg-8">
+    <div class="container-resource-person" id="qa-section">
+        {% for question in questions %}
+        <div class="person-info"><i class="bi bi-person-circle"></i>
+            {{ question.posted_by.first_name }}{{ question.posted_by.registration.middle_name }}{{ question.posted_by.last_name }} asked a question
+            <div class="post-time" data-posted="{{ question.posted_date_time|date:'U' }}"></div>
+        </div>
+        
+        <div class="question" style="margin-bottom:150px;">
+            <h2>{{ question.title }}</h2>
+            <p>{{ question.description }}</p>
+            <p>{{ question.additional_details }}</p>
 
-                    <div class="container-resource-person" id="qa-section">
-                        <ul id="qaList">
-                            <!-- Example Question and Answer -->
-                            <li class="custom-icon">
-                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
-                                <div class="question">
-                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                                <ul class="answers">
-                                    <li>
-                                        <p style="font-style: italic;">Answers</p>
-                                        <div class="answer">
-                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
-                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- Repeat this structure for more questions and answers -->
-                            <form id="answerForm" style="margin-top:50px">
-                                <div class="mb-3">
-                                    <label for="answerText" class="form-label">Your Answer</label>
-                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Post Answer</button>
-                            </form>
-                        </ul>
-    
-                        <!-- Answer a Question Form -->
-                        <h2>Answer a Question</h2>
-                        <form id="answerForm">
-                            <!-- ... Answer a Question Form ... -->
-                        </form>
-                    </div>
+            <p style="font-style: italic;">Answers</p>
 
-                    <div class="container-resource-person" id="qa-section">
-                        <ul id="qaList">
-                            <!-- Example Question and Answer -->
-                            <li class="custom-icon">
-                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
-                                <div class="question">
-                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                                <ul class="answers">
-                                    <li>
-                                        <p style="font-style: italic;">Answers</p>
-                                        <div class="answer">
-                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
-                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <!-- Answers Container -->
+            <div class="answers-container">
+                <ul class="answers">
+                    <!-- Loop through answers associated with this question -->
+                    {% for answer in answers %}
+                        {% if answer.question_id == question.id %}
+                        <li>
+                            <div class="answer">
+                               <!-- Inside your loop that displays comments -->
+                                <div class="user-info">
+                                    <span class="user-profile">
+                                        <i class="bi bi-person-circle"></i>&nbsp;<b>{{ answer.posted_by.first_name }}&nbsp;{{ answer.posted_by.registration.middle_name }}&nbsp;{{ answer.posted_by.last_name }}</b>
+                                        <span class="post-time" data-posted="{{ answer.posted_date_time|date:'U' }}"></span>
+                                    </span>
+                                    <div class="dropdown">
+                                        <button class="dropdown-btn" onclick="toggleDropdown(event, this)">&#8942;</button>
+                                        <div class="dropdown-content">
+                                            <a href="#" onclick="handleOptionClick(this)">Report Comment</a>
+                                            {% if user.is_superuser %}
+                                                <!-- Edit Comment Link -->
+                                                <a href="#" onclick="toggleEditForm({{ answer.id }}, event)">Edit Comment</a>
+                                            {% elif answer.posted_by == user %}
+                                                <!-- Show delete option with confirmation -->
+                                                <a href="#" onclick="toggleEditForm({{ answer.id }}, event)">Edit Comment</a>
+                                                <a href="{% url 'soft_delete_answer' answer.id %}" onclick="return confirm('Are you sure you want to delete this comment?')">Delete Comment</a>
+                                            {% endif %}
                                         </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- Repeat this structure for more questions and answers -->
-                            <form id="answerForm" style="margin-top:50px">
-                                <div class="mb-3">
-                                    <label for="answerText" class="form-label">Your Answer</label>
-                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Post Answer</button>
+                                <div class="answer">
+                                    <div class="comment-text" id="comment-{{ answer.id }}">
+                                        <p style="font-size: 15px;">{{ answer.answer_text }}</p>
+                                    </div>
+                                    <!-- Edit Comment Form (Initially hidden) -->
+                                    <form class="edit-comment-form" id="edit-comment-form-{{ answer.id }}" style="display: none;">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="editAnswerText-{{ answer.id }}" class="form-label">Edit Your Comment</label>
+                                            <textarea class="form-control" name="editAnswerText" id="editAnswerText-{{ answer.id }}" rows="4" required>{{ answer.answer_text }}</textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="saveEditComment({{ answer.id }})">Save</button>
+                                        <button type="button" class="btn btn-secondary" onclick="cancelEditComment({{ answer.id }})">Cancel</button>
+                                    </form>
+                                </div>
+
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Answer Form for this question -->
+                    <form action="{% url 'post_answer' %}" class="answerForm" method="post" data-question-id="{{ question.id }}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="answerText" class="form-label">Your Answer</label>
+                            <textarea class="form-control" name="answerText" rows="4" required></textarea>
+                        </div>
+                        <input type="hidden" name="questionId" value="{{ question.id }}">
+                        <button type="submit" class="btn btn-primary">Post Answer</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+
+             <!-- Ask a Question Section -->
+             <section id="ask-a-question" class="bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="section-title">Ask a Career-Related Question</h2>
+                            <!-- Separate div for Writing a good question -->
+                            <div class="bg-secondary text-white p-3 mb-4">
+                                <h3>Writing a Good Question</h3>
+                                <p>You’re ready to ask a career-related question, and this form will help guide you through the process.</p>
+                                <h4>Steps</h4>
+                                <ol>
+                                    <li>Summarize your problem in a one-line title.</li>
+                                    <li>Describe your problem in more detail.</li>
+                                    <li>Include any additional details.</li>
+                                    <li>Review your question and post it to the site.</li>
+                                </ol>
+                            </div>
+                            <!-- Form for asking a question -->
+                            <form id="askQuestionForm" action="{% url 'post_question' %}" method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="questionTitle" class="form-label">Title (Required)</label>
+                                    <input type="text" class="form-control" id="questionTitle" name="questionTitle" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="questionDescription" class="form-label">Detailed Description (Required)</label>
+                                    <textarea class="form-control" id="questionDescription" name="questionDescription" rows="4" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="additionalDetails" class="form-label">Additional Details (Optional)</label>
+                                    <textarea class="form-control" id="additionalDetails" name="additionalDetails" rows="4"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Question</button>
                             </form>
-                        </ul>
-    
-                        <!-- Answer a Question Form -->
-                        <h2>Answer a Question</h2>
-                        <form id="answerForm">
-                            <!-- ... Answer a Question Form ... -->
-                        </form>
+                        </div>
                     </div>
                 </div>
+            </section>   
+        </div>
+         
     
                 <!-- Resource Persons -->
-                <div class="col-lg-4" style="margin-top:30px;">
+                <div class="col-lg-4" style="">
+                    <h3>"Seeking Mentorship"</h3>
+                    <p><i>Find experienced mentors to guide your journey.</i></p>
                     <div class="resource-person"  style="margin-bottom:40px;">
                         <div class="image-container round-image">
                             <img src="{% static 'img/team/sobin.png' %}" alt="Resource Person 1" class="oval-image">
@@ -314,53 +428,6 @@
                 </div>
             </div>
         </div>
-    
-        {% comment %} <!-- Career Guidance Forum Section 2 (Duplicated) -->
-        <div class="container">
-            <h1>Sharing Knowledge and Shaping Futures</h1>
-            <div class="row">
-                <!-- Questions and Answers (Duplicated) -->
-                <div class="col-lg-8">
-                    <div class="container-resource-person" id="qa-section">
-                        <ul id="qaList">
-                            <!-- Example Question and Answer (Duplicated) -->
-                            <li class="custom-icon">
-                                <span class="user-profile"><i class="bi bi-person-circle"></i> Username asked a question</span>
-                                <div class="question">
-                                    <p style="color:red;">This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </div>
-                                <ul class="answers">
-                                    <li>
-                                        <p style="font-style: italic;">Answers</p>
-                                        <div class="answer">
-                                            <span class="user-profile"><i class="bi bi-person-circle"></i> Username</span>
-                                            <p>This is an example answer to the question. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- Repeat this structure for more questions and answers (Duplicated) -->
-                            <form id="answerForm" style="margin-top:50px">
-                                <div class="mb-3">
-                                    <label for="answerText" class="form-label">Your Answer</label>
-                                    <textarea class="form-control" id="answerText" name="answerText" rows="4" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Post Answer</button>
-                            </form>
-                        </ul>
-    
-                        <!-- Answer a Question Form (Duplicated) -->
-                        <h2>Answer a Question</h2>
-                        <form id="answerForm">
-                            <!-- ... Answer a Question Form ... -->
-                        </form>
-                    </div>
-                </div>
-    
-                <!-- Resource Persons (Duplicated) -->
-                <!-- Duplicate the resource persons content here -->
-            </div>
-        </div> {% endcomment %}
     </main>
 
     <!-- Vendor JS Files -->
@@ -374,6 +441,9 @@
 
     <!-- Template Main JS File -->
     <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Include jQuery if not already included -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         // JavaScript for responsive behavior
@@ -403,7 +473,211 @@
             // Listen for window resize event to update layout
             window.addEventListener('resize', rearrangeSections);
         });
-    </script>
+
+        // Check if the page was reloaded due to the back button click
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            // Reload the page
+            location.reload();
+        }
+    });
+    
+</script>
+<!-- Include jQuery if not already included -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Function to open/close the dropdown
+    function toggleDropdown(event, button) {
+        event.stopPropagation(); // Prevent the event from propagating to document click
+        const dropdownContent = button.nextElementSibling;
+        const isVisible = dropdownContent.style.display === 'block';
+
+        // Close all other dropdowns before opening the current one
+        closeAllDropdowns();
+
+        if (isVisible) {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'block';
+            // Add a click event listener to the document body to close the dropdown
+            document.body.addEventListener('click', closeDropdown);
+        }
+    }
+
+    // Handle option click
+    function handleOptionClick(option) {
+        const action = option.getAttribute("data-action");
+        const answerId = option.getAttribute("data-answer-id");
+        const deleteUrl = option.getAttribute("data-delete-url");
+
+        if (action === "delete" && confirm("Are you sure you want to delete this comment?")) {
+            // Send a request to the server to soft delete the answer
+            fetch(deleteUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"), // Make sure to include CSRF token
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Optionally, you can update the UI to remove the deleted comment
+                        const comment = option.parentElement.parentElement;
+                        comment.style.display = "none";
+                    } else {
+                        alert("Failed to delete the comment.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while deleting the comment.");
+                });
+        }
+    }
+
+    // Close the currently open dropdown
+    function closeDropdown() {
+        const dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(function (dropdown) {
+            dropdown.style.display = 'none';
+        });
+
+        // Remove the click event listener from the document body
+        document.body.removeEventListener('click', closeDropdown);
+    }
+
+    // Close all dropdowns except the one being clicked
+    function closeAllDropdowns() {
+        const dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(function (dropdown) {
+            dropdown.style.display = 'none';
+        });
+    }
+
+    // Function to get CSRF token from cookies (you can replace it with your implementation)
+    function getCookie(name) {
+        const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\s*([^;]+)`);
+        return cookieValue ? cookieValue.pop() : "";
+    }
+
+    // Close the dropdown when clicking outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropdown-btn')) {
+            const dropdowns = document.querySelectorAll(".dropdown-content");
+            dropdowns.forEach(function(dropdown) {
+                dropdown.style.display = 'none';
+            });
+        }
+    };
+</script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+    function formatTimeAgo(element) {
+        const postedAtTimestamp = element.getAttribute("data-posted");
+        const now = moment();
+        const postedAt = moment.unix(postedAtTimestamp); // Convert timestamp to a moment object
+
+        const timeAgo = moment.duration(now.diff(postedAt));
+
+        let timeAgoString = "";
+
+        if (timeAgo.asSeconds() < 60) {
+            timeAgoString = `(posted ${Math.floor(timeAgo.asSeconds())} sec ago)`;
+        } else if (timeAgo.asMinutes() < 60) {
+            timeAgoString = `(posted ${Math.floor(timeAgo.asMinutes())} min ago)`;
+        } else if (timeAgo.asHours() < 24) {
+            timeAgoString = `(posted ${Math.floor(timeAgo.asHours())} hr ago)`;
+        } else {
+            timeAgoString = `(posted ${Math.floor(timeAgo.asDays())} days ago)`;
+        }
+
+        element.textContent = timeAgoString;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const postTimeElements = document.querySelectorAll(".post-time");
+        postTimeElements.forEach(formatTimeAgo);
+    });
+</script>
+
+
+
+<!-- JavaScript for Edit Comment -->
+<script>
+   // Function to toggle the edit comment form
+function toggleEditForm(commentId, event) {
+    const editForm = document.getElementById(`edit-comment-form-${commentId}`);
+    const commentText = document.getElementById(`comment-${commentId}`);
+    
+    if (editForm.style.display === 'none' || !editForm.style.display) {
+        // Show the edit form
+        editForm.style.display = 'block';
+        commentText.style.display = 'none';
+    } else {
+        // Hide the edit form
+        editForm.style.display = 'none';
+        commentText.style.display = 'block';
+    }
+
+    // Prevent the default anchor click behavior
+    event.preventDefault();
+}
+
+
+    // Function to save the edited comment
+function saveEditComment(commentId) {
+    const editedText = document.getElementById(`editAnswerText-${commentId}`).value;
+
+    // Send a POST request to the server to update the comment
+    fetch(`/edit_comment/${commentId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken'), // Make sure to include CSRF token
+        },
+        body: `edited_text=${encodeURIComponent(editedText)}`,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Comment updated successfully
+            const commentText = document.getElementById(`comment-${commentId}`);
+            if (commentText) {
+                commentText.textContent = editedText;
+                commentText.style.display = 'block';
+                const editForm = document.getElementById(`edit-comment-form-${commentId}`);
+                if (editForm) {
+                    editForm.style.display = 'none';
+                }
+            }
+        } else {
+            alert('Failed to update the comment. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the comment.');
+    });
+}
+
+
+    // Function to cancel editing and hide the edit form
+    function cancelEditComment(commentId) {
+        const commentText = document.getElementById(`comment-${commentId}`);
+        const editForm = document.getElementById(`edit-comment-form-${commentId}`);
+
+        if (commentText && editForm) {
+            commentText.style.display = 'block';
+            editForm.style.display = 'none';
+        }
+    }
+</script>
+
+
+
 </body>
 
 </html>

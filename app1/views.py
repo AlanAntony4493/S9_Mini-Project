@@ -400,67 +400,8 @@ def retrieve_deleted_entity(request, entity_type, entity_id):
     # Redirect back to the 'parish_admin' page
     return redirect('parish_admin')
 
-
 def gallery(request):
     return render(request, 'gallery.html')
-
-# career 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Question, Answer
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-
-@login_required
-def career_forum(request):
-    if request.method == 'POST':
-        question_text = request.POST.get('question_text')
-        Question.objects.create(user=request.user, question_text=question_text)
-        messages.success(request, 'Question posted successfully.')
-        return redirect('career_forum')
-
-    questions = Question.objects.all().order_by('-created_at')
-    for question in questions:
-        question.answers = question.answers.all().order_by('-created_at')
-
-    return render(request, 'career_forum.html', {'questions': questions})
-
-@login_required
-def view_question(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    answers = question.answers.all()
-
-    if request.method == 'POST':
-        answer_text = request.POST.get('answer_text')
-        Answer.objects.create(user=request.user, question=question, answer_text=answer_text)
-        messages.success(request, 'Answer posted successfully.')
-        return redirect('view_question', question_id=question.id)
-
-    return render(request, 'view_question.html', {'question': question, 'answers': answers})
-
-@login_required
-def delete_question(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-
-    if request.user == question.user:
-        question.delete()
-        messages.success(request, 'Question deleted successfully.')
-    else:
-        messages.error(request, 'You do not have permission to delete this question.')
-
-    return redirect('career_forum')
-
-@login_required
-def delete_answer(request, answer_id):
-    answer = get_object_or_404(Answer, pk=answer_id)
-
-    if request.user == answer.user:
-        answer.delete()
-        messages.success(request, 'Answer deleted successfully.')
-    else:
-        messages.error(request, 'You do not have permission to delete this answer.')
-
-    return redirect('view_question', question_id=answer.question.id)
-
 
 from django.db import IntegrityError
 def report_admin(request):
@@ -550,5 +491,270 @@ def profile(request):
         'registration': registration,
     }
     return render(request, 'profile.html', context)
+
+
+
+# career 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def career_forum(request):
+    return render(request, 'career_forum.html')
+
+# from django.shortcuts import render, redirect
+# from .models import Question, Answer
+# from django.contrib.auth.decorators import login_required
+# from django.http import JsonResponse
+
+# @login_required
+# def post_question(request):
+#     if request.method == 'POST':
+#         title = request.POST.get('questionTitle')
+#         description = request.POST.get('questionDescription')
+#         additional_details = request.POST.get('additionalDetails')
+#         user = request.user
+
+#         question = Question.objects.create(
+#             title=title,
+#             description=description,
+#             additional_details=additional_details,
+#             posted_by=user
+#         )
+#         question.save()
+#         return redirect('career_forum')  # Redirect to the career forum page
+
+# @login_required
+# def post_answer(request):
+#     if request.method == 'POST':
+#         answer_text = request.POST.get('answerText')
+#         question_id = request.POST.get('questionId')
+#         user = request.user
+
+#         question = Question.objects.get(pk=question_id)
+
+#         answer = Answer.objects.create(
+#             question=question,
+#             text=answer_text,
+#             posted_by=user
+#         )
+#         answer.save()
+#         return JsonResponse({'success': True})
+
+# def get_questions_and_answers(request):
+#     # Fetch and prepare the list of questions and answers from your database
+#     questions = Question.objects.all()
+#     answers = Answer.objects.all()
+    
+#     data = {
+#         'questions': [{'title': q.title, 'description': q.description, 'id': q.id} for q in questions],
+#         'answers': [{'text': a.text, 'user': a.posted_by.username, 'question_id': a.question.id} for a in answers],
+#     }
+    
+#     return JsonResponse(data)
+
+
+# views.py
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from .models import Question, Answer
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def post_question(request):
+    if request.method == 'POST':
+        title = request.POST.get('questionTitle')
+        description = request.POST.get('questionDescription')
+        additional_details = request.POST.get('additionalDetails')
+        user = request.user
+
+        question = Question.objects.create(
+            title=title,
+            description=description,
+            additional_details=additional_details,
+            posted_by=user
+        )
+
+        # Optionally, you can redirect to the career_forum page after posting
+        return redirect('career_forum')
+    else:
+        return JsonResponse({'success': False})
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from .models import Question, Answer
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def post_answer(request):
+    if request.method == 'POST':
+        # print(answer_text)
+        answer_text = request.POST.get('answerText')
+        question_id = request.POST.get('questionId')
+        user = request.user
+        # print('answer_text')
+        question = Question.objects.get(pk=question_id)
+
+        answer = Answer.objects.create(
+            question=question,
+            answer_text=answer_text,
+            posted_by=user
+        )
+
+        # Optionally, you can redirect to the career_forum page after posting
+        return redirect('career_forum')
+    else:
+        return JsonResponse({'success': False})
+
+
+from django.shortcuts import render
+from .models import Question, Answer
+
+def career_forum(request):
+    # Fetch and prepare the list of questions and answers from your database
+    # questions = Question.objects.all()
+    # answers = Answer.objects.filter(is_deleted=False)
+    questions = Question.objects.select_related('posted_by__registration').all()
+    answers = Answer.objects.filter(is_deleted=False).select_related('posted_by__registration')
+
+    context = {
+        'questions': questions,
+        'answers': answers,
+    }
+    
+    return render(request, 'career_forum.html', context)
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import Question, Answer
+
+@login_required
+def soft_delete_question(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
+    if request.method == 'POST':
+        question.is_deleted = True
+        question.save()
+        return redirect('career_forum')  # Redirect to the career forum page after soft delete
+    else:
+        return JsonResponse({'success': False})
+
+from django.http import JsonResponse
+
+def soft_delete_answer(request, answer_id):
+    try:
+        answer = Answer.objects.get(pk=answer_id)
+        answer.is_deleted = True
+        answer.save()
+        return redirect('career_forum')
+    except Answer.DoesNotExist:
+        return JsonResponse({'success': False, 'error_message': 'Answer not found'})
+
+
+from django.shortcuts import render
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+
+
+# authorize razorpay client with API Keys.
+razorpay_client = razorpay.Client(
+	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+
+def index(request):
+	currency = 'INR'
+	amount = 20000 # Rs. 200
+
+	# Create a Razorpay Order
+	razorpay_order = razorpay_client.order.create(dict(amount=amount,
+													currency=currency,
+													payment_capture='0'))
+
+	# order id of newly created order.
+	razorpay_order_id = razorpay_order['id']
+	callback_url = 'paymenthandler/'
+
+	# we need to pass these details to frontend.
+	context = {}
+	context['razorpay_order_id'] = razorpay_order_id
+	context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+	context['razorpay_amount'] = amount
+	context['currency'] = currency
+	context['callback_url'] = callback_url
+
+	return render(request, 'index.html', context=context)
+
+
+# we need to csrf_exempt this url as
+# POST request will be made by Razorpay
+# and it won't have the csrf token.
+@csrf_exempt
+def paymenthandler(request):
+
+	# only accept POST request.
+	if request.method == "POST":
+		try:
+		
+			# get the required parameters from post request.
+			payment_id = request.POST.get('razorpay_payment_id', '')
+			razorpay_order_id = request.POST.get('razorpay_order_id', '')
+			signature = request.POST.get('razorpay_signature', '')
+			params_dict = {
+				'razorpay_order_id': razorpay_order_id,
+				'razorpay_payment_id': payment_id,
+				'razorpay_signature': signature
+			}
+
+			# verify the payment signature.
+			result = razorpay_client.utility.verify_payment_signature(
+				params_dict)
+			if result is not None:
+				amount = 20000 # Rs. 200
+				try:
+
+					# capture the payemt
+					razorpay_client.payment.capture(payment_id, amount)
+
+					# render success page on successful caputre of payment
+					return render(request, 'paymentsuccess.html')
+				except:
+
+					# if there is an error while capturing payment.
+					return render(request, 'paymentfail.html')
+			else:
+
+				# if signature verification fails.
+				return render(request, 'paymentfail.html')
+		except:
+
+			# if we don't find the required parameters in POST data
+			return HttpResponseBadRequest()
+	else:
+	# if other than POST request is made.
+		return HttpResponseBadRequest()
+
+
+# views.py
+from django.http import JsonResponse
+
+def edit_comment(request, answer_id):
+    if request.method == 'POST':
+        edited_text = request.POST.get('edited_text')
+
+        try:
+            # Find the comment by its ID and update the text
+            comment = Answer.objects.get(pk=answer_id)
+            comment.answer_text = edited_text
+            comment.save()
+
+            return JsonResponse({'success': True})
+        except Answer.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Comment not found'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 

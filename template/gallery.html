@@ -239,6 +239,15 @@
       // You can redirect to the event details page here, passing the eventId as a parameter
       window.location.href = `event-details.html?event=${eventId}`;
   }
+
+   // Check if the page was reloaded due to the back button click
+   window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        // Reload the page
+        location.reload();
+    }
+});
+
 </script>
 
 </body>

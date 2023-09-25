@@ -51,14 +51,18 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset/done/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
     path('gallery',views.gallery, name="gallery"),
-    path('career_forum',views.career_forum,name='career_forum'),
-    path('career_forum/question/<int:question_id>/', views.view_question, name='view_question'),
-    path('career_forum/delete_question/<int:question_id>/', views.delete_question, name='delete_question'),
-    path('career_forum/delete_answer/<int:answer_id>/', views.delete_answer, name='delete_answer'),
     path('retrieve_deleted_prayer_group/<int:entity_id>/', views.retrieve_deleted_entity, {'entity_type': 'prayer_group'}, name='retrieve_deleted_prayer_group'),
     path('retrieve_deleted_parish_member/<int:entity_id>/', views.retrieve_deleted_entity, {'entity_type': 'parish_member'}, name='retrieve_deleted_parish_member'),
     path('update_parish/<int:member_id>/', views.update_parish, name='update_parish'),
     path('profile/', views.profile, name='profile'),
+    path('career_forum/', views.career_forum, name='career_forum'),
+    path('post_question/', views.post_question, name='post_question'),
+    path('post_answer/', views.post_answer, name='post_answer'),
+    path('soft_delete_question/<int:question_id>/', views.soft_delete_question, name='soft_delete_question'),
+    path('soft_delete_answer/<int:answer_id>/', views.soft_delete_answer, name='soft_delete_answer'),
+    #  path('get-questions-and-answers/', views.get_questions_and_answers, name='get_questions_and_answers'),
+    path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
+    path('edit_comment/<int:answer_id>/', views.edit_comment, name='edit_comment'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
