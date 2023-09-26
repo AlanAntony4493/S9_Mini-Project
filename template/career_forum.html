@@ -333,8 +333,9 @@
                                             <a href="#" onclick="reportComment({{ answer.id }})">Report Answer</a>
                                             {% if user.is_superuser %}
                                                 <!-- Edit Comment Link -->
-                                                {% comment %} <a href="#" onclick="toggleEditForm({{ answer.id }}, event)">Edit Comment</a> {% endcomment %}
+                                                <a href="#" onclick="toggleEditForm({{ answer.id }}, event)">Edit Comment</a>
                                                 <a href="{% url 'soft_delete_answer' answer.id %}" onclick="return confirm('Are you sure you want to delete this comment?')">Delete Comment</a>
+                                                
                                             {% elif answer.posted_by == user %}
                                                 <!-- Show delete option with confirmation -->
                                                 <a href="#" onclick="toggleEditForm({{ answer.id }}, event)">Edit Comment</a>

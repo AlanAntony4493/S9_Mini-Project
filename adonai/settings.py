@@ -152,9 +152,19 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mailtoshowvalidationok@gmail.com'  
-EMAIL_HOST_PASSWORD = 'qtwpnirvgsxzhtdo'  
-DEFAULT_FROM_EMAIL = 'mailtoshowvalidationok@gmail.com'
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'alanantony96696@gmail.com'  
+EMAIL_HOST_PASSWORD = 'ufkwdjbeawlmvaan'  
+DEFAULT_FROM_EMAIL = 'alanantony96696@gmail.com'
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = 'viniann03@gmail.com'
+# EMAIL_HOST_PASSWORD = 'hzpapfdygyuegawy'
 
 
 RAZOR_KEY_ID = 'rzp_test_ow3KlW5qy6Rqco'

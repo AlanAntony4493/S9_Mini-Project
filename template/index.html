@@ -129,7 +129,7 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="#about"  id="pay-btn" class="get-started-btn scrollto">Support Us</a>
+      <a href="{% url "donation_form" %}" class="get-started-btn scrollto">Support Us</a>
       {% comment %} <button class="btn">Donate❤️</button> {% endcomment %}
 
     </div>
@@ -202,15 +202,13 @@
             <h3>Syro-Malabar Youth Movement Mukkoottuthara</h3>
           
             <p>
-              Syro Malabar Youth Movement (SMYM) is the official youth movement of the Syro Malabar Church.
-              SMC has more than 1.6 million catholic youth scattered all over the world.
-              The SMYM champions and lives out its mission to follow the tradition and beliefs
-              of the Syro Malabar Church for the Kingdom of God and Society, to strive for the
-              integral development of the youth and to bind together the youth of the SMC.
-              SMYM has various programmes and activities for the holistic development of youth
-              aligning its members with the religious and social causes of the Church including
-              Campus programmes against substance abuse and formation of de-addiction clubs on campuses.
-
+              The Syro Malabar Youth Movement (SMYM) Mukkottuthara, established in [insert year] under the Kanjirappally diocese,
+               stands as the official youth movement of the Syro Malabar Church. Rooted in the teachings of St. Thomas, 
+               the apostle of Jesus Christ, SMYM Mukkottuthara has evolved into a dynamic force for comprehensive youth development
+                and community service. With a passionate group of young individuals at its core, SMYM Mukkottuthara is dedicated to 
+                nurturing the spiritual growth of its members and promoting cultural exchange programs that instill vital life values. 
+                Over the years, this organization has played a pivotal role in creating future leaders within the Church, illuminating the path 
+                for countless individuals to thrive as eminent personalities and community leaders.  <a href="" style="color:blue"><u>Read more...</u></a>
             </p>
           </div>
         </div>
@@ -780,38 +778,6 @@
   });
   
     </script>
-
-  <!-- Razorpay's Javascript code. -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
-    var options = {
-       
-      // Enter the Key ID generated from the Dashboard
-      key: "{{ razorpay_merchant_key }}",
-       
-      // Amount is in currency subunits.
-      // Default currency is INR. Hence,
-      // 50000 refers to 50000 paise
-      amount: "{{ razorpay_amount }}",
-      currency: "{{ currency }}",
-       
-      // Your/store name.
-      name: "Smym Mukkoottuthara",
-       
-      // Pass the `id` obtained in the response of Step 1
-      order_id: "{{ razorpay_order_id }}",
-      callback_url: "{{ callback_url }}",
-    };
-     
-    // initialise razorpay with the options.
-    var rzp1 = new Razorpay(options);
-     
-    // add event listener to the payment button.
-    document.getElementById("pay-btn").onclick = function (e) {
-      rzp1.open();
-      e.preventDefault();
-    };
-  </script>
     
 </body>
 

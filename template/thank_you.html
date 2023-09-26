@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2>Thank You for Your Donation!</h2>
+    <p>Your generous donation of ${{ amount }} has been received.</p>
+    <p>We greatly appreciate your support.</p>
+    <a href="{% url 'donate' %}" class="btn btn-primary">Make Another Donation</a>
+  </div>
+{% endblock %}

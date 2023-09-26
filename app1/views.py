@@ -87,7 +87,7 @@ def index(request):
 
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
-from .models import AnswerReport, Event, Report
+from .models import AnswerReport, Donation, Event, Report
 from django.utils import timezone
 
 ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'svg', 'ico', 'jfif', 'pjpeg', 'pjp', 'avif']
@@ -208,6 +208,9 @@ def soft_delete_donor(request, donor_id):
     # Use reverse to get the URL for the blood_admin page
     return redirect(reverse('blood_admin'))
 
+from django.core.mail import send_mail
+from django.conf import settings
+
 def approve_user(request, user_id):
     if request.user.is_superuser:
         user_profile = get_object_or_404(Registration, user__id=user_id)
@@ -215,6 +218,26 @@ def approve_user(request, user_id):
         user_profile.is_approved = True 
         user_profile.is_active = True  # Set the user as active
         user_profile.save()
+
+        
+        subject = 'Account Approval for SMYM Mukkoottuthara'
+        # message = f'Dear{user_profile.user.first_name}, ,We are thrilled to inform you that your registration request for Adonai has been approved by our admin team, and your account is now ready for use.You can now access all the exciting features and content available on our platform by logging in with your registered email address and password.We are committed to providing you with a seamless and enjoyable experience on Adonai, and we look forward to having you as an active member of our community.If you have any questions, encounter any issues, or need assistance with anything related to our website, please do not hesitate to contact our support team at smymmukkoottuthara@gmail.com.Thank you for choosing Adonai. We hope you have a fantastic time exploring our platform.Best regards,President SMYM Mukkoottuthara Adonai{ user_profile.user.email }'
+        message = f'Dear {user_profile.user.username},\n\n' \
+          'We are thrilled to inform you that your registration request for Adonai has been approved by our admin team, and your account is now ready for use.\n\n' \
+          'You can now access all the exciting features and content available on our platform by logging in with your registered email address and password.\n\n' \
+          'To get started, please click the following link to log in:\n' \
+          '"http://127.0.0.1:8000/login" : Log In to Adonai\n\n' \
+          'We are committed to providing you with a seamless and enjoyable experience on Adonai, and we look forward to having you as an active member of our community.\n\n' \
+          'If you have any questions, encounter any issues, or need assistance with anything related to our website, please do not hesitate to contact our support team at smymmukkoottuthara@gmail.com.\n\n' \
+          'Thank you for choosing Adonai. We hope you have a fantastic time exploring our platform.\n\n' \
+          'Best regards,\n' \
+          'President \n'\
+        'SMYM Mukkoottuthara \n'
+        'Adonai'       
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [ user_profile.user.email ]
+
+        send_mail(subject, message, from_email, recipient_list)
     
         return redirect('user_admin')
     else:
@@ -222,22 +245,41 @@ def approve_user(request, user_id):
         return redirect('login')
 
 
-
+from django.core.mail import send_mail
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from .models import Registration
 
 def delete_user(request, user_id):
     user_profile = get_object_or_404(Registration, user__id=user_id)
-    
     if request.method == 'POST':
         comment = request.POST.get('comments', '')
         user_profile.is_active = False
         user_profile.comments = comment
         user_profile.save()
+
+         # Compose the email body
+        subject =  'Account Suspension Notification'
+        message = f'Dear {user_profile.user.first_name},\n' \
+                  'We hope this message finds you well. We regret to inform you that your account on [Website Name] has been suspended temporarily due to the following reason:\n\n' \
+                  'Suspension Reason: {{user_profile.comments}}\n' \
+                  'Suspension Date: {{timezone.now()}}\n\n' \
+                  'Your account will remain suspended until further notice. During this time, you will not be able to access your account or use the platform\'s features.\n\n' \
+                  'If you believe this suspension is in error or have any questions regarding the suspension, please reach out to our support team at smymmukkoottuthara@gmail.com for assistance. We will do our best to address your concerns and provide clarification on the situation.\n\n' \
+                  'We take account suspensions seriously and strive to maintain a safe and enjoyable environment for all users. We appreciate your understanding and cooperation in this matter.\n\n' \
+                  'Thank you for your attention to this notification, and we hope to resolve this issue promptly.\n\n' \
+                  'Best regards,\n' \
+                  'President\n' \
+                  'SMYM Mukkoottuthara\n' \
+                  'smymmukkoottuthara@gmail.com'
         
-        # You can add any additional logic or messages here if needed
-        
+        # Send the email
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user_profile.user.email]
+         
+        send_mail(subject, message, from_email, recipient_list)
+
         return redirect('user_admin')
     
     return render(request, 'user_admin.html', {'user_profile': user_profile})
@@ -665,77 +707,6 @@ razorpay_client = razorpay.Client(
 	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 
-def index(request):
-	currency = 'INR'
-	amount = 20000 # Rs. 200
-
-	# Create a Razorpay Order
-	razorpay_order = razorpay_client.order.create(dict(amount=amount,
-													currency=currency,
-													payment_capture='0'))
-
-	# order id of newly created order.
-	razorpay_order_id = razorpay_order['id']
-	callback_url = 'paymenthandler/'
-
-	# we need to pass these details to frontend.
-	context = {}
-	context['razorpay_order_id'] = razorpay_order_id
-	context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-	context['razorpay_amount'] = amount
-	context['currency'] = currency
-	context['callback_url'] = callback_url
-
-	return render(request, 'index.html', context=context)
-
-
-# we need to csrf_exempt this url as
-# POST request will be made by Razorpay
-# and it won't have the csrf token.
-@csrf_exempt
-def paymenthandler(request):
-
-	# only accept POST request.
-	if request.method == "POST":
-		try:
-		
-			# get the required parameters from post request.
-			payment_id = request.POST.get('razorpay_payment_id', '')
-			razorpay_order_id = request.POST.get('razorpay_order_id', '')
-			signature = request.POST.get('razorpay_signature', '')
-			params_dict = {
-				'razorpay_order_id': razorpay_order_id,
-				'razorpay_payment_id': payment_id,
-				'razorpay_signature': signature
-			}
-
-			# verify the payment signature.
-			result = razorpay_client.utility.verify_payment_signature(
-				params_dict)
-			if result is not None:
-				amount = 20000 # Rs. 200
-				try:
-
-					# capture the payemt
-					razorpay_client.payment.capture(payment_id, amount)
-
-					# render success page on successful caputre of payment
-					return render(request, 'paymentsuccess.html')
-				except:
-
-					# if there is an error while capturing payment.
-					return render(request, 'paymentfail.html')
-			else:
-
-				# if signature verification fails.
-				return render(request, 'paymentfail.html')
-		except:
-
-			# if we don't find the required parameters in POST data
-			return HttpResponseBadRequest()
-	else:
-	# if other than POST request is made.
-		return HttpResponseBadRequest()
 
 
 # views.py
@@ -789,3 +760,90 @@ def reported_comments(request):
     ).annotate(report_count=Subquery(report_counts)).distinct()
 
     return render(request, 'reported_comments.html', {'reported_answers': reported_answers})
+
+
+
+
+from django.shortcuts import render
+import razorpay
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+
+
+# authorize razorpay client with API Keys.
+razorpay_client = razorpay.Client(
+	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+
+def donation_form(request):
+	currency = 'INR'
+	amount = 20000 # Rs. 200
+
+	# Create a Razorpay Order
+	razorpay_order = razorpay_client.order.create(dict(amount=amount,
+													currency=currency,
+													payment_capture='0'))
+
+	# order id of newly created order.
+	razorpay_order_id = razorpay_order['id']
+	callback_url = 'paymenthandler/'
+
+	# we need to pass these details to frontend.
+	context = {}
+	context['razorpay_order_id'] = razorpay_order_id
+	context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+	context['razorpay_amount'] = amount
+	context['currency'] = currency
+	context['callback_url'] = callback_url
+
+	return render(request, 'donation_form.html', context=context)
+
+
+# we need to csrf_exempt this url as
+# POST request will be made by Razorpay
+# and it won't have the csrf token.
+@csrf_exempt
+def paymenthandler(request):
+
+	# only accept POST request.
+	if request.method == "POST":
+		try:
+		
+			# get the required parameters from post request.
+			payment_id = request.POST.get('razorpay_payment_id', '')
+			razorpay_order_id = request.POST.get('razorpay_order_id', '')
+			signature = request.POST.get('razorpay_signature', '')
+			params_dict = {
+				'razorpay_order_id': razorpay_order_id,
+				'razorpay_payment_id': payment_id,
+				'razorpay_signature': signature
+			}
+
+			# verify the payment signature.
+			result = razorpay_client.utility.verify_payment_signature(
+				params_dict)
+			if result is not None:
+				amount = 20000 # Rs. 200
+				try:
+
+					# capture the payemt
+					razorpay_client.payment.capture(payment_id, amount)
+
+					# render success page on successful caputre of payment
+					return render(request, 'paymentsuccess.html')
+				except:
+
+					# if there is an error while capturing payment.
+					return render(request, 'paymentfail.html')
+			else:
+
+				# if signature verification fails.
+				return render(request, 'paymentfail.html')
+		except:
+
+			# if we don't find the required parameters in POST data
+			return HttpResponseBadRequest()
+	else:
+	# if other than POST request is made.
+		return HttpResponseBadRequest()

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ======= Breadcrumbs ======= -->
+<section class="breadcrumbs">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 style="align:center">Make a Donation</h2>
+    </div>
+  </div>
+</section>
+<!-- End Breadcrumbs -->
+  <div class="container">
+
+<!-- Donation form -->
+<form method="post" action="{% url 'donation_form' %}">
+    {% csrf_token %}
+    <label for="amount">Enter Donation Amount (INR):</label>
+    <input type="number" id="amount" name="amount" required>
+    <button type="submit" id="pay-btn">Donate</button>
+</form>
+    
+<!-- Add this line to check if the razorpay_amount is correctly rendered -->
+<p>Amount in template: {{ razorpay_amount }}</p>
+
+  </div>
+
+  <!-- Razorpay's Javascript code. -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    // Enter the Key ID generated from the Dashboard
+    key: "{{ razorpay_merchant_key }}",
+     
+    // Amount is in currency subunits (paise).
+    amount: 0, // Set the initial amount to 0
+  
+    currency: "{{ currency }}",
+     
+    // Your/store name.
+    name: "Dj Razorpay",
+     
+    // Pass the `id` obtained in the response of Step 1
+    order_id: "{{ razorpay_order_id }}",
+    callback_url: "{{ callback_url }}",
+  };
+
+  // Initialize Razorpay with the options.
+  var rzp1 = new Razorpay(options);
+
+  // Add an event listener to the payment button.
+  document.getElementById("pay-btn").onclick = function (e) {
+    // Retrieve the entered donation amount from the input field
+    var amountInRupees = parseFloat(document.getElementById("amount").value);
+    
+    // Validate and convert the amount to paise
+    if (!isNaN(amountInRupees) && amountInRupees > 0) {
+      var amountInPaise = Math.round(amountInRupees * 100);
+      options.amount = amountInPaise;
+      
+      // Reinitialize Razorpay with the updated options
+      rzp1 = new Razorpay(options);
+
+      // Open the Razorpay payment dialog
+      rzp1.open();
+    } else {
+      alert("Please enter a valid donation amount greater than zero.");
+    }
+
+    e.preventDefault();
+  };
+</script>
+
+{% endblock %}
