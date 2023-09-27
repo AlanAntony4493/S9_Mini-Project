@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ======= Breadcrumbs ======= -->
+<section class="breadcrumbs">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 style="text-align: center;">Proceed Donation</h2>
+      </div>
+    </div>
+  </section>
+  <!-- End Breadcrumbs -->
+    <div class="payment-container" style="height:500px; margin-left:50px;margin-top:50px;">
+        <p>Proceed to pay :₹{{ razorpay_amount }}</p>
+        <button class="btn btn-success" id="pay-btn">Pay Now</button>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            key: "{{ razorpay_merchant_key }}",
+            amount: "{{ amount }}",
+            currency: "{{ currency }}",
+            name: "Dj Razorpay",
+            order_id: "{{ razorpay_order_id }}",
+            callback_url: "{{ callback_url }}",
+        };
+        var rzp1 = new Razorpay(options);
+        document.getElementById("pay-btn").onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        };
+    </script>
+    {% endblock %}

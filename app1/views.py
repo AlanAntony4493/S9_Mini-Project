@@ -263,8 +263,8 @@ def delete_user(request, user_id):
         subject =  'Account Suspension Notification'
         message = f'Dear {user_profile.user.first_name},\n' \
                   'We hope this message finds you well. We regret to inform you that your account on [Website Name] has been suspended temporarily due to the following reason:\n\n' \
-                  'Suspension Reason: {{user_profile.comments}}\n' \
-                  'Suspension Date: {{timezone.now()}}\n\n' \
+                  f'Suspension Reason: {user_profile.comments}\n' \
+                  f'Suspension Date: {timezone.now()}\n\n' \
                   'Your account will remain suspended until further notice. During this time, you will not be able to access your account or use the platform\'s features.\n\n' \
                   'If you believe this suspension is in error or have any questions regarding the suspension, please reach out to our support team at smymmukkoottuthara@gmail.com for assistance. We will do our best to address your concerns and provide clarification on the situation.\n\n' \
                   'We take account suspensions seriously and strive to maintain a safe and enjoyable environment for all users. We appreciate your understanding and cooperation in this matter.\n\n' \
@@ -672,17 +672,6 @@ def career_forum(request):
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
 from .models import Question, Answer
-
-@login_required
-def soft_delete_question(request, question_id):
-    question = get_object_or_404(Question, id=question_id)
-    if request.method == 'POST':
-        question.is_deleted = True
-        question.save()
-        return redirect('career_forum')  # Redirect to the career forum page after soft delete
-    else:
-        return JsonResponse({'success': False})
-
 from django.http import JsonResponse
 
 def soft_delete_answer(request, answer_id):
@@ -694,19 +683,16 @@ def soft_delete_answer(request, answer_id):
     except Answer.DoesNotExist:
         return JsonResponse({'success': False, 'error_message': 'Answer not found'})
 
+from django.http import JsonResponse
 
-from django.shortcuts import render
-import razorpay
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest
-
-
-# authorize razorpay client with API Keys.
-razorpay_client = razorpay.Client(
-	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
-
-
+def soft_delete_question(request, question_id):
+    try:
+        question = Question.objects.get(pk=question_id)
+        question.is_deleted = True
+        question.save()
+        return redirect('career_forum')  # Replace 'career_forum' with the URL name of your forum page
+    except Question.DoesNotExist:
+        return JsonResponse({'success': False, 'error_message': 'Question not found'})
 
 
 # views.py
@@ -747,103 +733,136 @@ def report_comment(request, answer_id):
 
 
 from django.shortcuts import render
-from django.db.models import Count, Subquery, OuterRef
+from django.db.models import Count, F
 from .models import AnswerReport, Answer
 
 def reported_comments(request):
-    # Subquery to count reports for each answer
-    report_counts = AnswerReport.objects.filter(answer=OuterRef('pk')).values('answer').annotate(report_count=Count('id')).values('report_count')
-
-    # Query the reported answers with counts
-    reported_answers = Answer.objects.filter(
-        answerreport__in=Subquery(report_counts)
-    ).annotate(report_count=Subquery(report_counts)).distinct()
+    # Annotate each answer with the count of reports
+    reported_answers = Answer.objects.annotate(report_count=Count('answerreport')).filter(report_count__gt=0)
 
     return render(request, 'reported_comments.html', {'reported_answers': reported_answers})
 
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from .models import Question, Answer, AnswerReport
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+
+@login_required  # Ensure the view is accessible only to logged-in users
+def soft_delete_reported_answer(request, answer_id):
+    try:
+        answer = Answer.objects.get(pk=answer_id)
+        
+        # Check if the answer is reported
+        if AnswerReport.objects.filter(answer=answer).exists():
+            # Soft delete the answer
+            answer.is_deleted = True
+            answer.save()
+            
+
+            removal_reasons = "\n\n".join(report.reason for report in AnswerReport.objects.filter(answer=answer))
+
+
+            # Send an email notification to the answer's author
+            subject = 'Answer Deleted due to reports'
+            message = f'Dear {answer.posted_by.username},\n\n' \
+                'We hope this message finds you well. We would like to inform you that one of your recent answers on [Platform/Website Name] has been removed due to reports from other users. We take the quality and appropriateness of content on our platform seriously, and this action has been taken to ensure a safe and respectful environment for all users.\n\n' \
+                'Removed Answer Details:\n\n' \
+                f'- Question: {answer.question.title}\n' \
+                f'- Date Posted: {answer.posted_date_time}\n\n' \
+                f'Reason(s) for Removal:\n\n{removal_reasons}\n\n' \
+                'We encourage our users to follow our community guidelines and terms of service to maintain a positive and constructive atmosphere on our platform. If you have any questions or concerns regarding the removal of your answer or would like further clarification, please do not hesitate to reach out to our support team at smymmukkoottuthara@gmail.com\n\n' \
+                'Your contributions to our community are valued, and we appreciate your understanding of this situation. We look forward to your continued participation and the sharing of valuable insights on Adonai.\n\n' \
+                'Thank you for being a part of our community.\n\n' \
+                'Best regards,\n' \
+                'President, Smym Mukkoottuthara\n' \
+                'Admin, Adonai\n'
+
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [answer.posted_by.email]
+               
+            send_mail(subject, message, from_email, recipient_list)
+
+            return redirect('career_forum')  # Redirect to the appropriate page
+        else:
+            return JsonResponse({'success': False, 'error_message': 'Answer is not reported'})
+    except Answer.DoesNotExist:
+        return JsonResponse({'success': False, 'error_message': 'Answer not found'})
 
 
 
-from django.shortcuts import render
-import razorpay
+
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseBadRequest
+from django.shortcuts import render
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
+import razorpay
+from .models import Registration
 
+razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
-# authorize razorpay client with API Keys.
-razorpay_client = razorpay.Client(
-	auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+def paymentform(request: HttpRequest):
+    currency = 'INR'
+    amount = int(request.GET.get("amount")) * 100  # Rs. 200
 
+    razorpay_order = razorpay_client.order.create(dict(amount=amount, currency=currency, payment_capture='0'))
+    razorpay_order_id = razorpay_order['id']
+    callback_url = '/paymenthandler/'
+    context = {}
+    context['razorpay_order_id'] = razorpay_order_id
+    context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
+    context['razorpay_amount'] = amount / 100
+    context['currency'] = currency
+    context['callback_url'] = callback_url
 
-def donation_form(request):
-	currency = 'INR'
-	amount = 20000 # Rs. 200
+    return render(request, 'paymentform.html', context=context)
 
-	# Create a Razorpay Order
-	razorpay_order = razorpay_client.order.create(dict(amount=amount,
-													currency=currency,
-													payment_capture='0'))
-
-	# order id of newly created order.
-	razorpay_order_id = razorpay_order['id']
-	callback_url = 'paymenthandler/'
-
-	# we need to pass these details to frontend.
-	context = {}
-	context['razorpay_order_id'] = razorpay_order_id
-	context['razorpay_merchant_key'] = settings.RAZOR_KEY_ID
-	context['razorpay_amount'] = amount
-	context['currency'] = currency
-	context['callback_url'] = callback_url
-
-	return render(request, 'donation_form.html', context=context)
-
-
-# we need to csrf_exempt this url as
-# POST request will be made by Razorpay
-# and it won't have the csrf token.
 @csrf_exempt
 def paymenthandler(request):
+    if request.method == "POST":
+        try:
+            payment_id = request.POST.get('razorpay_payment_id', '')
+            razorpay_order_id = request.POST.get('razorpay_order_id', '')
+            signature = request.POST.get('razorpay_signature', '')
+            params_dict = {
+                'razorpay_order_id': razorpay_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature
+            }
+            result = razorpay_client.utility.verify_payment_signature(params_dict)
+            if result is not None:
+                amount = 20000 
+                authenticated_user = request.user
+                user_profile = Registration.objects.get(user=authenticated_user)
+                user_profile.save()
 
-	# only accept POST request.
-	if request.method == "POST":
-		try:
-		
-			# get the required parameters from post request.
-			payment_id = request.POST.get('razorpay_payment_id', '')
-			razorpay_order_id = request.POST.get('razorpay_order_id', '')
-			signature = request.POST.get('razorpay_signature', '')
-			params_dict = {
-				'razorpay_order_id': razorpay_order_id,
-				'razorpay_payment_id': payment_id,
-				'razorpay_signature': signature
-			}
+                  # Compose the email body
+                subject =  'Donation Success'
+                message = f'Dear {user_profile.user.first_name},\n' \
+                        'We hope this message finds you well.\n\n' \
+                        'Thank you for the kind Donation \n' \
+                        'Thank you for your attention to this notification, and we hope to resolve this issue promptly.\n\n' \
+                        'Best regards,\n' \
+                        'President\n' \
+                        'SMYM Mukkoottuthara\n' \
+                        'smymmukkoottuthara@gmail.com'
+                
+                # Send the email
+                from_email = settings.EMAIL_HOST_USER
+                recipient_list = [user_profile.user.email]
+                
+                send_mail(subject, message, from_email, recipient_list)
+                
+                return render(request, 'index.html')
+            else:
+                return render(request, 'donation_form.html')
+        except:
+            return render(request,'index.html')
+    else:
+        return render(request,'donation_form.html')
+    
 
-			# verify the payment signature.
-			result = razorpay_client.utility.verify_payment_signature(
-				params_dict)
-			if result is not None:
-				amount = 20000 # Rs. 200
-				try:
-
-					# capture the payemt
-					razorpay_client.payment.capture(payment_id, amount)
-
-					# render success page on successful caputre of payment
-					return render(request, 'paymentsuccess.html')
-				except:
-
-					# if there is an error while capturing payment.
-					return render(request, 'paymentfail.html')
-			else:
-
-				# if signature verification fails.
-				return render(request, 'paymentfail.html')
-		except:
-
-			# if we don't find the required parameters in POST data
-			return HttpResponseBadRequest()
-	else:
-	# if other than POST request is made.
-		return HttpResponseBadRequest()
+    
+def donation_form(request):
+    return render(request, 'donation_form.html')

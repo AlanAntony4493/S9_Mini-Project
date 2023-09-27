@@ -58,14 +58,15 @@ urlpatterns = [
     path('career_forum/', views.career_forum, name='career_forum'),
     path('post_question/', views.post_question, name='post_question'),
     path('post_answer/', views.post_answer, name='post_answer'),
-    path('soft_delete_question/<int:question_id>/', views.soft_delete_question, name='soft_delete_question'),
     path('soft_delete_answer/<int:answer_id>/', views.soft_delete_answer, name='soft_delete_answer'),
-    #  path('get-questions-and-answers/', views.get_questions_and_answers, name='get_questions_and_answers'),
+    path('soft_delete_question/<int:question_id>/', views.soft_delete_question, name='soft_delete_question'),
     path('paymenthandler/', views.paymenthandler, name='paymenthandler'),
     path('edit_comment/<int:answer_id>/', views.edit_comment, name='edit_comment'),
     path('report/comment/<int:answer_id>/', views.report_comment, name='report_comment'),
     path('reported_comments/', views.reported_comments, name='reported_comments'),
     path('donation_form/', views.donation_form, name='donation_form'),
+    path('paymentform/', views.paymentform, name='paymentform'),
+    path('soft_delete_reported_answer/<int:answer_id>/', views.soft_delete_reported_answer, name='soft_delete_reported_answer'),
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

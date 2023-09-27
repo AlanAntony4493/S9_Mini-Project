@@ -37,6 +37,7 @@
                     <td>
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#reportedUsersAndReasonsModal{{ answer.id }}">View Reported Users and Reasons</a>
                         <a href="{% url "career_forum" %}#answer-{{ answer.id }}" class="btn btn-secondary scrollto">View Answer</a>
+                        <a href="{% url 'soft_delete_reported_answer' answer.id %}" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
                 {% endif %}

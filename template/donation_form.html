@@ -1,75 +1,75 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <!-- ======= Breadcrumbs ======= -->
 <section class="breadcrumbs">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
-      <h2 style="align:center">Make a Donation</h2>
+      <h2 style="text-align: center;">Make a Donation</h2>
     </div>
   </div>
 </section>
 <!-- End Breadcrumbs -->
-  <div class="container">
+<div class="container">
 
-<!-- Donation form -->
-<form method="post" action="{% url 'donation_form' %}">
-    {% csrf_token %}
-    <label for="amount">Enter Donation Amount (INR):</label>
-    <input type="number" id="amount" name="amount" required>
-    <button type="submit" id="pay-btn">Donate</button>
-</form>
-    
-<!-- Add this line to check if the razorpay_amount is correctly rendered -->
-<p>Amount in template: {{ razorpay_amount }}</p>
+  <p>Your support can make a real difference! By making a donation, you contribute to our mission and help us continue our work. Every contribution counts, no matter how big or small.</p>
 
+  {% comment %} <!-- Email Input Form -->
+  <form id="emailForm">
+    <label for="email">Enter your email address to proceed:</label>
+    <input type="email" id="email" name="email" required>
+    <button type="button" id="continueButton" class="btn btn-primary">Continue</button>
+  </form> {% endcomment %}
+
+  <p>Select an Amount for donation</p>
+  <div class="btn">
+    <a href="{% url 'paymentform' %}?amount=50" class="btn btn-primary" style="width: 100px;" disabled> ₹50</a>
+    <a href="{% url 'paymentform' %}?amount=100" class="btn btn-primary" style="width: 100px;" disabled> ₹100</a>
+    <a href="{% url 'paymentform' %}?amount=250" class="btn btn-primary" style="width: 100px;" disabled> ₹250</a>
+    <a href="{% url 'paymentform' %}?amount=500" class="btn btn-primary" style="width: 100px;" disabled> ₹500</a>
+    <a href="{% url 'paymentform' %}?amount=1000" class="btn btn-primary" style="width: 100px;" disabled> ₹1000</a>
   </div>
 
-  <!-- Razorpay's Javascript code. -->
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <h2>Why Donate?</h2>
+  <p>Donating to our cause helps us fund important projects and initiatives that have a positive impact on our community and the world. Your donation can:</p>
+  <ul>
+    <li>Support those in need</li>
+    <li>Drive positive change</li>
+    <li>Make a difference in people's lives</li>
+  </ul>
+
+  <h2>How Your Donation Helps</h2>
+  <p>Every rupee you contribute goes directly toward our mission. It helps us achieve our goals and create a better future for all. Your generosity fuels our work and makes it possible for us to continue making a positive impact.</p>
+
+  <h2>Thank You for Your Support!</h2>
+  <p>We are incredibly grateful for your support and belief in our cause. Together, we can make a difference and create a brighter tomorrow. Thank you for being a part of our journey!</p>
+
+</div>
+
 <script>
-  var options = {
-    // Enter the Key ID generated from the Dashboard
-    key: "{{ razorpay_merchant_key }}",
-     
-    // Amount is in currency subunits (paise).
-    amount: 0, // Set the initial amount to 0
-  
-    currency: "{{ currency }}",
-     
-    // Your/store name.
-    name: "Dj Razorpay",
-     
-    // Pass the `id` obtained in the response of Step 1
-    order_id: "{{ razorpay_order_id }}",
-    callback_url: "{{ callback_url }}",
-  };
+  // JavaScript to enable the donation links when a valid email is provided
+  document.addEventListener("DOMContentLoaded", function () {
+    const emailForm = document.getElementById("emailForm");
+    const emailInput = document.getElementById("email");
+    const continueButton = document.getElementById("continueButton");
+    const donationLinks = document.querySelectorAll(".btn-primary");
 
-  // Initialize Razorpay with the options.
-  var rzp1 = new Razorpay(options);
-
-  // Add an event listener to the payment button.
-  document.getElementById("pay-btn").onclick = function (e) {
-    // Retrieve the entered donation amount from the input field
-    var amountInRupees = parseFloat(document.getElementById("amount").value);
-    
-    // Validate and convert the amount to paise
-    if (!isNaN(amountInRupees) && amountInRupees > 0) {
-      var amountInPaise = Math.round(amountInRupees * 100);
-      options.amount = amountInPaise;
-      
-      // Reinitialize Razorpay with the updated options
-      rzp1 = new Razorpay(options);
-
-      // Open the Razorpay payment dialog
-      rzp1.open();
-    } else {
-      alert("Please enter a valid donation amount greater than zero.");
-    }
-
-    e.preventDefault();
-  };
+    continueButton.addEventListener("click", function () {
+      if (emailInput.checkValidity()) {
+        // Email is valid, enable the donation links
+        donationLinks.forEach(function (link) {
+          link.removeAttribute("disabled");
+        });
+      } else {
+        // Email is not valid, disable the donation links
+        donationLinks.forEach(function (link) {
+          link.setAttribute("disabled", true);
+        });
+        // Display an error message or take appropriate action
+        alert("Please provide a valid email address.");
+      }
+    });
+  });
 </script>
-
 {% endblock %}
