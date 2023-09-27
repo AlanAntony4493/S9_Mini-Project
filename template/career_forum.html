@@ -301,32 +301,38 @@
 <div class="col-lg-8">
     <div class="container-resource-person" id="qa-section">
         {% for question in questions %}
-        <div class="person-info"><i class="bi bi-person-circle"></i>
-            {{ question.posted_by.first_name }}{{ question.posted_by.registration.middle_name }}{{ question.posted_by.last_name }} asked a question
-            <div class="post-time" data-posted="{{ question.posted_date_time|date:'U' }}"></div>
-        </div>
+        <div class="person-info"></i>
+            <div class="user-info">
+                <span class="user-profile">
+                    <i class="bi bi-person-circle"></i>&nbsp;<b>{{ question.posted_by.first_name }}&nbsp;{{ question.posted_by.registration.middle_name }}&nbsp;{{ question.posted_by.last_name }}</b>
+                    <span class="post-time" data-posted="{{ question.posted_date_time|date:'U' }}"></span>
+                </span>
+                <div class="dropdown">
+                    <button class="dropdown-btn" onclick="toggleDropdown(event, this)">&#8942;</button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="reportQuestion({{ question.id }})">Report Question</a>
+                        {% if user.is_superuser %}
+                            <!-- Edit Question Link -->
+                            <a href="#" onclick="toggleEditForm({{ question.id }}, event)">Edit Question</a>
+                            <a href="{% url 'soft_delete_question' question.id %}" onclick="return confirm('Are you sure you want to delete this question?')">Delete Question</a>
+                            
+                        {% elif question.posted_by == user %}
+                            <!-- Show delete option with confirmation -->
+                            <a href="#" onclick="toggleEditForm({{ question.id }}, event)">Edit Question</a>
+                            <a href="{% url 'soft_delete_question' question.id %}" onclick="return confirm('Are you sure you want to delete this question?')">Delete Question</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            
         
-        <div class="question" style="margin-bottom:150px;">
+        <div class="question" style="margin-bottom:100px;">
             <h2>{{ question.title }}</h2>
             <p>{{ question.description }}</p>
             <p>{{ question.additional_details }}</p>
         
             <p style="font-style: italic;">Answers</p>
-        
-            <!-- Dropdown for Questions -->
-            <div class="dropdown">
-                <button class="dropdown-btn" onclick="toggleQuestionDropdown(event, this)">&#8942;</button>
-                <div class="dropdown-content">
-                    <a href="#" onclick="reportQuestion({{ question.id }})">Report Question</a>
-                    {% if user.is_superuser %}
-                        <a href="#" onclick="toggleEditQuestionForm({{ question.id }})">Edit Question</a>
-                        <a href="{% url 'soft_delete_question' question.id %}" onclick="return confirm('Are you sure you want to delete this question?')">Delete Question</a>
-                    {% elif question.posted_by == user %}
-                        <a href="#" onclick="toggleEditQuestionForm({{ question.id }})">Edit Question</a>
-                        <a href="{% url 'soft_delete_question' question.id %}" onclick="return confirm('Are you sure you want to delete this question?')">Delete Question</a>
-                    {% endif %}
-                </div>
-            </div>
 
             <!-- Answers Container -->
             <div class="answers-container">
@@ -744,6 +750,47 @@ function saveEditComment(commentId) {
     }
     
 </script>
+
+<!-- Update the JavaScript function to toggle question dropdowns -->
+<script>
+    // Function to open/close the dropdown for questions
+    function toggleQuestionDropdown(event, button) {
+        event.stopPropagation(); // Prevent the event from propagating to document click
+        const dropdownContent = button.nextElementSibling;
+        const isVisible = dropdownContent.style.display === 'block';
+
+        // Close all other question dropdowns before opening the current one
+        closeAllQuestionDropdowns();
+
+        if (isVisible) {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'block';
+            // Add a click event listener to the document body to close the question dropdown
+            document.body.addEventListener('click', closeQuestionDropdown);
+        }
+    }
+
+    // Close the currently open question dropdown
+    function closeQuestionDropdown() {
+        const questionDropdowns = document.querySelectorAll('.question-dropdown-content');
+        questionDropdowns.forEach(function (dropdown) {
+            dropdown.style.display = 'none';
+        });
+
+        // Remove the click event listener from the document body
+        document.body.removeEventListener('click', closeQuestionDropdown);
+    }
+
+    // Close all question dropdowns except the one being clicked
+    function closeAllQuestionDropdowns() {
+        const questionDropdowns = document.querySelectorAll('.question-dropdown-content');
+        questionDropdowns.forEach(function (dropdown) {
+            dropdown.style.display = 'none';
+        });
+    }
+</script>
+
 </body>
 
 </html>

@@ -658,7 +658,7 @@ def career_forum(request):
     # Fetch and prepare the list of questions and answers from your database
     # questions = Question.objects.all()
     # answers = Answer.objects.filter(is_deleted=False)
-    questions = Question.objects.select_related('posted_by__registration').all()
+    questions = Question.objects.filter(is_deleted=False).select_related('posted_by__registration').all()
     answers = Answer.objects.filter(is_deleted=False).select_related('posted_by__registration')
 
     context = {
