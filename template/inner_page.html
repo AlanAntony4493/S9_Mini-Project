@@ -25,7 +25,6 @@
   <link rel="stylesheet" href="{% static "assets_gallery/css/aos.css" %}">
 
   <link rel="stylesheet" href="{% static "assets_gallery/css/style.css" %}">
-  
 
   <style>
     .lg-delete-button {
@@ -60,9 +59,9 @@
 
               <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
                 <li><a href="{% url "index" %}">Home</a></li>
-                <li class="has-children active">
-                  <a href="">Gallery</a>
-                  <ul class="dropdown">
+                {% comment %} <li class="has-children active"> {% endcomment %}
+                 <li class="active"> <a href="{% url "gallery" %}">Gallery</a></li>
+                  {% comment %} <ul class="dropdown">
                     <li><a href="#">Nature</a></li>
                     <li><a href="#">Portrait</a></li>
                     <li><a href="#">People</a></li>
@@ -78,7 +77,7 @@
                         <li><a href="#">Menu Three</a></li>
                       </ul>
                     </li>
-                  </ul>
+                  </ul> {% endcomment %}
                 </li>
                 <li><a href="{% url "index" %}#services">Services</a></li>
                 <li><a href="{% url "index" %}#about">About</a></li>
@@ -120,12 +119,13 @@
           <div class="col-md-7">
             <div class="row mb-5">
               <div class="col-12">
-                <h2 class="site-section-heading text-center">Portrait Gallery</h2>
+                <h2 class="site-section-heading text-center">{{ album.title }}</h2>
               </div>
             </div>
           </div>
         </div>
 
+        {% if  user.is_superuser %}
         <div class="row">
           <div class="col-lg-4" style="height: 250px; width: 250px;">
             <div class="image-wrap-2">
@@ -136,50 +136,47 @@
             </div>
           </div>
         </div>
+        {% endif %}
 
         <div class="row" id="lightgallery">
-          <div class="col-6 col-md-4 col-lg-3 item" data-aos="fade" data-src="{% static "assets_gallery/images/big-images/nature_big_1.jpg" %}" data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloremque hic excepturi fugit, sunt impedit fuga tempora, ad amet aliquid?</p>">
-            <a href="#"><img src="{% static "assets_gallery/images/nature_small_1.jpg" %}" alt="Image" class="img-fluid"></a>
+          {% for image in album.image_set.all %}
+          <div class="col-6 col-md-4 col-lg-3 item" data-aos="fade" data-src="{{ image.image_file.url }}" data-sub-html="<h4>{{ album.title }}</h4><p>{{ image.description }}</p>">
+            <a href="#"><img src="{{ image.image_file.url }}" alt="{{ image.description }}" class="img-fluid"></a>
           </div>
-          <div class="col-6 col-md-4 col-lg-3 item" data-aos="fade" data-src="{% static "assets_gallery/images/big-images/nature_big_1.jpg" %}" data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloremque hic excepturi fugit, sunt impedit fuga tempora, ad amet aliquid?</p>">
-            <a href="#"><img src="{% static "assets_gallery/images/nature_small_1.jpg" %}" alt="Image" class="img-fluid"></a>
-          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
 
-   <!-- Image Upload Modal -->
-<div class="modal fade" id="addImageModal" tabindex="-1" role="dialog" aria-labelledby="addImageModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
+    <!-- Image Upload Modal -->
+    <div class="modal fade" id="addImageModal" tabindex="-1" role="dialog" aria-labelledby="addImageModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="addImageModalLabel">Upload Images</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
+            <h5 class="modal-title" id="addImageModalLabel">Upload Images</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body">
-              <!-- Dropzone Container -->
-              <div id="imageDropzone" class="dropzone"></div>
-              <!-- Description Form -->
-              <form method="post" enctype="multipart/form-data" id="imageUploadForm">
-                  {% csrf_token %}
-                  <div class="form-group">
-                      <label for="description">Description</label>
-                      <input type="text" class="form-control" id="description" name="description">
-                  </div>
-                  <div class="form-group">
-                      <label for="images">Upload Images</label>
-                      <input type="file" class="form-control" id="images" name="images" multiple>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Upload</button>
-              </form>
+            <!-- Description Form -->
+            <form method="post" enctype="multipart/form-data" id="imageUploadForm">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description">
+              </div>
+              <div class="form-group">
+                <label for="images">Upload Images</label>
+                <input type="file" class="form-control" id="images" name="images" multiple>
+              </div>
+              <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
           </div>
+        </div>
       </div>
-  </div>
-</div>
-
-
+    </div>
+    
   </div>
 
   <script src="{% static "assets_gallery/js/jquery-3.3.1.min.js" %}"></script>
@@ -202,30 +199,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css">
 
-  <script>
-    // Initialize Dropzone
-    Dropzone.autoDiscover = false; // Disable auto initialization
-
-    $(document).ready(function () {
-        $("#imageDropzone").dropzone({
-            url: "{% url 'inner_page' album.id %}", // URL to handle file uploads
-            paramName: "images", // Name of the file field
-            maxFilesize: 5, // Maximum file size in MB
-            addRemoveLinks: true, // Show remove links for uploaded files
-            parallelUploads: 5, // Number of files to upload in parallel
-            acceptedFiles: "image/*", // Accept only image files
-            init: function () {
-                // Add any additional setup or event handlers here
-                this.on("success", function (file, response) {
-                    // Handle successful file upload, if needed
-                });
-                this.on("removedfile", function (file) {
-                    // Handle file removal, if needed
-                });
-            },
-        });
-    });
-  </script>
 
   <script src="{% static "assets_gallery/js/main.js" %}"></script>
   

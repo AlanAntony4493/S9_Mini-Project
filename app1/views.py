@@ -919,22 +919,25 @@ def gallery(request):
     
     return render(request, 'gallery.html', {'albums': albums})
 
+
 from django.shortcuts import render, redirect
 from .models import Album, Image
 
 def inner_page(request, album_id):
     album = Album.objects.get(id=album_id)
-    
+
     if request.method == 'POST':
-        description = request.POST.get('description')
         images = request.FILES.getlist('images')
-        
+        description = request.POST.get('description')  # You can add this field if needed
+
         for image in images:
             Image.objects.create(album=album, description=description, image_file=image)
-        
+
         return redirect('inner_page', album_id=album_id)  # Redirect back to the same page
 
     return render(request, 'inner_page.html', {'album': album})
+
+
 
 
 

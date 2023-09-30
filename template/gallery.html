@@ -75,10 +75,10 @@
         <div class="col-10 col-md-8 d-none d-xl-block" data-aos="fade-down">
           <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
             <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
-              <li class="active"><a href="{% url "index" %}">Home</a></li>
-              <li class="has-children">
-                <a href="">Gallery</a>
-                <ul class="dropdown">
+              <li><a href="{% url "index" %}">Home</a></li>
+              <!-- <li class="has-children"> -->
+               <li class="active"> <a href="{% url 'gallery' %}">Gallery</a></li>
+                <!-- <ul class="dropdown">
                   <li><a href="#">Nature</a></li>
                   <li><a href="#">Portrait</a></li>
                   <li><a href="#">People</a></li>
@@ -94,7 +94,7 @@
                       <li><a href="#">Menu Three</a></li>
                     </ul>
                   </li>
-                </ul>
+                </ul> -->
               </li>
               <li><a href="{% url "index" %}#services">Services</a></li>
               <li><a href="{% url "index" %}#about">About</a></li>
@@ -128,9 +128,10 @@
   </header>
 
   <div class="container-fluid" data-aos="fade" data-aos-delay="500">
-    <div class="row">
+    <div class="row" style="margin-top: 50px;">
 
-
+      {% if user.is_superuser %}
+        
       <div class="col-lg-4" style="height: 250px; width: 250px;">
         <div class="image-wrap-2">
           <div class="image-info">
@@ -139,6 +140,8 @@
           </div>
         </div>
       </div>
+
+      {% endif %}
 
       {% for album in albums %}
       <div class="col-lg-4 col-md-6 col-sm-12" style="height: 300px; width: 250px; margin-bottom:20px;">
