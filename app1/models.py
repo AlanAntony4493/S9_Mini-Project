@@ -166,3 +166,31 @@ class Donation(models.Model):
     
     def __str__(self):
         return f"Donation of {self.amount} on {self.timestamp}"
+
+
+
+
+# gallery
+
+from django.db import models
+
+class Album(models.Model):
+    title = models.CharField(max_length=100)
+    cover_image = models.ImageField(upload_to='albums/covers/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+from django.db import models
+from .models import Album
+
+class Image(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    image_file = models.ImageField(upload_to='albums/images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.description

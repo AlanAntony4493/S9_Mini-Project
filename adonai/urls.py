@@ -50,7 +50,6 @@ urlpatterns = [
     path('password_reset/done/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset/done/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
-    path('gallery',views.gallery, name="gallery"),
     path('retrieve_deleted_prayer_group/<int:entity_id>/', views.retrieve_deleted_entity, {'entity_type': 'prayer_group'}, name='retrieve_deleted_prayer_group'),
     path('retrieve_deleted_parish_member/<int:entity_id>/', views.retrieve_deleted_entity, {'entity_type': 'parish_member'}, name='retrieve_deleted_parish_member'),
     path('update_parish/<int:member_id>/', views.update_parish, name='update_parish'),
@@ -67,6 +66,17 @@ urlpatterns = [
     path('donation_form/', views.donation_form, name='donation_form'),
     path('paymentform/', views.paymentform, name='paymentform'),
     path('soft_delete_reported_answer/<int:answer_id>/', views.soft_delete_reported_answer, name='soft_delete_reported_answer'),
+    path('edit_question/<int:question_id>/', views.edit_question, name='edit_question'),
+
+    # quiz
+    
+    path('quiz', views.quiz, name='quiz'),
+
+    # gallery
+    path('inner_page/<int:album_id>/', views.inner_page, name='inner_page'),
+    path('gallery',views.gallery, name="gallery"),
+
+
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

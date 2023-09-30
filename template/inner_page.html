@@ -1,0 +1,239 @@
+{% load static %}
+<html lang="en">
+<head>
+  <title>SMYM Mukkoottuthara</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static "assets_gallery/fonts/icomoon/style.css" %}">
+
+  <link rel="stylesheet" href="{% static "assets_gallery/css/bootstrap.min.css" %}">
+  <link rel="stylesheet" href="{% static "assets_gallery/css/magnific-popup.css" %}">
+  <link rel="stylesheet" href="{% static "assets_gallery/css/jquery-ui.css" %}">
+  <link rel="stylesheet" href="{% static "assets_gallery/css/owl.carousel.min.css" %}">
+  <link rel="stylesheet" href="{% static "assets_gallery/css/owl.theme.default.min.css" %}">
+
+  <link rel="stylesheet" href="{% static "assets_gallery/css/lightgallery.min.css" %}">    
+
+  <link rel="stylesheet" href="{% static "assets_gallery/css/bootstrap-datepicker.css" %}">
+
+  <link rel="stylesheet" href="{% static "assets_gallery/fonts/flaticon/font/flaticon.css" %}">
+
+  <link rel="stylesheet" href="{% static "assets_gallery/css/swiper.css" %}">
+
+  <link rel="stylesheet" href="{% static "assets_gallery/css/aos.css" %}">
+
+  <link rel="stylesheet" href="{% static "assets_gallery/css/style.css" %}">
+  
+
+  <style>
+    .lg-delete-button {
+      display: none;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+    
+    <header class="site-navbar py-3" role="banner">
+
+      <div class="container-fluid">
+        <div class="row align-items-center">
+
+          <div class="col-6 col-xl-2" data-aos="fade-down">
+            <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:60px"></a>
+          </div>
+          <div class="col-10 col-md-8 d-none d-xl-block" data-aos="fade-down">
+            <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
+
+              <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
+                <li><a href="{% url "index" %}">Home</a></li>
+                <li class="has-children active">
+                  <a href="">Gallery</a>
+                  <ul class="dropdown">
+                    <li><a href="#">Nature</a></li>
+                    <li><a href="#">Portrait</a></li>
+                    <li><a href="#">People</a></li>
+                    <li><a href="#">Architecture</a></li>
+                    <li><a href="#">Animals</a></li>
+                    <li><a href="#">Sports</a></li>
+                    <li><a href="#">Travel</a></li>
+                    <li class="has-children">
+                      <a href="#">Sub Menu</a>
+                      <ul class="dropdown">
+                        <li><a href="#">Menu One</a></li>
+                        <li><a href="#">Menu Two</a></li>
+                        <li><a href="#">Menu Three</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li><a href="{% url "index" %}#services">Services</a></li>
+                <li><a href="{% url "index" %}#about">About</a></li>
+                <li><a href="{% url "index" %}#contact">Contact</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <div class="col-6 col-xl-2 text-right" data-aos="fade-down">
+            <div class="d-none d-xl-inline-block">
+              <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
+                <li>
+                  <a href="#" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                </li>
+                <li>
+                  <a href="#" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                </li>
+                <li>
+                  <a href="#" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                </li>
+                <li>
+                  <a href="#" class="pl-3 pr-3"><span class="icon-youtube-play"></span></a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a></div>
+
+          </div>
+
+        </div>
+      </div>
+      
+    </header>
+
+    <div class="site-section"  data-aos="fade">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-md-7">
+            <div class="row mb-5">
+              <div class="col-12">
+                <h2 class="site-section-heading text-center">Portrait Gallery</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4" style="height: 250px; width: 250px;">
+            <div class="image-wrap-2">
+              <div class="image-info">
+                <h2 class="mb-3" style="color:red;">Add Images</h2>
+                <button type="button" class="btn btn-outline-white py-2 px-4" data-toggle="modal" data-target="#addImageModal">Add Images</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id="lightgallery">
+          <div class="col-6 col-md-4 col-lg-3 item" data-aos="fade" data-src="{% static "assets_gallery/images/big-images/nature_big_1.jpg" %}" data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloremque hic excepturi fugit, sunt impedit fuga tempora, ad amet aliquid?</p>">
+            <a href="#"><img src="{% static "assets_gallery/images/nature_small_1.jpg" %}" alt="Image" class="img-fluid"></a>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3 item" data-aos="fade" data-src="{% static "assets_gallery/images/big-images/nature_big_1.jpg" %}" data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloremque hic excepturi fugit, sunt impedit fuga tempora, ad amet aliquid?</p>">
+            <a href="#"><img src="{% static "assets_gallery/images/nature_small_1.jpg" %}" alt="Image" class="img-fluid"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   <!-- Image Upload Modal -->
+<div class="modal fade" id="addImageModal" tabindex="-1" role="dialog" aria-labelledby="addImageModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="addImageModalLabel">Upload Images</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- Dropzone Container -->
+              <div id="imageDropzone" class="dropzone"></div>
+              <!-- Description Form -->
+              <form method="post" enctype="multipart/form-data" id="imageUploadForm">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="description">Description</label>
+                      <input type="text" class="form-control" id="description" name="description">
+                  </div>
+                  <div class="form-group">
+                      <label for="images">Upload Images</label>
+                      <input type="file" class="form-control" id="images" name="images" multiple>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Upload</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+  </div>
+
+  <script src="{% static "assets_gallery/js/jquery-3.3.1.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/jquery-migrate-3.0.1.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/jquery-ui.js" %}"></script>
+  <script src="{% static "assets_gallery/js/popper.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/bootstrap.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/owl.carousel.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/jquery.stellar.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/jquery.countdown.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/jquery.magnific-popup.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/bootstrap-datepicker.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/swiper.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/aos.js" %}"></script>
+  <script src="{% static "assets_gallery/js/picturefill.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/lightgallery-all.min.js" %}"></script>
+  <script src="{% static "assets_gallery/js/jquery.mousewheel.min.js" %}"></script>
+
+  <!-- Dropzone.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css">
+
+  <script>
+    // Initialize Dropzone
+    Dropzone.autoDiscover = false; // Disable auto initialization
+
+    $(document).ready(function () {
+        $("#imageDropzone").dropzone({
+            url: "{% url 'inner_page' album.id %}", // URL to handle file uploads
+            paramName: "images", // Name of the file field
+            maxFilesize: 5, // Maximum file size in MB
+            addRemoveLinks: true, // Show remove links for uploaded files
+            parallelUploads: 5, // Number of files to upload in parallel
+            acceptedFiles: "image/*", // Accept only image files
+            init: function () {
+                // Add any additional setup or event handlers here
+                this.on("success", function (file, response) {
+                    // Handle successful file upload, if needed
+                });
+                this.on("removedfile", function (file) {
+                    // Handle file removal, if needed
+                });
+            },
+        });
+    });
+  </script>
+
+  <script src="{% static "assets_gallery/js/main.js" %}"></script>
+  
+  <script>
+    $(document).ready(function(){
+      $('#lightgallery').lightGallery();
+    });
+  </script>
+
+</body>
+</html>

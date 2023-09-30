@@ -169,3 +169,6 @@ DEFAULT_FROM_EMAIL = 'alanantony96696@gmail.com'
 
 RAZOR_KEY_ID = 'rzp_test_ow3KlW5qy6Rqco'
 RAZOR_KEY_SECRET = 'yc9xKTnRSg4qwaOIGVVCGcTX'
+
+
+GOOGLE_API_KEY = 'AIzaSyDPqaNQoZUc2lim_-wn4O_CnHLlqlogZIs'

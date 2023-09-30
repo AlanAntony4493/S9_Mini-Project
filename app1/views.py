@@ -442,8 +442,6 @@ def retrieve_deleted_entity(request, entity_type, entity_id):
     # Redirect back to the 'parish_admin' page
     return redirect('parish_admin')
 
-def gallery(request):
-    return render(request, 'gallery.html')
 
 from django.db import IntegrityError
 def report_admin(request):
@@ -719,6 +717,35 @@ def edit_comment(request, answer_id):
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
+from .models import Question
+
+def edit_question(request, question_id):
+    # Assuming you have a Question model with fields 'title' and 'description'
+    question = get_object_or_404(Question, pk=question_id)
+    
+    if request.method == 'POST':
+        edited_title = request.POST.get('edited_title')
+        edited_description = request.POST.get('edited_description')
+        
+        # Update the question with the new data
+        question.title = edited_title
+        question.description = edited_description
+        question.save()
+        
+        # Return a JSON response indicating success
+        return JsonResponse({'success': True})
+        print(success)
+    
+    # Return a JSON response indicating failure (if the request method is not POST)
+    return JsonResponse({'success': False})
+
+
+
+
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+
 def report_comment(request, answer_id):
     answer = get_object_or_404(Answer, id=answer_id)
     reason = request.POST.get('reason', '')
@@ -789,8 +816,6 @@ def soft_delete_reported_answer(request, answer_id):
             return JsonResponse({'success': False, 'error_message': 'Answer is not reported'})
     except Answer.DoesNotExist:
         return JsonResponse({'success': False, 'error_message': 'Answer not found'})
-
-
 
 
 from django.conf import settings
@@ -866,3 +891,51 @@ def paymenthandler(request):
     
 def donation_form(request):
     return render(request, 'donation_form.html')
+
+
+def quiz(request):
+    return render(request, 'quiz.html')
+
+
+# ####### Gallery ######## #
+
+from django.shortcuts import render, redirect
+from .models import Album
+
+def gallery(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        cover_image = request.FILES.get('cover_image')
+        
+        if title and cover_image:
+            album = Album(title=title, cover_image=cover_image)
+            album.save()
+            
+            # Redirect to the album detail page using the URL pattern name
+            return redirect('inner_page', album_id=album.id)
+    
+    # Retrieve all albums from the database
+    albums = Album.objects.all()
+    
+    return render(request, 'gallery.html', {'albums': albums})
+
+from django.shortcuts import render, redirect
+from .models import Album, Image
+
+def inner_page(request, album_id):
+    album = Album.objects.get(id=album_id)
+    
+    if request.method == 'POST':
+        description = request.POST.get('description')
+        images = request.FILES.getlist('images')
+        
+        for image in images:
+            Image.objects.create(album=album, description=description, image_file=image)
+        
+        return redirect('inner_page', album_id=album_id)  # Redirect back to the same page
+
+    return render(request, 'inner_page.html', {'album': album})
+
+
+
+

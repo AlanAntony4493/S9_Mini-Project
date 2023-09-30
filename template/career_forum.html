@@ -301,7 +301,7 @@
 <div class="col-lg-8">
     <div class="container-resource-person" id="qa-section">
         {% for question in questions %}
-        <div class="person-info"></i>
+        <div class="person-info">
             <div class="user-info">
                 <span class="user-profile">
                     <i class="bi bi-person-circle"></i>&nbsp;<b>{{ question.posted_by.first_name }}&nbsp;{{ question.posted_by.registration.middle_name }}&nbsp;{{ question.posted_by.last_name }}</b>
@@ -313,12 +313,12 @@
                         <a href="#" onclick="reportQuestion({{ question.id }})">Report Question</a>
                         {% if user.is_superuser %}
                             <!-- Edit Question Link -->
-                            <a href="#" onclick="toggleEditForm({{ question.id }}, event)">Edit Question</a>
+                            <button class="btn btn-link" onclick="toggleEditQuestionForm({{ question.id }})">Edit Question</button>
                             <a href="{% url 'soft_delete_question' question.id %}" onclick="return confirm('Are you sure you want to delete this question?')">Delete Question</a>
                             
                         {% elif question.posted_by == user %}
                             <!-- Show delete option with confirmation -->
-                            <a href="#" onclick="toggleEditForm({{ question.id }}, event)">Edit Question</a>
+                            <button class="btn btn-link" onclick="toggleEditQuestionForm({{ question.id }})">Edit Question</button>
                             <a href="{% url 'soft_delete_question' question.id %}" onclick="return confirm('Are you sure you want to delete this question?')">Delete Question</a>
                         {% endif %}
                     </div>
@@ -327,11 +327,25 @@
             
             
         
-        <div class="question" style="margin-bottom:100px;">
+        <div class="question" id="edit-question-{{ question.id }}">
             <h2>{{ question.title }}</h2>
             <p>{{ question.description }}</p>
-            <p>{{ question.additional_details }}</p>
-        
+            <p>{{ question.additional_details }}</p> 
+        </div>
+                        <!-- Edit Question Form (Initially hidden) -->
+            <form class="edit-question-form" id="edit-question-form-{{ question.id }}" style="display: none;">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="editQuestionTitle-{{ question.id }}" class="form-label">Edit Title</label>
+                    <input type="text" class="form-control" name="editQuestionTitle" id="editQuestionTitle-{{ question.id }}" value="{{ question.title }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="editQuestionDescription-{{ question.id }}" class="form-label">Edit Description</label>
+                    <textarea class="form-control" name="editQuestionDescription" id="editQuestionDescription-{{ question.id }}" rows="4" required>{{ question.description }}</textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="console.log('Save button clicked for question {{ question.id }}'); saveEditQuestion({{ question.id }})">Save</button>
+                <button type="button" class="btn btn-secondary" onclick="console.log('Cancel button clicked for question {{ question.id }}'); cancelEditQuestion({{ question.id }})">Cancel</button>
+            </form>
             <p style="font-style: italic;">Answers</p>
 
             <!-- Answers Container -->
@@ -395,7 +409,7 @@
                             <textarea class="form-control" name="answerText" rows="4" required></textarea>
                         </div>
                         <input type="hidden" name="questionId" value="{{ question.id }}">
-                        <button type="submit" class="btn btn-primary">Post Answer</button>
+                        <button type="submit" class="btn btn-primary" style="margin-bottom:50px;">Post Answer</button>
                     </form>
                 </div>
                 {% endfor %}
@@ -789,6 +803,69 @@ function saveEditComment(commentId) {
             dropdown.style.display = 'none';
         });
     }
+</script>
+
+<script>
+    function toggleEditQuestionForm(questionId) {
+        const editForm = document.getElementById(`edit-question-form-${questionId}`);
+        const questionText = document.getElementById(`question-${questionId}`);
+        
+        if (editForm.style.display === 'none' || !editForm.style.display) {
+            // Show the edit form
+            editForm.style.display = 'block';
+            questionText.style.display = 'none';
+        } else {
+            // Hide the edit form
+            editForm.style.display = 'none';
+            questionText.style.display = 'block';
+        }
+    }
+    function saveEditQuestion(questionId) {
+        console.log('saveEditQuestion function called for questionId:', questionId);
+        const editedTitle = document.getElementById(`editQuestionTitle-${questionId}`).value;
+        const editedDescription = document.getElementById(`editQuestionDescription-${questionId}`).value;
+    
+        // Send a POST request to the server to update the question
+        fetch(`/edit_question/${questionId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: `edited_title=${encodeURIComponent(editedTitle)}&edited_description=${encodeURIComponent(editedDescription)}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Update successful');
+                const editForm = document.getElementById(`edit-question-form-${questionId}`);
+                console.log('editForm');
+    
+                if (editForm) {
+                    console.log('Hiding the form');
+                    editForm.style.display = 'none';
+                }
+            } else {
+                alert('Failed to update the question. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the question. Please try again later.');
+        });        
+    }
+    
+    
+    
+    function cancelEditQuestion(questionId) {
+        const questionText = document.getElementById(`edit-question-${questionId}`);
+        const editForm = document.getElementById(`edit-question-form-${questionId}`);
+    
+        if (questionText && editForm) {
+            questionText.style.display = 'block';
+            editForm.style.display = 'none';
+        }
+    }    
 </script>
 
 </body>

@@ -1,0 +1,30 @@
+<!-- quiz_summary.html -->
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Quiz Summary</h1>
+            <h2>{{ quiz.title }}</h2>
+            <p>{{ quiz.description }}</p>
+
+            {% for question in quiz.questions.all %}
+            <div class="question">
+                <h3>Question: {{ forloop.counter }} - {{ question.text }}</h3>
+                <ul>
+                    {% for answer in question.answers.all %}
+                    <li>
+                        {% if answer.is_correct %}
+                        <strong>Correct Answer:</strong>
+                        {% endif %}
+                        {{ answer.text }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
