@@ -442,6 +442,7 @@
           <th>Date</th>
           <th>Heading</th>
           <th>Name</th>
+          <th>Action</th>
       </tr>
   </thead>
   <tbody>
@@ -449,6 +450,25 @@
   </tbody>
 </table>
 
+
+        <!-- View Report Modal -->
+        <div class="modal fade" id="viewReportModal" tabindex="-1" role="dialog" aria-labelledby="viewReportModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="viewReportModalLabel">View Archived Report</h5>
+                      <button type="button" class="close" id="closeViewReportModal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div id="archived-report-content">
+                          <!-- Archived report content will be displayed here -->
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
 </section>
 
@@ -639,10 +659,37 @@
   });
     </script>    
 
-
+    
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>  
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Function to open the modal for viewing archived reports
+            function openViewModal(date, heading, name, report) {
+                // Create the modal content
+                var modalContent = '<h4>' + heading + '</h4>';
+                modalContent += '<p>Date: ' + date + '</p>';
+                modalContent += '<p>Name: ' + name + '</p>';
+                modalContent += '<p> ' + report + '</p>';
+                // You may need to add more code to include the archived report content here
+    
+                // Set the modal content
+                $('#viewReportModal .modal-body').html(modalContent);
+                
+                // Open the modal
+                $('#viewReportModal').modal('show');
+            }
+    
+            // Handle the "View" button click event
+            $('#archived-reports-table').on('click', '.view-button', function() {
+                var row = $(this).closest('tr');
+                var date = row.find('td:eq(0)').text(); // Assuming date is in the first column
+                var heading = row.find('td:eq(1)').text(); // Assuming heading is in the second column
+                var name = row.find('td:eq(2)').text(); // Assuming name is in the third column
+                var report = row.find('td:eq(3)').text(); 
+                openViewModal(date, heading, name, report);
+            });
+    
             $('#selected_year').on('change', function() {
                 var selectedYear = $(this).val();
                 if (selectedYear) {
@@ -658,6 +705,8 @@
                                 row += '<td>' + data[i].date + '</td>';
                                 row += '<td>' + data[i].heading + '</td>';
                                 row += '<td>' + data[i].name + '</td>';
+                                row += '<td style="display: none;">' + data[i].report + '</td>';
+                                row += '<td><button class="btn btn-primary view-button">View</button></td>';
                                 row += '</tr>';
                                 tableBody.append(row);
                             }
@@ -669,6 +718,20 @@
             });
         });
     </script>
+
+    <script>
+      // Function to close the modal
+      function closeViewReportModal() {
+          $('#viewReportModal').modal('hide');
+      }
+  
+      $(document).ready(function() {
+          // ... your other JavaScript code ...
+  
+          // Attach the close function to the close button
+          document.getElementById("closeViewReportModal").onclick = closeViewReportModal;
+      });
+  </script>
 </body>
 
 </html>

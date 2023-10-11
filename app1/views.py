@@ -572,14 +572,12 @@ def get_archived_reports(request):
     selected_year = request.GET.get('selected_year')
 
     if selected_year:
-        archived_reports = Report.objects.filter(archive=True, date__year=selected_year).values('date', 'heading', 'name')
+        archived_reports = Report.objects.filter(archive=True, date__year=selected_year).values('date', 'heading', 'name', 'report')
     else:
         archived_reports = []
 
     data = list(archived_reports)
     return JsonResponse(data, safe=False)
-
-
 
 
 # views.py
