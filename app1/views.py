@@ -443,10 +443,67 @@ def retrieve_deleted_entity(request, entity_type, entity_id):
     return redirect('parish_admin')
 
 
+# from django.utils import timezone
+
+# from django.db import IntegrityError
+# def report_admin(request):
+#     # Fetch all reports for the dropdown
+#     reports = Report.objects.all().order_by('-date')
+
+#     try:
+#         # Fetch the latest report entry from the database based on the latest date
+#         latest_report = Report.objects.latest('date')
+#     except Report.DoesNotExist:
+#         # Handle the case when no reports exist
+#         latest_report = None
+
+#     if request.method == 'POST':
+#         if request.user.is_staff:  # Check if the user is a staff member (admin)
+#             heading = request.POST.get('heading')
+#             report_text = request.POST.get('report')
+#             date = request.POST.get('date')
+#             place = request.POST.get('place')
+#             funame = request.POST.get('funame')
+
+#             try:
+#                 Report.objects.create(
+#                     heading=heading,
+#                     report=report_text,
+#                     date=date,
+#                     place=place,
+#                     name=funame
+#                 )
+#             except IntegrityError:
+#                 messages.error(request, 'A report with the same date already exists.')
+            
+#             return redirect('report_admin')  # Redirect after submission
+
+#         else:
+#             messages.error(request, 'You do not have permission to access this page.')
+#             return redirect('login')  # Redirect to the login page for non-admin users
+
+#     return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})
+
+
+
+
 from django.db import IntegrityError
+from django.utils import timezone
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Report
+
+def archive_old_reports():
+    # Calculate the date 5 years ago from the current date
+    five_years_ago = timezone.now() - timezone.timedelta(days=365 * 5)
+
+    # Get reports older than 5 years and mark them as archived
+    old_reports = Report.objects.filter(date__lt=five_years_ago, archive=False)
+    old_reports.update(archive=True)
+
 def report_admin(request):
-    # Fetch all reports for the dropdown
-    reports = Report.objects.all().order_by('-date')
+    # Fetch all reports with archive=False for the dropdown
+    reports = Report.objects.filter(archive=False).order_by('-date')
 
     try:
         # Fetch the latest report entry from the database based on the latest date
@@ -464,24 +521,34 @@ def report_admin(request):
             funame = request.POST.get('funame')
 
             try:
+                report_date = timezone.datetime.strptime(date, "%Y-%m-%d").date()
+                current_date = timezone.now().date()
+
                 Report.objects.create(
                     heading=heading,
                     report=report_text,
-                    date=date,
+                    date=report_date,
                     place=place,
                     name=funame
                 )
+
+                # Check if the report is older than 5 years and mark it as archived
+                if report_date < (current_date - timezone.timedelta(days=365 * 5)):
+                    Report.objects.filter(date=report_date).update(archive=True)
+
             except IntegrityError:
-                messages.error(request, 'A report with the same date already exists.')
-            
+                messages.error(request, 'A report with the same date already exists')
+
             return redirect('report_admin')  # Redirect after submission
 
         else:
-            messages.error(request, 'You do not have permission to access this page.')
+            messages.error(request, 'You do not have permission to access this page')
             return redirect('login')  # Redirect to the login page for non-admin users
 
-    return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})
+    # Archive old reports before rendering the page
+    archive_old_reports()
 
+    return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})
 
 
 
