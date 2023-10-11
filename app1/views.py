@@ -494,10 +494,10 @@ from django.contrib import messages
 from .models import Report
 
 def archive_old_reports():
-    # Calculate the date 5 years ago from the current date
-    five_years_ago = timezone.now() - timezone.timedelta(days=365 * 5)
+    # Calculate the date 1 years ago from the current date
+    five_years_ago = timezone.now() - timezone.timedelta(days=365 * 1)
 
-    # Get reports older than 5 years and mark them as archived
+    # Get reports older than 1 years and mark them as archived
     old_reports = Report.objects.filter(date__lt=five_years_ago, archive=False)
     old_reports.update(archive=True)
 
@@ -532,8 +532,8 @@ def report_admin(request):
                     name=funame
                 )
 
-                # Check if the report is older than 5 years and mark it as archived
-                if report_date < (current_date - timezone.timedelta(days=365 * 5)):
+                # Check if the report is older than 1 years and mark it as archived
+                if report_date < (current_date - timezone.timedelta(days=365 * 1)):
                     Report.objects.filter(date=report_date).update(archive=True)
 
             except IntegrityError:
