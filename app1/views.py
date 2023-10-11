@@ -651,6 +651,7 @@ def post_answer(request):
 
 from django.shortcuts import render
 from .models import Question, Answer
+from .models import CareerResourcePerson
 
 def career_forum(request):
     # Fetch and prepare the list of questions and answers from your database
@@ -658,10 +659,11 @@ def career_forum(request):
     # answers = Answer.objects.filter(is_deleted=False)
     questions = Question.objects.filter(is_deleted=False).select_related('posted_by__registration').all()
     answers = Answer.objects.filter(is_deleted=False).select_related('posted_by__registration')
-
+    resource_persons = CareerResourcePerson.objects.all()
     context = {
         'questions': questions,
         'answers': answers,
+        'resource_persons': resource_persons,
     }
     
     return render(request, 'career_forum.html', context)
@@ -936,6 +938,25 @@ def inner_page(request, album_id):
         return redirect('inner_page', album_id=album_id)  # Redirect back to the same page
 
     return render(request, 'inner_page.html', {'album': album})
+
+
+from django.shortcuts import render, redirect
+from .models import CareerResourcePerson
+
+def add_resource_person(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        job_title = request.POST['jobTitle']
+        phone_number = request.POST['phoneNumber']
+        photo = request.FILES['photo']
+
+        # Create a new CareerResourcePerson object
+        resource_person = CareerResourcePerson(name=name, job_title=job_title, phone_number=phone_number, photo=photo)
+        resource_person.save()
+
+        return redirect('career_forum')  # Redirect to the career guidance page
+
+    return render(request, 'career_forum.html')
 
 
 

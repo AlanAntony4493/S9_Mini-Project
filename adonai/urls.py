@@ -67,7 +67,7 @@ urlpatterns = [
     path('paymentform/', views.paymentform, name='paymentform'),
     path('soft_delete_reported_answer/<int:answer_id>/', views.soft_delete_reported_answer, name='soft_delete_reported_answer'),
     path('edit_question/<int:question_id>/', views.edit_question, name='edit_question'),
-
+    path('add_resource_person/', views.add_resource_person, name='add_resource_person'),
     # quiz
     
     path('quiz', views.quiz, name='quiz'),

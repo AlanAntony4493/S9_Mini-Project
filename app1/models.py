@@ -194,3 +194,14 @@ class Image(models.Model):
 
     def __str__(self):
         return self.description
+
+
+
+class CareerResourcePerson(models.Model):
+    name = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=15)  # You can adjust the max_length as needed
+    photo = models.ImageField(upload_to='resource_person_photos/', blank=False)  # No longer allows null values
+
+    def __str__(self):
+        return self.name

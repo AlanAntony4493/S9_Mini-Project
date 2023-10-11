@@ -454,9 +454,40 @@
                                 <input type="submit" value="Post_Question" class="btn btn-primary"/>
                             </form>
                         </div>
+
+                        
                     </div>
                 </div>
-            </section>   
+            </section>  
+        {% if user.is_superuser %}
+            <section>
+                <h2 class="section-title">ADD NEW RESOURCE PERSON</h2>
+                <form id="addResourcePersonForm" action="{% url 'add_resource_person' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name (Required)</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                        <p class="error" id="name-error"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobTitle" class="form-label">Job Title</label>
+                        <input type="text" class="form-control" id="jobTitle" name="jobTitle">
+                        <p class="error" id="jobTitle-error"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number (Required)</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                        <p class="error" id="phoneNumber-error"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Photo (Required)</label>
+                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+                        <p class="error" id="photo-error"></p>
+                    </div>
+                    <input type="submit" value="Add Resource Person" class="btn btn-primary"/>
+                </form>                            
+            </section>
+        {% endif %}
         </div>
          
     
@@ -464,19 +495,31 @@
                 <div class="col-lg-4" style="">
                     <h3>"Seeking Mentorship"</h3>
                     <p><i>Find experienced mentors to guide your journey.</i></p>
-                    <div class="resource-person"  style="margin-bottom:40px;">
-                        <div class="image-container round-image">
+                    
+                        {% comment %} <div class="image-container round-image">
                             <img src="{% static 'img/team/sobin.png' %}" alt="Resource Person 1" class="oval-image">
                         </div>
                         <div class="resource-person-description">
                             <p>Name: Jane Smith</p>
                             <p>Job: CTO, Tech Solutions</p>
+                            <p>985577585</p>
+                        </div> {% endcomment %}
+
+                        {% for resource_person in resource_persons %}
+                        <div class="resource-person"  style="margin-bottom: 20px; background-color:#e9f2ec; padding: 10px; border-radius: 8px;">
+                            <div class="image-container round-image" >
+                                <img src="{{ resource_person.photo.url }}" alt="{{ resource_person.name }}" class="oval-image">
+                            </div>
+                            <div class="resource-person-description" >
+                                <p style="font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">{{ resource_person.name }}</p>
+                                <p style="font-style: italic; font-size: 1.1em; margin-bottom: 5px;">{{ resource_person.job_title }}</p>
+                                <p style="font-size: 1em;">Phone: {{ resource_person.phone_number }}</p>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
-    
-                    <!-- Repeat this structure for more resource persons -->
-                    
-                </div>
+
+                
             </div>
         </div>
     </main>
@@ -622,6 +665,8 @@
         }
     };
 </script>
+
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -867,6 +912,71 @@ function saveEditComment(commentId) {
         }
     }    
 </script>
+
+
+
+<script>
+    // Function to validate the Name field on input
+    document.getElementById('name').addEventListener('input', function () {
+        validateName();
+    });
+
+    // Function to validate the Phone Number field on input
+    document.getElementById('phoneNumber').addEventListener('input', function () {
+        validatePhoneNumber();
+    });
+
+    // Function to validate the form on submission
+    document.getElementById('addResourcePersonForm').addEventListener('submit', function (event) {
+        const nameError = validateName();
+        const phoneNumberError = validatePhoneNumber();
+        const photoInput = document.getElementById('photo').value;
+        const photoError = document.getElementById('photo-error');
+
+        // Validate Photo (Accept only image files)
+        if (photoInput === '') {
+            photoError.textContent = 'Photo is required';
+            event.preventDefault(); // Prevent form submission if there are errors
+        } else {
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+            if (!allowedExtensions.exec(photoInput)) {
+                photoError.textContent = 'Invalid file type. Only image files are allowed.';
+                event.preventDefault(); // Prevent form submission if there are errors
+            } else {
+                photoError.textContent = '';
+            }
+        }
+    });
+
+    // Function to validate the Name field
+    function validateName() {
+        const nameInput = document.getElementById('name').value.trim();
+        const nameError = document.getElementById('name-error');
+
+        if (nameInput.length < 3 || !/^(?!\s)[A-Za-z\s]+(?<!\s)$/.test(nameInput)) {
+            nameError.textContent = 'Invalid name format (minimum 3 characters and numbers are not allowed)';
+            return false;
+        } else {
+            nameError.textContent = '';
+            return true;
+        }
+    }
+
+    // Function to validate the Phone Number field
+    function validatePhoneNumber() {
+        const phoneNumberInput = document.getElementById('phoneNumber').value.trim();
+        const phoneNumberError = document.getElementById('phoneNumber-error');
+
+        if (phoneNumberInput === '' || !/^\d{10}$/.test(phoneNumberInput)) {
+            phoneNumberError.textContent = 'Invalid phone number format (e.g., 1234567890)';
+            return false;
+        } else {
+            phoneNumberError.textContent = '';
+            return true;
+        }
+    }
+</script>
+
 
 </body>
 
