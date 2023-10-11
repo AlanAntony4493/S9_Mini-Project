@@ -487,22 +487,22 @@ def retrieve_deleted_entity(request, entity_type, entity_id):
 
 
 
-from django.db import IntegrityError
-from django.utils import timezone
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Report
+from django.utils import timezone
 
 def archive_old_reports():
-    # Calculate the date 1 years ago from the current date
-    five_years_ago = timezone.now() - timezone.timedelta(days=365 * 1)
+    # Calculate the date 1 year ago from the current date
+    one_year_ago = timezone.now() - timezone.timedelta(days=365 * 1)
 
-    # Get reports older than 1 years and mark them as archived
-    old_reports = Report.objects.filter(date__lt=five_years_ago, archive=False)
+    # Get reports older than 1 year and mark them as archived
+    old_reports = Report.objects.filter(date__lt=one_year_ago, archive=False)
     old_reports.update(archive=True)
 
 def report_admin(request):
-    # Fetch all reports with archive=False for the dropdown
+    # Fetch all non-archived reports for the dropdown
     reports = Report.objects.filter(archive=False).order_by('-date')
 
     try:
@@ -511,6 +511,8 @@ def report_admin(request):
     except Report.DoesNotExist:
         # Handle the case when no reports exist
         latest_report = None
+
+    selected_year = request.GET.get('selected_year')  # Get the selected year
 
     if request.method == 'POST':
         if request.user.is_staff:  # Check if the user is a staff member (admin)
@@ -532,7 +534,7 @@ def report_admin(request):
                     name=funame
                 )
 
-                # Check if the report is older than 1 years and mark it as archived
+                # Check if the report is older than 1 year and mark it as archived
                 if report_date < (current_date - timezone.timedelta(days=365 * 1)):
                     Report.objects.filter(date=report_date).update(archive=True)
 
@@ -548,7 +550,34 @@ def report_admin(request):
     # Archive old reports before rendering the page
     archive_old_reports()
 
-    return render(request, 'report_admin.html', {'latest_report': latest_report, 'reports': reports})
+    # Fetch the years with archived reports
+    archived_years = Report.objects.filter(archive=True).dates('date', 'year').values('date__year').distinct()
+
+    # Fetch archived reports for the selected year
+    archived_reports = None
+    if selected_year:
+        archived_reports = Report.objects.filter(archive=True, date__year=selected_year).values('date', 'heading', 'name')
+
+    return render(request, 'report_admin.html', {
+        'latest_report': latest_report,
+        'reports': reports,
+        'archived_years': archived_years,
+        'archived_reports': archived_reports,
+        'selected_year': selected_year,
+    })
+
+from django.http import JsonResponse
+
+def get_archived_reports(request):
+    selected_year = request.GET.get('selected_year')
+
+    if selected_year:
+        archived_reports = Report.objects.filter(archive=True, date__year=selected_year).values('date', 'heading', 'name')
+    else:
+        archived_reports = []
+
+    data = list(archived_reports)
+    return JsonResponse(data, safe=False)
 
 
 

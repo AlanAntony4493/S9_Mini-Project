@@ -46,6 +46,7 @@ urlpatterns = [
     path('blood_user/<str:blood_group>/', views.filtered_donor_list, name='filtered_donor_list'),
     path('approve_user/<int:user_id>/', views.approve_user, name='approve_user'),
     path('report_admin/', views.report_admin, name='report_admin'),
+    path('get_archived_reports/', views.get_archived_reports, name='get_archived_reports'),
     path('password_reset/',auth_views.PasswordResetView.as_view(),name='password_reset'),
     path('password_reset/done/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
