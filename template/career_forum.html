@@ -258,7 +258,7 @@
                     <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
                     {% if user.is_superuser %}
                     <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
-                    <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out (
+                    <li><a class="nav-link scrollto" id="logout" href="{% url 'logout' %}?next=/">Log Out (
                             {{ user.username }})</a></li>
                     {% elif user.is_authenticated %}
                     <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out (
@@ -451,7 +451,7 @@
                                     <textarea class="form-control" id="additionalDetails" name="additionalDetails" rows="4" oninput="validateAdditionalDetails()"></textarea>
                                     <p class="error" id="adddetails-error"></p>
                                 </div>
-                                <input type="submit" value="Post_Question" class="btn btn-primary"/>
+                                <input type="submit" value="Post_Question" id="sub" class="btn btn-primary">
                             </form>
                         </div>
 

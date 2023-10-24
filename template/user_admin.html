@@ -280,7 +280,7 @@
             <p style="color:red;"><strong>Comments:</strong> {{ user_profile.comments }}</p>
             <form method="post" action="{% url 'approve_user' user_profile.user.id %}">
               {% csrf_token %}
-              <button type="submit" class="approve-button">Activate</button>
+              <button type="submit" class="approve-button" id="activate">Activate</button>
           </form>
         </div>
         </div>
