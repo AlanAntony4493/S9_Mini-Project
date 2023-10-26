@@ -544,7 +544,10 @@ section {
         <td>{{ member.house_name }}</td>
         <td>{{ member.contact }}</td>
         <td>{{ member.prayer_group.name }}</td>
-        <td> <a href="{% url 'retrieve_deleted_parish_member' member.id %}" class="custom-restore-button">Retrieve Member</a></td>
+
+        <td> 
+          <a href="{% url 'update_parish' member.id %}" class="update-button"><i class="bi bi-pencil-square"></i></a>
+          <a href="{% url 'retrieve_deleted_parish_member' member.id %}" class="custom-restore-button">Retrieve Member</a></td>
       </tr>
     {% empty %}
       <tr>

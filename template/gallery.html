@@ -183,7 +183,8 @@
             </div>
             <div class="form-group">
               <label for="cover_image">Cover Image</label>
-              <input type="file" class="form-control-file" id="cover_image" name="cover_image" required>
+              <input type="file" class="form-control-file" id="cover_image" name="cover_image" required accept=".jpg, .jpeg, .png, .gif">
+              <small class="text-danger" id="coverImageError" style="display: none;">Please select a valid image file (JPG, JPEG, PNG, GIF).</small>
             </div>
             <button type="submit" class="btn btn-primary">Add Album</button>
           </form>
@@ -224,6 +225,28 @@
       });
     });
   </script>
+
+<script>
+  document.getElementById('cover_image').addEventListener('change', function() {
+    const fileInput = this;
+    const errorElement = document.getElementById('coverImageError');
+    const allowedFormats = ['jpg', 'jpeg', 'png', 'gif'];
+    const selectedFile = fileInput.files[0];
+  
+    if (selectedFile) {
+      const fileName = selectedFile.name;
+      const fileExtension = fileName.split('.').pop().toLowerCase();
+  
+      if (allowedFormats.indexOf(fileExtension) === -1) {
+        // Display the error message and clear the file input
+        errorElement.style.display = 'block';
+        fileInput.value = '';
+      } else {
+        errorElement.style.display = 'none';
+      }
+    }
+  });
+</script>  
 
 </body>
 </html>

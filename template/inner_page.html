@@ -168,8 +168,9 @@
               </div>
               <div class="form-group">
                 <label for="images">Upload Images</label>
-                <input type="file" class="form-control" id="images" name="images" multiple>
-              </div>
+                <input type="file" class="form-control" id="images" name="images" multiple accept=".jpg, .jpeg, .png, .gif">
+                <small class="text-danger" id="imagesError" style="display: none;">Please select valid image files (JPG, JPEG, PNG, GIF).</small>
+              </div>            
               <button type="submit" class="btn btn-primary">Upload</button>
             </form>
           </div>
@@ -207,6 +208,29 @@
       $('#lightgallery').lightGallery();
     });
   </script>
+
+  <script>
+    document.getElementById('imageUploadForm').addEventListener('submit', function(event) {
+      const fileInput = document.getElementById('images');
+      const errorElement = document.getElementById('imagesError');
+      const allowedFormats = ['jpg', 'jpeg', 'png', 'gif'];
+    
+      for (let i = 0; i < fileInput.files.length; i++) {
+        const selectedFile = fileInput.files[i];
+        const fileName = selectedFile.name;
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+    
+        if (allowedFormats.indexOf(fileExtension) === -1) {
+          // Display the error message and prevent form submission
+          errorElement.style.display = 'block';
+          event.preventDefault(); // Prevent the form from being submitted
+          break; // Exit the loop if an invalid file is found
+        } else {
+          errorElement.style.display = 'none';
+        }
+      }
+    });
+  </script>    
 
 </body>
 </html>
