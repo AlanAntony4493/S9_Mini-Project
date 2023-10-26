@@ -116,10 +116,10 @@
             <li><a class="nav-link scrollto" href="#services">Services</a></li>
             {% if user.is_superuser %}
                 <li><a class="nav-link scrollto" href="{% url 'user_admin' %}" id="users">Users</a></li>
-                <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+                <li><a class="nav-link scrollto" id="logout" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
             {% elif user.is_authenticated %}
             <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()">Log Out</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out</a></li>
             {% else %}
                 <li><a class="nav-link scrollto" id="login" href="{% url 'login' %}">Log In</a></li>
             {% endif %}
@@ -342,12 +342,12 @@
          </div> {% endcomment %}
             
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
-           <a href="{% url 'by_law' %}">
+         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+          <a href="{% url 'blood_admin' %}">
             <div class="icon-box">
-              <div class="icon"><img src="{% static 'img/logo1.png' %}" alt="logo" height="30px" width="30px"></div>
-              <h4><a href="{% url 'by_law' %}">SMYM</a></h4>
-              <p style="color:#444444">Syro Malabar Youth Movement By-law, Jurisdiction, Aim, Slogan, Emblem, Flag, Way Of Action and More..</p>
+              <div class="icon"><img src="{% static 'img/blood.png' %}" alt="logo" height="30px" width="30px"></div>
+              <h4><a href="{% url 'blood_admin' %}" id="blood">Blood Donors</a></h4>
+              <p>Blood Donor's Details and Blood Donation Form</p>
             </div>
           </div></a>
 
@@ -371,14 +371,14 @@
           </div>
           </a>
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-          <a href="{% url 'blood_admin' %}">
-            <div class="icon-box">
-              <div class="icon"><img src="{% static 'img/blood.png' %}" alt="logo" height="30px" width="30px"></div>
-              <h4><a href="{% url 'blood_admin' %}">Blood Donors</a></h4>
-              <p>Blood Donor's Details and Blood Donation Form</p>
-            </div>
-          </div></a>
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+            <a href="{% url 'by_law' %}">
+             <div class="icon-box">
+               <div class="icon"><img src="{% static 'img/logo1.png' %}" alt="logo" height="30px" width="30px"></div>
+               <h4><a href="{% url 'by_law' %}">SMYM</a></h4>
+               <p style="color:#444444">Syro Malabar Youth Movement By-law, Jurisdiction, Aim, Slogan, Emblem, Flag, Way Of Action and More..</p>
+             </div>
+           </div></a>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
             <a href="{% url 'report_admin' %}">
@@ -666,7 +666,7 @@
 
           </div>
 
-          <div class="col-lg-8 mt-5 mt-lg-0">
+          {% comment %} <div class="col-lg-8 mt-5 mt-lg-0">
 
             <form action="forms/contact.php" method="post" role="form" class="php-email-form">
               <div class="row">
@@ -689,7 +689,7 @@
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
               <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
+            </form> {% endcomment %}
 
           </div>
 

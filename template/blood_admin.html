@@ -221,13 +221,13 @@
                 <ul>
                   <li><a class="nav-link scrollto" href="{% url 'gallery' %}">Gallery</a></li>
                   <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
-                  <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'index' %}#services" id="service">Services</a></li>
                   {% if user.is_superuser %}
                 <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
                 <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
                 {% elif user.is_authenticated %}
                 <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
-                <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out</a></li>
+                <li><a class="nav-link scrollto" id="logout" href="{% url 'logout' %}?next=/">Log Out</a></li>
                 {% else %}
                     <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
                 {% endif %}
