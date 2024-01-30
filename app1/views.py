@@ -619,43 +619,47 @@ def report_admin(request):
 
 
 
+from django.template.loader import get_template
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from datetime import datetime
+from xhtml2pdf import pisa
 from django.shortcuts import get_object_or_404
+from django.template import Context
 
 def generate_pdf(request, year):
     try:
-        # Parse the year parameter into a datetime object and extract the year
-        report_date = datetime.strptime(year, "%b. %d, %Y")
-        selected_year = report_date.year
+        # Convert the year parameter to an integer
+        selected_year = int(year)
 
         # Fetch and add report details for the selected year to the PDF
         reports = Report.objects.filter(archive=False, date__year=selected_year)
-        
+
+        template_path = 'your_template.html'  # Update with the path to your HTML template
+
+        context = {
+            'year': selected_year,
+            'reports': reports,
+        }
+
+        template = get_template(template_path)
+        html = template.render(context)
+
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="reports_{selected_year}.pdf"'
 
-        # Create PDF
-        pdf = canvas.Canvas(response)
-        pdf.drawString(100, 800, f'Reports for Year {selected_year}')
+        # Generate PDF using xhtml2pdf.pisa
+        pisa_status = pisa.CreatePDF(html, dest=response)
 
-        y_position = 780
-
-        for report in reports:
-            # Include both date, heading, name, and report in the PDF
-            pdf.drawString(100, y_position, f"{report.date}: {report.heading} - {report.name}")
-            y_position -= 20
-            pdf.drawString(120, y_position, f"{report.report}")
-            y_position -= 20
-
-        pdf.save()
+        if pisa_status.err:
+            return HttpResponse("Error generating PDF")
 
         return response
 
     except ValueError:
-        # Handle the case when the date parameter is not in the expected format
-        return HttpResponse("Invalid date format")
+        # Handle the case when the year parameter is not a valid integer
+        return HttpResponse("Invalid year format")
+
+
+
     
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas

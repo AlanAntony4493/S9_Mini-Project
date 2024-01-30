@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ {% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,5 +13,128 @@
         <p>{{ archived_report.date }}: {{ archived_report.heading }} - {{ archived_report.name }}</p>
         <p>{{ archived_report.report }}</p>
     {% endfor %}
+</body>
+</html> 
+
+
+
+
+
+ {% endcomment %}
+
+{% comment %} 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archived Reports for Year {{ selected_year }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .report-container {
+            page-break-after: always;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Archived Reports for Year {{ selected_year }}</h1>
+
+    {% for archived_report in archived_reports %}
+        <div class="report-container">
+            <p>{{ archived_report.date }}: {{ archived_report.heading }} - {{ archived_report.name }}</p>
+            <p>{{ archived_report.report }}</p>
+        </div>
+    {% endfor %}
+
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archived Reports for Year {{ selected_year }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .report-container {
+            page-break-after: always;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        table {
+            font-size: 18px;
+            margin-top: 10px;
+            border-collapse: collapse;
+            width: 100%;
+            font-family:cursive;
+        }
+
+        table, th, td {
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Archived Reports for Year {{ selected_year }}</h1>
+
+    {% for archived_report in archived_reports %}
+        <div class="report-container">
+            <h1>{{ archived_report.heading }}</h1>
+            <p>{{ archived_report.report }}</p>
+            <table>
+                <tr>
+                    <td>{{ archived_report.date }}</td>
+                    <td>General Secretary</td>
+                    <td>Director</td>
+                </tr>
+                <tr>
+                    <td>{{ archived_report.place }}</td>
+                    <td>{{ archived_report.name }}</td>
+                    <td>Fr. Rajesh Kottoor</td>
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+
 </body>
 </html>

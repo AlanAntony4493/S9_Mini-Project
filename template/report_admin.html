@@ -410,19 +410,23 @@
                   </div>
               </div>
           </section>
-          <button onclick="generatePDF()">Generate PDF</button>
 
+          {% if user.registration.is_media_manager %}
+
+          <button onclick="generatePDF()" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 128px;">Generate PDF</button>
+
+          {% endif %}
           <script>
             function generatePDF() {
-              var selectedYear = document.getElementById('filter-report-select').value;
-          
-              if (selectedYear) {
-                window.location.href = `/generate-pdf/${selectedYear}/`;
-              } else {
-                alert('Please select a year before generating the PDF.');
-              }
+              // Get the current year
+              var currentYear = new Date().getFullYear();
+              
+              // Set the URL to generate PDF for the current year
+              window.location.href = `/generate-pdf/${currentYear}/`;
             }
           </script>
+          
+          
           
       
 
@@ -462,9 +466,13 @@
                   <!-- Archived reports will be displayed here -->
               </tbody>
           </table>
-      
+          
+          {% if user.registration.is_media_manager %}
+
           <!-- Generate PDF Button for Archived Reports -->
-          <button onclick="generateArchivedPDF()">Generate PDF</button>
+          <button onclick="generateArchivedPDF()" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 128px;margin-top:10px;">Generate PDF</button>
+          
+          {% endif %}
       
           <script>
               function generateArchivedPDF() {
@@ -500,7 +508,7 @@
 
 </section>
 
-        {% if user.is_superuser %}
+    {% if user.registration.is_media_manager %}
         <!-- Form section visible only to admin (superuser) -->
         <section class="breadcrumbs">
           <div class="container">
