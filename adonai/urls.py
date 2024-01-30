@@ -32,8 +32,8 @@ urlpatterns = [
 
 
     path('report_admin/', views.report_admin, name='report_admin'),
-    path('generate-pdf/<str:year>/', views.generate_pdf, name='generate_pdf'),
-    path('generate-archived-pdf/<int:year>/', views.generate_archived_pdf, name='generate_archived_pdf'),
+    # path('generate-pdf/<str:year>/', views.generate_pdf, name='generate_pdf'),
+    # path('generate-archived-pdf/<int:year>/', views.generate_archived_pdf, name='generate_archived_pdf'),
 
     # path('login/', LoginView.as_view(template_name="login.html",next_page="index"), name='login'),
     path('media-manager-login/', views.media_manager_login_view, name='media_manager_login'),

@@ -613,84 +613,84 @@ def report_admin(request):
 
 
 
-from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from datetime import datetime
-from django.shortcuts import get_object_or_404
+# from django.http import HttpResponse
+# from reportlab.pdfgen import canvas
+# from datetime import datetime
+# from django.shortcuts import get_object_or_404
 
-def generate_pdf(request, year):
-    try:
-        # Parse the year parameter into a datetime object and extract the year
-        report_date = datetime.strptime(year, "%b. %d, %Y")
-        selected_year = report_date.year
+# def generate_pdf(request, year):
+#     try:
+#         # Parse the year parameter into a datetime object and extract the year
+#         report_date = datetime.strptime(year, "%b. %d, %Y")
+#         selected_year = report_date.year
 
-        # Fetch and add report details for the selected year to the PDF
-        reports = Report.objects.filter(archive=False, date__year=selected_year)
+#         # Fetch and add report details for the selected year to the PDF
+#         reports = Report.objects.filter(archive=False, date__year=selected_year)
         
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="reports_{selected_year}.pdf"'
+#         response = HttpResponse(content_type='application/pdf')
+#         response['Content-Disposition'] = f'attachment; filename="reports_{selected_year}.pdf"'
 
-        # Create PDF
-        pdf = canvas.Canvas(response)
-        pdf.drawString(100, 800, f'Reports for Year {selected_year}')
+#         # Create PDF
+#         pdf = canvas.Canvas(response)
+#         pdf.drawString(100, 800, f'Reports for Year {selected_year}')
 
-        y_position = 780
+#         y_position = 780
 
-        for report in reports:
-            # Include both date, heading, name, and report in the PDF
-            pdf.drawString(100, y_position, f"{report.date}: {report.heading} - {report.name}")
-            y_position -= 20
-            pdf.drawString(120, y_position, f"{report.report}")
-            y_position -= 20
+#         for report in reports:
+#             # Include both date, heading, name, and report in the PDF
+#             pdf.drawString(100, y_position, f"{report.date}: {report.heading} - {report.name}")
+#             y_position -= 20
+#             pdf.drawString(120, y_position, f"{report.report}")
+#             y_position -= 20
 
-        pdf.save()
+#         pdf.save()
 
-        return response
+#         return response
 
-    except ValueError:
-        # Handle the case when the date parameter is not in the expected format
-        return HttpResponse("Invalid date format")
+#     except ValueError:
+#         # Handle the case when the date parameter is not in the expected format
+#         return HttpResponse("Invalid date format")
     
-from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from datetime import datetime
-from django.shortcuts import get_object_or_404
+# from django.http import HttpResponse
+# from reportlab.pdfgen import canvas
+# from datetime import datetime
+# from django.shortcuts import get_object_or_404
 
-def generate_archived_pdf(request, year):
-    try:
-        # Ensure that the year parameter is a string
-        year_str = str(year)
+# def generate_archived_pdf(request, year):
+#     try:
+#         # Ensure that the year parameter is a string
+#         year_str = str(year)
 
-        # Parse the year parameter into a datetime object and extract the year
-        report_date = datetime.strptime(year_str, "%Y")
-        selected_year = report_date.year
+#         # Parse the year parameter into a datetime object and extract the year
+#         report_date = datetime.strptime(year_str, "%Y")
+#         selected_year = report_date.year
 
-        # Fetch and add archived report details for the selected year to the PDF
-        archived_reports = Report.objects.filter(date__year=selected_year)
+#         # Fetch and add archived report details for the selected year to the PDF
+#         archived_reports = Report.objects.filter(date__year=selected_year)
         
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="archived_reports_{selected_year}.pdf"'
+#         response = HttpResponse(content_type='application/pdf')
+#         response['Content-Disposition'] = f'attachment; filename="archived_reports_{selected_year}.pdf"'
 
-        # Create PDF
-        pdf = canvas.Canvas(response)
-        pdf.drawString(100, 800, f'Archived Reports for Year {selected_year}')
+#         # Create PDF
+#         pdf = canvas.Canvas(response)
+#         pdf.drawString(100, 800, f'Archived Reports for Year {selected_year}')
 
-        y_position = 780
+#         y_position = 780
 
-        for archived_report in archived_reports:
-            # Include both date, heading, name, and report in the PDF
-            pdf.drawString(100, y_position, f"{archived_report.date}: {archived_report.heading} - {archived_report.name}")
-            y_position -= 20
-            pdf.drawString(120, y_position, f"{archived_report.report}")
-            y_position -= 20
+#         for archived_report in archived_reports:
+#             # Include both date, heading, name, and report in the PDF
+#             pdf.drawString(100, y_position, f"{archived_report.date}: {archived_report.heading} - {archived_report.name}")
+#             y_position -= 20
+#             pdf.drawString(120, y_position, f"{archived_report.report}")
+#             y_position -= 20
 
-        pdf.save()
+#         pdf.save()
 
-        return response
+#         return response
 
-    except ValueError:
-        # Handle the case when the date parameter is not in the expected format
-        return HttpResponse("Invalid date format")
+#     except ValueError:
+#         # Handle the case when the date parameter is not in the expected format
+#         return HttpResponse("Invalid date format")
 
 
 
