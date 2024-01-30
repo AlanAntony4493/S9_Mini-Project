@@ -8,6 +8,9 @@ class Registration(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)  # New field for user status
     comments = models.TextField(blank=True) 
+    is_media_manager = models.BooleanField(default=False)
+    is_accounted_user = models.BooleanField(default=False)
+    
     
     PRAYER_GROUP_CHOICES = [
         ('Gethsemane', 'Gethsemane'),
@@ -37,6 +40,22 @@ class Registration(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Registration"
+
+class MediaManager(models.Model):
+    user_profile = models.OneToOneField(Registration, on_delete=models.CASCADE)
+    # Add additional fields specific to the Media Manager
+
+    def __str__(self):
+        return self.user_profile.user.username
+
+
+class AccountedUser(models.Model):
+    user_profile = models.OneToOneField(Registration, on_delete=models.CASCADE)
+    # Add additional fields specific to the Accounted User
+
+    def __str__(self):
+        return self.user_profile.user.username
+    
 
 
 class Donor(models.Model):

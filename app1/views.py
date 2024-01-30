@@ -66,6 +66,47 @@ def login_view(request):
     
     return render(request, 'login.html')
 
+# views.py
+
+from django.contrib.auth import login, authenticate
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
+def media_manager_login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.registration.is_active and user.registration.is_media_manager:
+            login(request, user)
+            return redirect('index')
+        elif user is not None and not user.registration.is_active:
+            messages.error(request, 'User account is not active.')
+        elif user is not None and not user.registration.is_media_manager:
+            messages.error(request, 'Invalid user role for Media Manager login.')
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
+
+    return render(request, 'media_manager_login.html')
+
+def accounted_user_login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.registration.is_active and user.registration.is_accounted_user:
+            login(request, user)
+            return redirect('index')
+        elif user is not None and not user.registration.is_active:
+            messages.error(request, 'User account is not active.')
+        elif user is not None and not user.registration.is_accounted_user:
+            messages.error(request, 'Invalid user role for Accounted User login.')
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
+
+    return render(request, 'accounted_user_login.html')
 
 
 from django.contrib.auth.models import User, auth
@@ -82,6 +123,9 @@ def index_admin(request):
 
 def index(request):
     return render(request, "index.html")
+
+def about(request):
+    return render(request, "Aboutus.html")
 
 # event
 
@@ -565,6 +609,91 @@ def report_admin(request):
         'archived_reports': archived_reports,
         'selected_year': selected_year,
     })
+
+
+
+
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from datetime import datetime
+from django.shortcuts import get_object_or_404
+
+def generate_pdf(request, year):
+    try:
+        # Parse the year parameter into a datetime object and extract the year
+        report_date = datetime.strptime(year, "%b. %d, %Y")
+        selected_year = report_date.year
+
+        # Fetch and add report details for the selected year to the PDF
+        reports = Report.objects.filter(archive=False, date__year=selected_year)
+        
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="reports_{selected_year}.pdf"'
+
+        # Create PDF
+        pdf = canvas.Canvas(response)
+        pdf.drawString(100, 800, f'Reports for Year {selected_year}')
+
+        y_position = 780
+
+        for report in reports:
+            # Include both date, heading, name, and report in the PDF
+            pdf.drawString(100, y_position, f"{report.date}: {report.heading} - {report.name}")
+            y_position -= 20
+            pdf.drawString(120, y_position, f"{report.report}")
+            y_position -= 20
+
+        pdf.save()
+
+        return response
+
+    except ValueError:
+        # Handle the case when the date parameter is not in the expected format
+        return HttpResponse("Invalid date format")
+    
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from datetime import datetime
+from django.shortcuts import get_object_or_404
+
+def generate_archived_pdf(request, year):
+    try:
+        # Ensure that the year parameter is a string
+        year_str = str(year)
+
+        # Parse the year parameter into a datetime object and extract the year
+        report_date = datetime.strptime(year_str, "%Y")
+        selected_year = report_date.year
+
+        # Fetch and add archived report details for the selected year to the PDF
+        archived_reports = Report.objects.filter(date__year=selected_year)
+        
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="archived_reports_{selected_year}.pdf"'
+
+        # Create PDF
+        pdf = canvas.Canvas(response)
+        pdf.drawString(100, 800, f'Archived Reports for Year {selected_year}')
+
+        y_position = 780
+
+        for archived_report in archived_reports:
+            # Include both date, heading, name, and report in the PDF
+            pdf.drawString(100, y_position, f"{archived_report.date}: {archived_report.heading} - {archived_report.name}")
+            y_position -= 20
+            pdf.drawString(120, y_position, f"{archived_report.report}")
+            y_position -= 20
+
+        pdf.save()
+
+        return response
+
+    except ValueError:
+        # Handle the case when the date parameter is not in the expected format
+        return HttpResponse("Invalid date format")
+
+
+
 
 from django.http import JsonResponse
 

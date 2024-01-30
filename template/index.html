@@ -117,10 +117,20 @@
             {% if user.is_superuser %}
                 <li><a class="nav-link scrollto" href="{% url 'user_admin' %}" id="users">Users</a></li>
                 <li><a class="nav-link scrollto" id="logout" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
-            {% elif user.is_authenticated %}
+                
+                {% elif user.registration.is_media_manager %}
+                <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;Profile</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out ({{ user.first_name }})</a></li>
+                
+            
+                {% elif user.is_authenticated %}
             <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
-            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out ({{ user.first_name }})</a></li>
+            
+            
+            
             {% else %}
+
                 <li><a class="nav-link scrollto" id="login" href="{% url 'login' %}">Log In</a></li>
             {% endif %}
 
@@ -208,7 +218,7 @@
                 and community service. With a passionate group of young individuals at its core, SMYM Mukkottuthara is dedicated to 
                 nurturing the spiritual growth of its members and promoting cultural exchange programs that instill vital life values. 
                 Over the years, this organization has played a pivotal role in creating future leaders within the Church, illuminating the path 
-                for countless individuals to thrive as eminent personalities and community leaders.  <a href="" style="color:blue"><u>Read more...</u></a>
+                for countless individuals to thrive as eminent personalities and community leaders.  <a href="{% url "about" %}" style="color:blue"><u>Read more...</u></a>
             </p>
           </div>
         </div>
@@ -341,15 +351,15 @@
             </a>
          </div> {% endcomment %}
             
-
-         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
           <a href="{% url 'blood_admin' %}">
             <div class="icon-box">
               <div class="icon"><img src="{% static 'img/blood.png' %}" alt="logo" height="30px" width="30px"></div>
               <h4><a href="{% url 'blood_admin' %}" id="blood">Blood Donors</a></h4>
               <p>Blood Donor's Details and Blood Donation Form</p>
             </div>
-          </div></a>
+          </div></a> 
+
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
             <a href="{% url 'event' %}">
@@ -370,6 +380,7 @@
             </div>
           </div>
           </a>
+
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
             <a href="{% url 'by_law' %}">
@@ -744,6 +755,8 @@
               <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}">Upcoming Events</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+              <li><a class="nav-link scrollto" id="login" href="{% url 'accounted_user_login' %}">Account Manager Login</a></li>
+              <li><a class="nav-link scrollto" id="login" href="{% url 'media_manager_login' %}">Media Manager Login</a></li>
               <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
             </ul>
           </div>

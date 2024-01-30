@@ -284,7 +284,9 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2>Career Guidance Forum</h2>
+                    {% if user.is_authenticated %}
                     <a href="#ask-a-question" class="btn btn-primary scrollto">Ask Question</a>
+                    {% endif %}
                     {% if user.is_superuser %}
                     <a href="{% url 'reported_comments' %}">View Reported Comments</a>
                     {% endif %}
@@ -333,8 +335,7 @@
             <p>{{ question.additional_details }}</p> 
         </div>
                         <!-- Edit Question Form (Initially hidden) -->
-            <form class="edit-question-form" id="edit-question-form-{{ question.id }}" style="display: none;">
-                {% csrf_token %}
+            <form class="edit-question-f 77
                 <div class="mb-3">
                     <label for="editQuestionTitle-{{ question.id }}" class="form-label">Edit Title</label>
                     <input type="text" class="form-control" name="editQuestionTitle" id="editQuestionTitle-{{ question.id }}" value="{{ question.title }}" required>
@@ -402,6 +403,7 @@
             </div>
 
             <!-- Answer Form for this question -->
+            {% if user.is_authenticated %}
                     <form action="{% url 'post_answer' %}" class="answerForm" method="post" data-question-id="{{ question.id }}">
                         {% csrf_token %}
                         <div class="mb-3">
@@ -411,10 +413,13 @@
                         <input type="hidden" name="questionId" value="{{ question.id }}">
                         <button type="submit" class="btn btn-primary" style="margin-bottom:50px;">Post Answer</button>
                     </form>
+            {% endif %}
                 </div>
                 {% endfor %}
             </div>
 
+           
+            {% if user.is_authenticated %}
              <!-- Ask a Question Section -->
              <section id="ask-a-question" class="bg-light">
                 <div class="container">
@@ -459,6 +464,7 @@
                     </div>
                 </div>
             </section>  
+        {% endif %}
         {% if user.is_superuser %}
             <section>
                 <h2 class="section-title">ADD NEW RESOURCE PERSON</h2>
@@ -470,7 +476,7 @@
                         <p class="error" id="name-error"></p>
                     </div>
                     <div class="mb-3">
-                        <label for="jobTitle" class="form-label">Job Title</label>
+                        <label for="jobTitle" class "form-label">Job Title</label>
                         <input type="text" class="form-control" id="jobTitle" name="jobTitle">
                         <p class="error" id="jobTitle-error"></p>
                     </div>
@@ -485,7 +491,7 @@
                         <p class="error" id="photo-error"></p>
                     </div>
                     <input type="submit" value="Add Resource Person" class="btn btn-primary"/>
-                </form>                            
+                </form>                           
             </section>
         {% endif %}
         </div>
@@ -977,6 +983,48 @@ function saveEditComment(commentId) {
     }
 </script>
 
+<script>
+    document.getElementById("addResourcePersonForm").addEventListener("submit", function(event) {
+        const nameInput = document.getElementById("name");
+        const phoneNumberInput = document.getElementById("phoneNumber");
+        const photoInput = document.getElementById("photo");
+
+        const nameError = document.getElementById("name-error");
+        const phoneNumberError = document.getElementById("phoneNumber-error");
+        const photoError = document.getElementById("photo-error");
+
+        let isValid = true;
+
+        // Name validation: Check if it's not empty
+        if (nameInput.value.trim() === "") {
+            nameError.textContent = "Name is required";
+            isValid = false;
+        } else {
+            nameError.textContent = "";
+        }
+
+        // Phone Number validation: Check if it's not empty and a valid phone number format
+        const phoneNumberRegex = /^\d{10}$/; // Adjust as needed
+        if (phoneNumberInput.value.trim() === "" || !phoneNumberRegex.test(phoneNumberInput.value)) {
+            phoneNumberError.textContent = "Phone Number is required and should be 10 digits";
+            isValid = false;
+        } else {
+            phoneNumberError.textContent = "";
+        }
+
+        // Photo validation: Check if a file is selected and it's an image
+        if (photoInput.files.length === 0 || !photoInput.files[0].type.startsWith("image/")) {
+            photoError.textContent = "Please select a valid image file";
+            isValid = false;
+        } else {
+            photoError.textContent = "";
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
 
 </body>
 

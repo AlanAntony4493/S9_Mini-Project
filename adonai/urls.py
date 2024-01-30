@@ -27,7 +27,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.index, name='index'),
     path('login', views.login_view, name='login'),
+    path('about', views.about, name='about'),
+
+
+
+    path('report_admin/', views.report_admin, name='report_admin'),
+    path('generate-pdf/<str:year>/', views.generate_pdf, name='generate_pdf'),
+    path('generate-archived-pdf/<int:year>/', views.generate_archived_pdf, name='generate_archived_pdf'),
+
     # path('login/', LoginView.as_view(template_name="login.html",next_page="index"), name='login'),
+    path('media-manager-login/', views.media_manager_login_view, name='media_manager_login'),
+    path('accounted-user-login/', views.accounted_user_login_view, name='accounted_user_login'),
     path('logout', views.logout, name='logout'),
     path('event',views.event, name='event'),
     path('archive_event/<int:event_id>/', views.archive_event, name='archive_event'),
@@ -45,7 +55,6 @@ urlpatterns = [
     path('soft-delete-donor/<int:donor_id>/', views.soft_delete_donor, name='soft_delete_donor'),
     path('blood_user/<str:blood_group>/', views.filtered_donor_list, name='filtered_donor_list'),
     path('approve_user/<int:user_id>/', views.approve_user, name='approve_user'),
-    path('report_admin/', views.report_admin, name='report_admin'),
     path('get_archived_reports/', views.get_archived_reports, name='get_archived_reports'),
     path('password_reset/',auth_views.PasswordResetView.as_view(),name='password_reset'),
     path('password_reset/done/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),

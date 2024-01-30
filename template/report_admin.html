@@ -342,75 +342,89 @@
           </div>
         </header><!-- End Header -->
 
-    <main id="main">
-        <!-- Breadcrumbs -->
-        <section class="breadcrumbs">
-          <div class="container">
-    
-            <div class="d-flex justify-content-between align-items-center">
-              <h2>Reports</h2>
-            </div>
-    
-          </div>
-        </section>
-        <!-- End Breadcrumbs -->
-  {% if user.is_superuser %} 
-        {% if messages %}
-        <div class="alert alert-danger">
-          <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-  {% endif %}
-        <!-- report_admin.html -->
-        <div class="container-main">
-          <div class="inner-container">
-              <div class="heading-container">
-                  <p id="report-heading">{{ latest_report.heading }}</p>
-              </div>
-              <div class="container2">
-                  <p id="report-content">{{ latest_report.report|safe }}</p>
-              </div>
-              <div class="row_1">
-                  <div class="container3">
-                      <p id="report-date">{{ latest_report.date }}</p>
-                      <p id="report-place">{{ latest_report.place }}</p>
-                  </div>
-                  <div class="container3">
-                    <p>General Secretary</p>
-                      <p id="report-name">{{ latest_report.name }}</p>
+        <main id="main">
+          <!-- Breadcrumbs -->
+          <section class="breadcrumbs">
+              <div class="container">
+                  <div class="d-flex justify-content-between align-items-center">
+                      <h2>Reports</h2>
                   </div>
               </div>
+          </section>
+          <!-- End Breadcrumbs -->
+      
+          {% if user.is_superuser %} 
+              {% if messages %}
+                  <div class="alert alert-danger">
+                      <ul>
+                          {% for message in messages %}
+                              <li>{{ message }}</li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+              {% endif %}
+          {% endif %}
+      
+          <!-- report_admin.html -->
+          <div class="container-main">
+              <div class="inner-container">
+                  <div class="heading-container">
+                      <p id="report-heading">{{ latest_report.heading }}</p>
+                  </div>
+                  <div class="container2">
+                      <p id="report-content">{{ latest_report.report|safe }}</p>
+                  </div>
+                  <div class="row_1">
+                      <div class="container3">
+                          <p id="report-date">{{ latest_report.date }}</p>
+                          <p id="report-place">{{ latest_report.place }}</p>
+                      </div>
+                      <div class="container3">
+                          <p>General Secretary</p>
+                          <p id="report-name">{{ latest_report.name }}</p>
+                      </div>
+                  </div>
+              </div>
           </div>
-      </div>
+      
+          <section style="margin-bottom: 0px !important;">
+              <div class="filter-container" style="max-width: 200px; margin-bottom:0; float: left;">
+                  <p>Select a Report:</p>
+                  <div class="form-group">
+                      <select id="filter-report-select" onchange="filterReport()">
+                          <option value="" selected
+                                  data-heading="{{ latest_report.heading }}"
+                                  data-report="{{ latest_report.report|safe }}"
+                                  data-date="{{ latest_report.date }}"
+                                  data-place="{{ latest_report.place }}"
+                                  data-name="{{ latest_report.name }}">
+                              Show Latest
+                          </option>
+                          {% for report in reports %}
+                              <option value="{{ report.date }}" data-heading="{{ report.heading }}" data-report="{{ report.report|safe }}"
+                                      data-date="{{ report.date }}" data-place="{{ report.place }}" data-name="{{ report.name }}">
+                                  {{ report.date }} - {{ report.heading }}
+                              </option>
+                          {% endfor %}
+                      </select>
+                  </div>
+              </div>
+          </section>
+          <button onclick="generatePDF()">Generate PDF</button>
 
-       <section style="margin-bottom: 0px !important;">
-    <div class="filter-container" style="max-width: 200px; margin-bottom:0; float: left;">
-        <p>Select a Report:</p>
-        <div class="form-group">
-            <select id="filter-report-select" onchange="filterReport()">
-              <option value="" selected
-              data-heading="{{ latest_report.heading }}"
-              data-report="{{ latest_report.report|safe }}"
-              data-date="{{ latest_report.date }}"
-              data-place="{{ latest_report.place }}"
-              data-name="{{ latest_report.name }}">
-              Show Latest
-              </option>
-                {% for report in reports %}
-                <option value="{{ report.date }}" data-heading="{{ report.heading }}" data-report="{{ report.report|safe }}"
-                    data-date="{{ report.date }}" data-place="{{ report.place }}" data-name="{{ report.name }}">
-                    {{ report.date }} - {{ report.heading }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-</section>
-
+          <script>
+            function generatePDF() {
+              var selectedYear = document.getElementById('filter-report-select').value;
+          
+              if (selectedYear) {
+                window.location.href = `/generate-pdf/${selectedYear}/`;
+              } else {
+                alert('Please select a year before generating the PDF.');
+              }
+            }
+          </script>
+          
+      
 
         <!-- Breadcrumbs -->
         <section class="breadcrumbs">
@@ -423,33 +437,47 @@
           </div>
         </section>
         <!-- End Breadcrumbs -->
-
-<section>
-<!-- Add this HTML code to your report_admin.html template -->
-<form method="get" style="margin-left:10%;">
-  <label for="selected_year">Select Year:</label>
-  <select name="selected_year" id="selected_year">
-      <option value="">Select year</option>
-      {% for year in archived_years %}
-          <option value="{{ year.date__year }}">{{ year.date__year }}</option>
-      {% endfor %}
-  </select>
-</form>
-
-<table id="archived-reports-table" style="margin-top:20px;">
-  <thead>
-      <tr>
-          <th>Date</th>
-          <th>Heading</th>
-          <th>Name</th>
-          <th>Action</th>
-      </tr>
-  </thead>
-  <tbody>
-      <!-- Archived reports will be displayed here -->
-  </tbody>
-</table>
-
+        <section>
+          <!-- Add this HTML code to your report_admin.html template -->
+          <form method="get" style="margin-left:10%;">
+              <label for="selected_year">Select Year:</label>
+              <select name="selected_year" id="selected_year">
+                  <option value="">Select year</option>
+                  {% for year in archived_years %}
+                      <option value="{{ year.date__year }}">{{ year.date__year }}</option>
+                  {% endfor %}
+              </select>
+          </form>
+      
+          <table id="archived-reports-table" style="margin-top:20px;">
+              <thead>
+                  <tr>
+                      <th>Date</th>
+                      <th>Heading</th>
+                      <th>Name</th>
+                      <th>Action</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <!-- Archived reports will be displayed here -->
+              </tbody>
+          </table>
+      
+          <!-- Generate PDF Button for Archived Reports -->
+          <button onclick="generateArchivedPDF()">Generate PDF</button>
+      
+          <script>
+              function generateArchivedPDF() {
+                  var selectedYear = document.getElementById('selected_year').value;
+      
+                  if (selectedYear) {
+                      window.location.href = `/generate-archived-pdf/${selectedYear}/`;
+                  } else {
+                      alert('Please select a year before generating the PDF.');
+                  }
+              }
+          </script>
+      </section>
 
         <!-- View Report Modal -->
         <div class="modal fade" id="viewReportModal" tabindex="-1" role="dialog" aria-labelledby="viewReportModalLabel" aria-hidden="true">

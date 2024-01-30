@@ -1,0 +1,264 @@
+{% load static %}
+  <!DOCTYPE html>
+  <html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+    <title>SMYM Mukkoottuthara</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    
+  
+    <!-- Favicons -->
+    <link href="{% static 'img/logo1.png' %}" rel="icon">
+    <link href="{% static 'img/logo1.png' %}" rel="apple-touch-icon">
+  
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  
+    <!-- Template Main CSS File -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+      .event {
+        display: flex;
+        border: 1px solid #ddd;
+        margin: 10px;
+        padding: 10px;
+      }
+      .event-date {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f2f2f2;
+        border-right: 1px solid #ddd;
+        padding: 5px;
+      }
+      .event-date .day {
+        font-size: 40px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .event-date .month {
+        font-size: 18px;
+        margin: 0;
+      }
+      .event-description {
+        flex: 3;
+        padding: 10px;
+      }
+
+      .container1{
+        background-color: #fff;
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        text-align: center;
+    }
+    
+    h2 {
+        margin-top: 20px;
+    }
+    
+    p {
+        line-height: 1.5;
+    }
+    
+    .error {
+        color: red;
+    }
+    </style>
+  </head>
+  
+<body>
+  
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top header-inner-pages">
+      <div class="container d-flex align-items-center justify-content-lg-between">
+  
+        <!-- <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1> -->
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <a href="{% url 'index' %}" class="logo me-auto me-lg-0"><img src="{% static 'img/logonew.png' %}" alt="SMYM" class="img-fluid" style="height:100px"></a>
+  
+        <nav id="navbar" class="navbar order-last order-lg-0">
+          <ul>
+            <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+            <li class="dropdown"><a href=""><span>About Us</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="{% url 'index' %}#about">SMYM Mukkoottuthara</a></li>
+                <li class="dropdown"><a href="{% url 'by_law' %}"><span>SMYM BY Law</span> <i class="bi bi-chevron-right"></i></a>
+                  <!-- <ul>
+                    <li><a href="#">SMYM-LOGO</a></li>
+                    <li><a href="#">SMYM-FLAG</a></li>
+                    <li><a href="#">SMYM-ANTHEM</a></li>
+                    <li><a href="#">SMYM-SLOGAN</a></li>
+                  </ul> -->
+                </li>
+                <!-- <li><a href="#">Drop Down 2</a></li>
+                <li><a href="#">Drop Down 3</a></li>
+                <li><a href="#">Drop Down 4</a></li> -->
+              </ul>
+            </li>
+            <ul>
+              <li><a class="nav-link scrollto" href="{% url 'gallery' %}">Gallery</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'index' %}#contact">Contact</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'index' %}#services">Services</a></li>
+              {% if user.is_superuser %}
+                  <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+              {% elif user.is_authenticated %}
+                  <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
+                  <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out</a></li>
+              {% else %}
+                  <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
+              {% endif %}
+  
+          </ul>
+          
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+  
+        <a href="{% url "donation_form" %}" class="get-started-btn scrollto">Support Us</a>
+  
+      </div>
+    </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+      </div>
+    </section>
+
+    <div class="container1">
+        <h1>About SMYM Mukkottuthara</h1>
+        <div class="content">
+            <h2>History and Background:</h2>
+            <p>SMYM Mukkottuthara is a vibrant and dynamic youth organization operating under the auspices of the Syro Malabar Church, specifically in the Kanjirappally Diocese. Established in [insert year], SMYM Mukkottuthara is dedicated to serving society and promoting the spiritual and cultural development of youth in the region.</p>
+            
+            <h2>Mission and Goals:</h2>
+            <p>Since its inception, SMYM Mukkottathara has been guided by a noble mission: to create future leaders deeply grounded in their faith, culture, and values. This mission is reflected in the various programs and activities the organization has undertaken over the years.</p>
+            
+            <h2>Youth Development:</h2>
+            <p>SMYM Mukkottuthara's commitment to the overall development of youth is evident through its diverse programs. These programs aim to provide guidance and support for continued faith development, helping young people deepen their connection and spiritual understanding. In addition, cultural exchange programs are the foundation of SMYM's activities, actively promoting life values and nurturing the spirit of solidarity and close friendship among young people.</p>
+            
+            <h2>Spiritual Foundation:</h2>
+            <p>The organization's spiritual foundation is deeply rooted in the teachings of Saint Thomas, apostle of Jesus Christ. Therefore, St. Thomas Mukkottuthara played a pivotal role in the spiritual development of SMYM members. The principles and values established by St. Thomas serve as a guide for the organization's members as they strive to make a positive impact in their communities and churches.</p>
+            
+            <h2>Leadership and Impact:</h2>
+            <p>SMYM Mukkottuthara has played an important role in the lives of many young people who have become prominent figures and leaders in the Church. Through various initiatives, the organization has provided a platform for young people to develop leadership skills, engage in community service, and contribute positively to society.</p>
+            
+            <h2>In Summary:</h2>
+            <p>In short, SMYM Mukkottuthara is a beacon of hope and inspiration for the youth of Kanjirappally Diocese. The commitment to promoting the spiritual, cultural, and leadership development of youth reflects the core values of the Syro Malabar Church and the teachings of St. Thomas. With its rich history and bright future, SMYM Mukkottathara continues to serve as a force for positive change in the lives of the youth and communities it serves.</p>
+        </div>
+    </div>
+
+
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="footer-info">
+              <h3><img src="{% static 'img/logo1.png' %}" style="height:90px; width:80px;"></h3>
+              <p>
+                St Thomas Church <br>
+                Mukkoottuthara,<br>
+                PIN: 686510<br><br>
+                <strong>Phone:</strong> +91 8078529691<br>
+                <strong>Email:</strong> smymmukkoottuthara@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="https://www.facebook.com/SMYM.Mukkoottuthara" class="facebook" target="_blank"><i class="bx bxl-facebook"></i></a>
+                <a href="https://www.instagram.com/smymmukkoottuthara/" class="instagram" target="_blank"><i class="bx bxl-instagram"></i></a>
+                {% comment %} <a href="#" target="blank" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> {% endcomment %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}#services">Services</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li> -->
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'parish_admin' %}">Parish Directory</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}">Upcoming Events</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
+              <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
+            </ul>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+  <script> // Check if the page was reloaded due to the back button click
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            // Reload the page
+            location.reload();
+        }
+    });
+  </script>
+
+  <script src="jquery.min.js"></script>
+  <script src="scripts.js"></script>
+
+</body>
+
+</html>

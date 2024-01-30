@@ -120,6 +120,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+WKHTMLTOPDF_PATH = '/path/to/wkhtmltopdf'
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
