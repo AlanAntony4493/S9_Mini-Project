@@ -119,12 +119,12 @@
                 <li><a class="nav-link scrollto" id="logout" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
                 
                 {% elif user.registration.is_media_manager %}
-                <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;Profile</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'view_profile' %}"><i class="bi bi-person-circle"></i>&nbsp;Profile</a></li>
                 <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out ({{ user.first_name }})</a></li>
                 
             
                 {% elif user.is_authenticated %}
-            <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'view_profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
             <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out ({{ user.first_name }})</a></li>
             
             

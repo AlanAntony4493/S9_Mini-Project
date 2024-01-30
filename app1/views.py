@@ -1203,5 +1203,36 @@ def add_resource_person(request):
 
 
 
+# #########user profile################
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from django.http import HttpResponse
+
+@login_required
+def view_profile(request):
+    try:
+        # Attempt to retrieve the user's existing profile
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # If the profile does not exist, create a new one
+        user_profile = UserProfile(user=request.user)
+        user_profile.save()
+
+    if request.method == 'POST':
+        # Handle the profile picture upload
+        profile_picture = request.FILES.get('profile_picture')
+        if profile_picture:
+            user_profile.profile_picture = profile_picture
+            user_profile.save()
+            return HttpResponse("Profile picture uploaded successfully.")
+
+    context = {
+        'user_profile': user_profile,
+    }
+
+    return render(request, 'profile.html', context)
+
 
 

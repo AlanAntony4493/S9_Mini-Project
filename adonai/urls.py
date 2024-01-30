@@ -86,6 +86,8 @@ urlpatterns = [
     path('inner_page/<int:album_id>/', views.inner_page, name='inner_page'),
     path('gallery',views.gallery, name="gallery"),
 
+    # profile
+    path('view_profile/', views.view_profile, name='view_profile'),
 
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:

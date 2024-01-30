@@ -1,54 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- ======= Breadcrumbs ======= -->
-    <section class="breadcrumbs">
-        <div class="container">
-          <div class="d-flex justify-content-between align-items-center">
-            <h2 style="align:center">My Profile</h2>
-          </div>
-        </div>
-      </section>
- <!-- End Breadcrumbs -->
 <section class="inner-page">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
+        <!-- Display Profile Information -->
         <div class="card">
           <div class="card-body">
+            <!-- Display other profile information here -->
             <h3 class="card-title">Profile Information</h3>
             <hr>
             <div class="mb-3">
               <strong>Full Name:</strong>
-              <span class="ml-2">
-                {{ user.first_name }} {% if registration.middle_name %}{{ registration.middle_name }}{% endif %} {{ user.last_name }}
-              </span>
+              <span class="ml-2">{{ user_profile.user.get_full_name }}</span>
             </div>
             <div class="mb-3">
               <strong>Email:</strong>
-              <span class="ml-2">{{ user.email }}</span>
+              <span class="ml-2">{{ user_profile.user.email }}</span>
             </div>
-            <div class="mb-3">
-              <strong>Date of Birth:</strong>
-              <span class="ml-2">{{ registration.date_of_birth }}</span>
-            </div>
-            <div class="mb-3">
-              <strong>Gender:</strong>
-              <span class="ml-2">{{ registration.gender }}</span>
-            </div>
-            <div class="mb-3">
-              <strong>Prayer Group:</strong>
-              <span class="ml-2">{{ registration.prayer_group }}</span>
-            </div>
-            <div class="mb-3">
-              <strong>House Name:</strong>
-              <span class="ml-2">{{ registration.house_name }}</span>
-            </div>
-            <div class="mb-3">
-                <strong>Phone Number:</strong>
-                <span class="ml-2">{{ registration.phone_number }}</span>
-            </div>
-            <!-- Add other user and registration fields as needed -->
+            <!-- Display other fields as needed -->
+
+            <!-- Display Profile Picture -->
+            {% if user_profile.profile_picture %}
+              <div class="mb-3">
+                <strong>Profile Picture:</strong>
+                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Display Profile Picture Upload Form -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Profile Picture</h3>
+            <hr>
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <label for="profile_picture">Upload Profile Picture:</label>
+              <input type="file" name="profile_picture" accept="image/*" class="form-control">
+              <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
           </div>
         </div>
       </div>
@@ -56,4 +51,3 @@
   </div>
 </section>
 {% endblock %}
-
