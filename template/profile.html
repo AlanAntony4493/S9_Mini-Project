@@ -178,4 +178,17 @@
   });
 </script>
 
+<script>
+  // Show success or error messages in an alert box if they exist
+  {% if success_message %}
+      alert('Success: {{ success_message }}');
+  {% endif %}
+
+  {% if error_message %}
+      alert('Error: {{ error_message }}');
+  {% endif %}
+</script>
+
+
+
 {% endblock %}
