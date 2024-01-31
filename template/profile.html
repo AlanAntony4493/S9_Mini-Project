@@ -1,44 +1,184 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
+
+
+<style>
+  body {
+      background-color: #fff;
+      color: #333;
+      font-family: 'Arial', sans-serif;
+  }
+
+  .card {
+      max-width: 400px;
+      margin: 50px auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 2px solid #ff0000;
+      border-radius: 15px;
+      overflow: hidden;
+  }
+
+  .card-header {
+      background-color: #ff0000;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+  }
+
+  .card-body {
+      text-align: center;
+      padding: 20px;
+  }
+
+  .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 5px solid #ffcc00;
+  }
+
+  .card-title {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #ff0000;
+  }
+
+  .card-text {
+      font-size: 16px;
+      margin-bottom: 10px;
+  }
+
+  .emblem {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      margin-bottom: 10px;
+  }
+
+  .signature {
+      width: 100px;
+      height: 50px;
+      object-fit: cover;
+      margin-top: 20px;
+  }
+
+  .seal {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      margin-top: 20px;
+  }
+
+  .btn-primary {
+      background-color: #ffcc00;
+      border-color: #ffcc00;
+      color: #fff;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+      background-color: #ff9900;
+      border-color: #ff9900;
+  }
+</style>
+
 <section class="inner-page">
   <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <!-- Display Profile Information -->
-        <div class="card">
-          <div class="card-body">
-            <!-- Display other profile information here -->
-            <h3 class="card-title">Profile Information</h3>
-            <hr>
-            <div class="mb-3">
-              <strong>Full Name:</strong>
-              <span class="ml-2">{{ user_profile.user.get_full_name }}</span>
-            </div>
-            <div class="mb-3">
-              <strong>Email:</strong>
-              <span class="ml-2">{{ user_profile.user.email }}</span>
-            </div>
-            <!-- Display other fields as needed -->
-      <!-- Display Profile Picture -->
-{% if user_profile.profile_picture %}
-<div class="mb-3">
-  <strong>Profile Picture:</strong>
-  <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
-</div>
-{% else %}
-<!-- Display Profile Picture Upload Form -->
-<div class="mb-3">
-  <h3 class="card-title">Profile Picture</h3>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="profile_picture">Upload Profile Picture:</label>
-    <input type="file" name="profile_picture" accept="image/*" class="form-control">
-    <button type="submit" class="btn btn-primary">Upload</button>
-  </form>
-</div>
-{% endif %}
-    </div>
+      <div class="row justify-content-center">
+          <div class="col-md-6">
+              <!-- Display Profile Information -->
+              <div class="card">
+                  <div class="card-body">
+                      <!-- Display other profile information here -->
+                      <h3 class="card-title">Profile Information</h3>
+                      <hr>
+                      <div class="mb-3 text-center">
+                          <strong>Full Name:</strong>
+                          <span class="ml-2">{{ user_profile.user.get_full_name }}</span>
+                      </div>
+                      <div class="mb-3 text-center">
+                          <strong>Email:</strong>
+                          <span class="ml-2">{{ user_profile.user.email }}</span>
+                      </div>
+                      <!-- Display Profile Picture -->
+                      <div class="mb-3 text-center">
+                          <strong>Profile Picture:</strong>
+                          {% if user_profile.profile_picture %}
+                              <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                          {% else %}
+                              <!-- Display Profile Picture Upload Form -->
+                              <h5 class="card-title">Upload Profile Picture</h5>
+                              <form method="post" enctype="multipart/form-data">
+                                  {% csrf_token %}
+                                  <label for="profile_picture" class="btn btn-primary">Choose Picture</label>
+                                  <input type="file" name="profile_picture" accept="image/*" class="form-control" style="display: none;" onchange="this.form.submit()">
+                              </form>
+                          {% endif %}
+                      </div>
+
+                      <!-- Button to View ID Card -->
+                      <div class="text-center mt-3">
+                          <button class="btn btn-primary" id="viewIdCardBtn">View ID Card</button>
+                      </div>
+
+                      <!-- Virtual ID Card Section -->
+                      <div class="mb-4 virtual-id-card" id="virtualIdCard">
+                          <h3 class="card-title text-center mb-4">Virtual ID Card</h3>
+                          {% if user_profile.admin_approval %}
+                              <!-- Display ID Card details here -->
+                              <div class="card">
+                                  <div class="card-header bg-primary text-white">
+                                      SMYM Mukkoottuthara
+                                  </div>
+                                  <div class="card-body text-center">
+                                      <!-- Display ID Card details here -->
+                                      <!-- You can customize this based on your requirements -->
+                                      <h4 class="card-title">{{ user_profile.user.get_full_name }}</h4>
+                                      <p class="card-text">Member</p>
+                                      <p class="card-text">St. Thomas Church Mukkoottuthara</p>
+                                      <!-- Add other ID card details as needed -->
+                                      <p class="card-text">UUID: ABC123XYZ</p>
+                                  </div>
+                              </div>
+                              <!-- Button to Download ID Card -->
+                              <div class="text-center mt-3">
+                                  <button class="btn btn-primary" id="downloadBtn">Download</button>
+                              </div>
+                          {% else %}
+                              <!-- Display message if ID Card is not approved by admin -->
+                              <div class="alert alert-warning text-center" role="alert">
+                                  Your ID Card is not yet approved by the admin.
+                              </div>
+                          {% endif %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $("#downloadBtn").click(function() {
+          // Implement download functionality here
+          alert("Downloading ID card...");
+      });
+
+      $("#viewIdCardBtn").click(function() {
+          // Toggle visibility of the ID card section
+          $("#virtualIdCard").toggle();
+      });
+  });
+</script>
+
 {% endblock %}
