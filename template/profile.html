@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 
-
 <style>
   body {
       background-color: #fff;
@@ -87,7 +86,6 @@
       border-color: #ff9900;
   }
 </style>
-
 <section class="inner-page">
   <div class="container">
       <div class="row justify-content-center">
@@ -105,22 +103,20 @@
                       <div class="mb-3 text-center">
                           <strong>Email:</strong>
                           <span class="ml-2">{{ user_profile.user.email }}</span>
-                      </div>
                       <!-- Display Profile Picture -->
                       <div class="mb-3 text-center">
-                          <strong>Profile Picture:</strong>
-                          {% if user_profile.profile_picture %}
-                              <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                          {% else %}
-                              <!-- Display Profile Picture Upload Form -->
-                              <h5 class="card-title">Upload Profile Picture</h5>
-                              <form method="post" enctype="multipart/form-data">
-                                  {% csrf_token %}
-                                  <label for="profile_picture" class="btn btn-primary">Choose Picture</label>
-                                  <input type="file" name="profile_picture" accept="image/*" class="form-control" style="display: none;" onchange="this.form.submit()">
-                              </form>
-                          {% endif %}
-                      </div>
+                        <strong>Profile Picture:</strong>
+                        {% if user_profile.profile_picture %}
+                            <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <!-- Display Profile Picture Upload Form -->
+                            <h5 class="card-title">Upload Profile Picture</h5>
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="file" name="profile_picture" accept="image/*" class="form-control" onchange="this.form.submit()">
+                            </form>
+                        {% endif %}
+                    </div>
 
                       <!-- Button to View ID Card -->
                       <div class="text-center mt-3">
@@ -128,7 +124,7 @@
                       </div>
 
                       <!-- Virtual ID Card Section -->
-                      <div class="mb-4 virtual-id-card" id="virtualIdCard">
+                      <div class="mb-4 virtual-id-card" id="virtualIdCard" style="display: none;">
                           <h3 class="card-title text-center mb-4">Virtual ID Card</h3>
                           {% if user_profile.admin_approval %}
                               <!-- Display ID Card details here -->
@@ -164,19 +160,20 @@
   </div>
 </section>
 
+<!-- Include jQuery, Popper.js, and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function() {
-      $("#downloadBtn").click(function() {
-          // Implement download functionality here
-          alert("Downloading ID card...");
-      });
-
       $("#viewIdCardBtn").click(function() {
           // Toggle visibility of the ID card section
           $("#virtualIdCard").toggle();
+      });
+
+      $("#downloadBtn").click(function() {
+          // Implement download functionality here
+          alert("Downloading ID card...");
       });
   });
 </script>

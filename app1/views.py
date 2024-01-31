@@ -1207,8 +1207,8 @@ def add_resource_person(request):
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseBadRequest
 from .models import UserProfile
-from django.http import HttpResponse
 
 @login_required
 def view_profile(request):
@@ -1224,15 +1224,20 @@ def view_profile(request):
             # Handle the profile picture upload
             profile_picture = request.FILES.get('profile_picture')
             if profile_picture:
+                # Ensure that the uploaded file is an image
+                if not profile_picture.content_type.startswith('image'):
+                    return HttpResponseBadRequest("Invalid file type. Please upload an image.")
+
                 user_profile.profile_picture = profile_picture
                 user_profile.save()
                 return HttpResponse("Profile picture uploaded successfully.")
-    
+
     context = {
         'user_profile': user_profile,
     }
 
     return render(request, 'profile.html', context)
+
 
 
 
