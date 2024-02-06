@@ -281,7 +281,7 @@
             <th>Gender</th>
             <th>Blood Group</th>
             <th>Contact</th>
-            {% if user.is_superuser %}
+            {% if user.registration.is_media_manager %}
             <th>Actions</th>
             {% endif %}
           </tr>
@@ -294,7 +294,7 @@
                 <td>{{ donor.get_gender_display }}</td>
                 <td>{{ donor.get_blood_group_display }}</td>
                 <td>{{ donor.contact }}</td>
-                {% if user.is_superuser %}
+                {% if user.registration.is_media_manager %}
                 <td>
                   <form method="post" action="{% url 'soft_delete_donor' donor.id %}">
                     {% csrf_token %}
@@ -312,7 +312,7 @@
     </tbody>
     </table>
 
-{% if user.is_superuser %}
+{% if user.registration.is_media_manager %}
 
     <!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">

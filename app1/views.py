@@ -218,15 +218,21 @@ def by_law(request):
 def index_home(request):
     return render(request,"index.html")
 
-from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 from .models import Donor
 
 def blood_admin(request):
     donors = Donor.objects.filter(is_deleted=False)
-    is_superuser = request.user.is_superuser if request.user.is_authenticated else False
+    is_media_manager = False
 
-    if request.method == 'POST' and is_superuser:
+    if request.user.is_authenticated:
+        try:
+            is_media_manager = request.user.registration.is_media_manager
+        except Registration.DoesNotExist:
+            # Handle the case where the user has no associated Registration object
+            pass
+
+    if request.method == 'POST' and is_media_manager:
         name = request.POST.get('funame')
         age = request.POST.get('age')
         gender = request.POST.get('gender')
@@ -242,10 +248,10 @@ def blood_admin(request):
         )
         donor.save()
 
-        # messages.success(request, 'Donor data submitted successfully.')
         return redirect('blood_admin')  
 
-    return render(request, 'blood_admin.html', {'donors': donors, 'is_superuser': is_superuser})
+    return render(request, 'blood_admin.html', {'donors': donors, 'is_media_manager': is_media_manager})
+
 
 from django.shortcuts import get_object_or_404, redirect, reverse  # Import the reverse function
 from .models import Donor

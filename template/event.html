@@ -296,7 +296,7 @@
                             <p class="event-title"><b>{{ event.title }}</b>: {{ event.description }}</p>
                             <p class="event-time">{{ event.start_time|time:"h:i A" }} - {{ event.end_time|time:"h:i A" }}</p>
                             <p class="event-venue">{{ event.venue }}</p>
-                            {% if user.is_superuser %}
+                            {% if  user.registration.is_media_manager %}
                             {% comment %} <button class="delete-button" onclick="deleteEvent('{{ event.id }}')">Delete</button> {% endcomment %}
                             <button class="archive-button" onclick="archiveEvent('{{ event.id }}')"><i class="fa fa-trash-o" style="font-size:24px"></i></button>
                             {% endif %}
@@ -316,7 +316,7 @@
     {% endif %}
 
         <!-- Event form -->
-        {% if user.is_superuser %}
+        {% if user.registration.is_media_manager %}
         <div class="container">
             <div class="row">
                 <div class="col-md-6">

@@ -306,7 +306,7 @@ section {
 
   <main id="main">
 
-    {% if user.is_superuser %}
+    {% if user.registration.is_media_manager %}
     <!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">
       <div class="container">
@@ -329,7 +329,7 @@ section {
     {% endif %}
  
     <div class="container">
-      {% if user.is_superuser %}
+      {% if user.registration.is_media_manager %}
   <!-- ======= Breadcrumbs ======= -->
   <section class="breadcrumbs">
     <div class="container">
@@ -447,7 +447,7 @@ section {
                       <th>House Name</th>
                       <th>Contact</th>
                       <th>Prayer Group</th>
-                      {% if user.is_superuser %}
+                      {% if user.registration.is_media_manager %}
                       <th>Action</th>
                       {% endif %}
                   </tr>
@@ -460,7 +460,7 @@ section {
                       <td>{{ member.house_name }}</td>
                       <td>{{ member.contact }}</td>
                       <td>{{ member.prayer_group.name }}</td>
-                      {% if user.is_superuser %}
+                      {% if user.registration.is_media_manager %}
                       <td>
                         <a href="{% url 'update_parish' member.id %}" class="update-button"><i class="bi bi-pencil-square"></i></a>
                         <a href="?soft_delete_member={{ member.id }}" class="delete-button" onclick="return confirmDelete();"><i class='fa fa-trash-o' style='font-size:20px'></i></a> 
@@ -475,7 +475,7 @@ section {
           </table>
     {% endblock %}
           <!-- Add New Member Form -->
-          {% if user.is_superuser %}
+          {% if user.registration.is_media_manager %}
           <!-- ======= Breadcrumbs ======= -->
           <section class="breadcrumbs">
             <div class="container">

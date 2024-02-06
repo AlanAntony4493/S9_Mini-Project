@@ -421,14 +421,14 @@
             </div>
           </div></a>
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
+          {% comment %} <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-box">
               <div class="icon"><i class="bi bi-signpost-split-fill"></i></div>
               <h4><a href="{% url 'career_forum' %}" class="career">Career Guidance Forum</a></h4>
               <p>Contacts of Experts in Various Fields( Includes IT, Bank, Overseas Studies and More..), career predictor test
               </p>
             </div>
-          </div>
+          </div> {% endcomment %}
 
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
@@ -767,8 +767,6 @@
               <li><i class="bx bx-chevron-right"></i> <a href="{% url 'blood_admin' %}">Blood Bank</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="{% url 'event' %}">Upcoming Events</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Help</a></li>
-              <li><a class="nav-link scrollto" id="login" href="{% url 'accounted_user_login' %}">Account Manager Login</a></li>
-              <li><a class="nav-link scrollto" id="login" href="{% url 'media_manager_login' %}">Media Manager Login</a></li>
               <!-- <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li> -->
             </ul>
           </div>
