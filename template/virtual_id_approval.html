@@ -3,8 +3,31 @@
 {% block content %}
   <div class="container mt-4">
     <h2>Admin Approval Page</h2>
-    
+    {% if user_profiles %}
     {% for profile in user_profiles %}
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ profile.user.get_full_name }}</h5>
+        
+        <!-- Display Profile Picture -->
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded mb-2" style="max-width: 100px; max-height: 100px;">
+        
+        <!-- Display Email -->
+        <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
+        
+        <!-- Display Phone Number -->
+        <p class="card-text"><strong>Phone Number:</strong> {{ profile.user.registration.phone_number }}</p>
+        
+        <a href="{% url 'approve_id' id=profile.id %}" class="approve-link">Approve</a><br><br>
+        <a href="#" class="reject-link" onclick="rejectProfile('{{ profile.id }}')">Reject</a>
+      </div>
+    </div>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No user profiles awaiting approval.</p>
+{% endif %}
+    {% comment %} {% for profile in user_profiles %}
       {% if not profile.admin_approval %}
         <div class="card mt-3">
           <div class="card-body">
@@ -20,17 +43,44 @@
             <p class="card-text"><strong>Phone Number:</strong> {{ profile.user.registration.phone_number }}</p>
             
             <!-- Add an approval button -->
-            <form method="post" action="{% url 'approve_user' profile.user.id %}">
+            <form method="post" action="{% url 'approve_id' profile.user.id %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-success">Approve</button>
             </form>
           </div>
         </div>
       {% endif %}
-    {% endfor %}
+    {% endfor %} {% endcomment %}
+    <script>
+        function rejectProfile(profileId) {
+          var reason = prompt("Enter the reason for rejection:");
+          if (reason !== null) {
+            // Create a form element
+            var form = document.createElement('form');
+            form.action = '{% url "reject_id" id=12345 %}'.replace('12345', profileId);
+            form.method = 'post';
     
-    {% if user_profiles|length == 0 %}
-      <p>No users awaiting approval.</p>
-    {% endif %}
+            // Create an input field for the reason
+            var inputReason = document.createElement('input');
+            inputReason.type = 'hidden';
+            inputReason.name = 'reason';
+            inputReason.value = reason;
+    
+            // Create an input field for the CSRF token
+            var inputCSRF = document.createElement('input');
+            inputCSRF.type = 'hidden';
+            inputCSRF.name = 'csrfmiddlewaretoken';
+            inputCSRF.value = '{{ csrf_token }}';
+    
+            // Append the input fields to the form
+            form.appendChild(inputReason);
+            form.appendChild(inputCSRF);
+    
+            // Append the form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+          }
+        }
+      </script>
   </div>
 {% endblock %}

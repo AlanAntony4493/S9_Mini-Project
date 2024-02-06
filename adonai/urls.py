@@ -92,6 +92,9 @@ urlpatterns = [
 
     #admin approval for id card
     path('virtual_id_approval/', views.virtual_id_approval, name='virtual_id_approval'),
+    path('virtual_id_approval/approve/<int:id>/',views.approve_id, name='approve_id'),
+    path('virtual_id_approval/reject/<int:id>/', views.reject_id, name='reject_id'),
+    # path('virtual_id_approval/reject/<int:id>/', views.reject_id, name='reject_id'),
 
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:

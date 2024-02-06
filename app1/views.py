@@ -1254,7 +1254,63 @@ def virtual_id_approval(request):
     return render(request, 'virtual_id_approval.html', context)
    
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import UserProfile
 
+def approve_id(request, id):
+    profile_to_approve = get_object_or_404(UserProfile, id=id)
+    profile_to_approve.admin_approval = True
+    profile_to_approve.save()
+    
+    messages.success(request, 'Profile approved successfully!')
+    return redirect('virtual_id_approval')
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.core.mail import send_mail
+from .models import UserProfile
 
+def reject_id(request, id):
+    if request.method == 'POST':
+        profile_to_reject = get_object_or_404(UserProfile, id=id)
+        try:
+            reason = request.POST.get('reason', 'No reason provided')
+
+            send_mail(
+                'ID Card Rejection - Profile Picture Resubmission',
+                f'Dear {profile_to_reject.user.first_name},\n\n'
+                'I hope this email finds you well. We regret to inform you that your recently requested ID card has been rejected due to ' + reason + '.\n' 
+                'We understand the importance of having a valid ID card and apologize for any inconvenience this may have caused.\n'
+                'To rectify this issue, we kindly request you to upload your profile picture once again. Please ensure that the provided image adheres to our guidelines:\n\n'
+                'Image Requirements:\n'
+                '1. Ensure the photo is clear, well-lit, and in color.\n'
+                '2. The image should be in a standard passport-style format.\n'
+                '3. Make sure your face is prominently visible without any obstructions (e.g., sunglasses, hats).\n\n'
+                '<b>File Format:</b>\n'
+                '1. Upload a JPEG or PNG file for the best quality.\n\n'
+                'Resolution:\n'
+                '1. Use a high-resolution image to ensure clarity and accuracy.\n\n'
+                'Background:\n'
+                '1. Choose a plain, neutral background for the photo.\n\n'
+                'Please follow the provided link [insert link here] to submit your profile picture. Once the re-submission is complete, our administrators will review your request promptly. Your cooperation in this matter is greatly appreciated.\n\n'
+                'If you encounter any issues during the upload process or have further questions, feel free to contact our support team at [adonaisupport@email.com].\n\n'
+                'We appreciate your prompt attention to this matter, and we assure you that our team is working diligently to resolve it.\n\n'
+                'Thank you for your cooperation and understanding.\n'
+                'Best regards,\n'
+                'President \n'
+                'SMYM Mukkoottuthara \n'
+                'Adonai',
+                'smymmukkoottuthara@gmail.com', 
+                [profile_to_reject.user.email],
+            )
+
+            profile_to_reject.delete()
+            # messages.success(request, 'Profile rejected successfully!')
+        except Exception as e:
+            messages.error(request, f'Error sending rejection email: {str(e)}')
+
+        return redirect('virtual_id_approval')
+
+    return render(request, 'virtual_id_approval.html')  # Use a separate template for the prompt
 
