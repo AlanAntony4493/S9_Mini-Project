@@ -1240,7 +1240,19 @@ def view_profile(request):
     return render(request, 'profile.html', context)
 
 
+from django.shortcuts import render
+from .models import UserProfile
 
+def virtual_id_approval(request):
+    # Retrieve user profiles that are not yet approved by the admin
+    user_profiles = UserProfile.objects.filter(admin_approval=False)
+
+    context = {
+        'user_profiles': user_profiles,
+    }
+
+    return render(request, 'virtual_id_approval.html', context)
+   
 
 
 

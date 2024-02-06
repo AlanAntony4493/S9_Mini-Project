@@ -350,7 +350,19 @@
                   </div>
             </a>
          </div> {% endcomment %}
-            
+          
+         {% if user.is_superuser %}
+
+         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+          <a href="{% url 'virtual_id_approval' %}">
+            <div class="icon-box">
+              <div class="icon"><i class="bi bi-person-badge"></i></div>
+              <h4><a href="{% url 'virtual_id_approval' %}" id="blood">Approve ID Cards</a></h4>
+              <p>Validate and authorize virtual ID card submissions</p>
+            </div>
+          </div></a> 
+          {% endif %}
+
         <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
           <a href="{% url 'blood_admin' %}">
             <div class="icon-box">

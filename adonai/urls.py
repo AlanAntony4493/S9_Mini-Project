@@ -89,6 +89,10 @@ urlpatterns = [
     # profile
     path('view_profile/', views.view_profile, name='view_profile'),
 
+
+    #admin approval for id card
+    path('virtual_id_approval/', views.virtual_id_approval, name='virtual_id_approval'),
+
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

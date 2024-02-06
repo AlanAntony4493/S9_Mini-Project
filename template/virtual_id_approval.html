@@ -1,5 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+  <div class="container mt-4">
+    <h2>Admin Approval Page</h2>
+    
+    {% for profile in user_profiles %}
+      {% if not profile.admin_approval %}
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ profile.user.get_full_name }}</h5>
+            
+            <!-- Display Profile Picture -->
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded mb-2" style="max-width: 100px; max-height: 100px;">
+            
+            <!-- Display Email -->
+            <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
+            
+            <!-- Display Phone Number -->
+            <p class="card-text"><strong>Phone Number:</strong> {{ profile.user.registration.phone_number }}</p>
+            
+            <!-- Add an approval button -->
+            <form method="post" action="{% url 'approve_user' profile.user.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Approve</button>
+            </form>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+    
+    {% if user_profiles|length == 0 %}
+      <p>No users awaiting approval.</p>
+    {% endif %}
+  </div>
 {% endblock %}
