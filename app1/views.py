@@ -1231,7 +1231,7 @@ def view_profile(request):
 
                 user_profile.profile_picture = profile_picture
                 user_profile.save()
-                return HttpResponse('Profile picture uploaded successfully.')
+                # return HttpResponse('Profile picture uploaded successfully.')
 
     context = {
         'user_profile': user_profile,
@@ -1263,7 +1263,7 @@ def approve_id(request, id):
     profile_to_approve.admin_approval = True
     profile_to_approve.save()
     
-    messages.success(request, 'Profile approved successfully!')
+    # messages.success(request, 'Profile approved successfully!')
     return redirect('virtual_id_approval')
 
 from django.shortcuts import render, redirect, get_object_or_404

@@ -1,11 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  .approve-link,
+.reject-link {
+  display: inline-block;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #007BFF; /* Border color for the button */
+  background-color: #007BFF; /* Background color for the button */
+  color: #ffffff; /* Text color for the button */
+  border-radius: 4px; /* Rounded corners for the button */
+}
+
+.reject-link {
+  border-color: #dc3545; /* Border color for the rejection button */
+  background-color: #dc3545; /* Background color for the rejection button */
+}
+
+</style>
   <div class="container mt-4">
     <h2>Admin Approval Page</h2>
     {% if user_profiles %}
     {% for profile in user_profiles %}
-    <div class="card mt-3">
+    <div class="card mb-3">
       <div class="card-body">
         <h5 class="card-title">{{ profile.user.get_full_name }}</h5>
         
@@ -27,30 +47,6 @@
 {% else %}
   <p>No user profiles awaiting approval.</p>
 {% endif %}
-    {% comment %} {% for profile in user_profiles %}
-      {% if not profile.admin_approval %}
-        <div class="card mt-3">
-          <div class="card-body">
-            <h5 class="card-title">{{ profile.user.get_full_name }}</h5>
-            
-            <!-- Display Profile Picture -->
-            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded mb-2" style="max-width: 100px; max-height: 100px;">
-            
-            <!-- Display Email -->
-            <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
-            
-            <!-- Display Phone Number -->
-            <p class="card-text"><strong>Phone Number:</strong> {{ profile.user.registration.phone_number }}</p>
-            
-            <!-- Add an approval button -->
-            <form method="post" action="{% url 'approve_id' profile.user.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-success">Approve</button>
-            </form>
-          </div>
-        </div>
-      {% endif %}
-    {% endfor %} {% endcomment %}
     <script>
         function rejectProfile(profileId) {
           var reason = prompt("Enter the reason for rejection:");

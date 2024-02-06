@@ -124,6 +124,14 @@
   td:first-child {
     font-weight: bold;
   }
+  #viewGuidelinesBtn {
+    float: right;
+    margin-top: 3px;
+    margin-bottom:10px;
+    border: none;
+    background-color: red;
+    color:white;
+  }
 </style>
 
 <section class="inner-page">
@@ -147,11 +155,12 @@
                 {% csrf_token %}
                 <input type="file" name="profile_picture" accept="image/*" class="form-control" onchange="this.form.submit()">
               </form>
+              <button class="" id="viewGuidelinesBtn">View Guidelines</button>
               {% endif %}
             </div>
 
             <!-- Display other profile information here -->
-            <hr>
+           
             <table style="text-align:left;"> 
               <tr>
                 <td>Full Name</td>
@@ -251,7 +260,24 @@
       // Toggle the state
       isProfileVisible = !isProfileVisible;
     });
+
+  $("#viewGuidelinesBtn").click(function () {
+    var guidelinesMessage = 'Image Requirements:\n' +
+                            '1. Ensure the photo is clear, well-lit, and in color.\n' +
+                            '2. The image should be in a standard passport-style format.\n' +
+                            '3. Make sure your face is prominently visible without any obstructions (e.g., sunglasses, hats).\n\n' +
+                            'File Format:\n' +
+                            '1. Upload a JPEG or PNG file for the best quality.\n\n' +
+                            'Resolution:\n' +
+                            '1. Use a high-resolution image to ensure clarity and accuracy.\n\n' +
+                            'Background:\n' +
+                            '1. Choose a plain, neutral background for the photo.\n';
+
+    // Display the guidelines in an alert box
+    alert(guidelinesMessage);
+    });
   });
+
 </script>
 
 <script>
