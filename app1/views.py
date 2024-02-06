@@ -776,6 +776,7 @@ def profile(request):
 
 
 
+
 # career 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -1218,9 +1219,6 @@ def view_profile(request):
         user_profile = UserProfile(user=request.user)
         user_profile.save()
 
-    success_message = None
-    error_message = None
-
     if request.method == 'POST':
         # Check if the user already has a profile picture
         if not user_profile.profile_picture:
@@ -1229,20 +1227,17 @@ def view_profile(request):
             if profile_picture:
                 # Ensure that the uploaded file is an image
                 if not profile_picture.content_type.startswith('image'):
-                    error_message = 'Invalid file type. Please upload an image.'
-                else:
-                    user_profile.profile_picture = profile_picture
-                    user_profile.save()
-                    success_message = 'Profile picture uploaded successfully.'
+                    return HttpResponse('Invalid file type. Please upload an image.', status=400)
+
+                user_profile.profile_picture = profile_picture
+                user_profile.save()
+                return HttpResponse('Profile picture uploaded successfully.')
 
     context = {
         'user_profile': user_profile,
-        'success_message': success_message,
-        'error_message': error_message,
     }
 
     return render(request, 'profile.html', context)
-
 
 
 
