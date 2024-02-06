@@ -326,7 +326,7 @@
                       <li><a class="nav-link scrollto" href="{% url 'user_admin' %}">Users</a></li>
                       <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
                   {% elif user.is_authenticated %}
-                      <li><a class="nav-link scrollto" href="{% url 'profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
+                      <li><a class="nav-link scrollto" href="{% url 'view_profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
                       <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out</a></li>
                   {% else %}
                       <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
