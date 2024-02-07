@@ -571,7 +571,7 @@ def report_admin(request):
     selected_year = request.GET.get('selected_year')  # Get the selected year
 
     if request.method == 'POST':
-        if request.user.is_staff:  # Check if the user is a staff member (admin)
+        if request.user.registration.is_media_manager:  # Check if the user is a staff member (admin)
             heading = request.POST.get('heading')
             report_text = request.POST.get('report')
             date = request.POST.get('date')

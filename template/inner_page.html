@@ -82,6 +82,24 @@
                 <li><a href="{% url "index" %}#services">Services</a></li>
                 <li><a href="{% url "index" %}#about">About</a></li>
                 <li><a href="{% url "index" %}#contact">Contact</a></li>
+                {% if user.is_superuser %}
+                <li><a class="nav-link scrollto" id="logout" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
+                
+                {% elif user.registration.is_media_manager %}
+                <li><a class="nav-link scrollto" href="{% url 'view_profile' %}"><i class="bi bi-person-circle"></i>&nbsp;Profile</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out ({{ user.first_name }})</a></li>
+                
+            
+                {% elif user.is_authenticated %}
+            <li><a class="nav-link scrollto" href="{% url 'view_profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
+            <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/" onclick="clearHistory()" id="logout-button"">Log Out ({{ user.first_name }})</a></li>
+            
+            
+            
+            {% else %}
+
+                <li><a class="nav-link scrollto" id="login" href="{% url 'login' %}">Log In</a></li>
+            {% endif %}
               </ul>
             </nav>
           </div>
@@ -90,16 +108,13 @@
             <div class="d-none d-xl-inline-block">
               <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
                 <li>
-                  <a href="#" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                  <a href="https://www.facebook.com/SMYM.Mukkoottuthara?mibextid=ZbWKwL" target="_blank" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
                 </li>
                 <li>
-                  <a href="#" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                  <a href="https://www.instagram.com/smymmukkoottuthara?igsh=anB1MTVwcWNma2c=" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
                 </li>
                 <li>
-                  <a href="#" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
-                </li>
-                <li>
-                  <a href="#" class="pl-3 pr-3"><span class="icon-youtube-play"></span></a>
+                  <a href="https://www.youtube.com/@SMYMMukkoottuthara" class="pl-3 pr-3"><span class="icon-youtube-play"></span></a>
                 </li>
               </ul>
             </div>
@@ -125,13 +140,13 @@
           </div>
         </div>
 
-        {% if  user.is_superuser %}
+        {% if  user.registration.is_media_manager %}
         <div class="row">
           <div class="col-lg-4" style="height: 250px; width: 250px;">
             <div class="image-wrap-2">
               <div class="image-info">
                 <h2 class="mb-3" style="color:red;">Add Images</h2>
-                <button type="button" class="btn btn-outline-white py-2 px-4" data-toggle="modal" data-target="#addImageModal">Add Images</button>
+                <button type="button" style="color:black;" class="btn btn-outline-white py-2 px-4" data-toggle="modal" data-target="#addImageModal">Add Images</button>
               </div>
             </div>
           </div>

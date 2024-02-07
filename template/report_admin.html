@@ -327,7 +327,7 @@
                       <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out ({{ user.username }})</a></li>
                   {% elif user.is_authenticated %}
                       <li><a class="nav-link scrollto" href="{% url 'view_profile' %}"><i class="bi bi-person-circle"></i>&nbsp;My Profile</a></li>
-                      <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out</a></li>
+                      <li><a class="nav-link scrollto" href="{% url 'logout' %}?next=/">Log Out({{ user.first_name }})</a></li>
                   {% else %}
                       <li><a class="nav-link scrollto" href="{% url 'login' %}">Log In</a></li>
                   {% endif %}
@@ -413,7 +413,7 @@
 
           {% if user.registration.is_media_manager %}
 
-          <button onclick="generatePDF()" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 128px;">Generate PDF</button>
+          <button onclick="generatePDF()" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 128px;">Generate PDF For Current Year</button>
 
           {% endif %}
           <script>
@@ -470,7 +470,7 @@
           {% if user.registration.is_media_manager %}
 
           <!-- Generate PDF Button for Archived Reports -->
-          <button onclick="generateArchivedPDF()" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 128px;margin-top:10px;">Generate PDF</button>
+          <button onclick="generateArchivedPDF()" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 128px;margin-top:10px;">Generate PDF For Selected Year</button>
           
           {% endif %}
       
