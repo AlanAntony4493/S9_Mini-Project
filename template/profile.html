@@ -150,12 +150,13 @@
               <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle avatar">
               {% else %}
               <!-- Display Profile Picture Upload Form -->
-              <h5 class="card-title">Upload Profile Picture</h5>
+              <h5 class="card-title">Upload Profile Picture*</h5>
               <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="profile_picture" accept="image/*" class="form-control" onchange="this.form.submit()">
               </form>
-              <button class="" id="viewGuidelinesBtn">View Guidelines</button>
+              <p style="font-size:smaller;">*</p>
+              <button class="" id="viewGuidelinesBtn" style="margin-top:5px;">View Guidelines</button>
               {% endif %}
             </div>
 

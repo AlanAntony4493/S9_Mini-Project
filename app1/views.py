@@ -1260,17 +1260,56 @@ def virtual_id_approval(request):
     return render(request, 'virtual_id_approval.html', context)
    
 
+# from django.shortcuts import render, redirect, get_object_or_404
+# from django.contrib import messages
+# from .models import UserProfile
+
+# def approve_id(request, id):
+#     profile_to_approve = get_object_or_404(UserProfile, id=id)
+#     profile_to_approve.admin_approval = True
+#     profile_to_approve.save()
+    
+#     # messages.success(request, 'Profile approved successfully!')
+#     return redirect('virtual_id_approval')
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.core.mail import send_mail
 from .models import UserProfile
 
 def approve_id(request, id):
     profile_to_approve = get_object_or_404(UserProfile, id=id)
     profile_to_approve.admin_approval = True
     profile_to_approve.save()
-    
-    # messages.success(request, 'Profile approved successfully!')
+
+    # Compose email for successful approval
+    try:
+        send_mail(
+            subject='Congratulations! Your ID Card Approval is Confirmed',
+            message=f'Dear {profile_to_approve.user.first_name},\n\n'
+            'Congratulations! We are pleased to inform you that your requested ID card has been approved successfully.\n\n' 
+            'To view your ID card, please log in to the website and navigate to: Home => My Profile => View ID Card.\n\n'
+            'Should you have any questions or require further assistance, please don’t hesitate to reach out to our dedicated support team at [adonaisupport@email.com].\n\n'
+            'Thank you for choosing Adonai.\n\n'
+            'Best regards,\n'
+            'President\n'
+            'SMYM Mukkoottuthara\n'
+            'Adonai',
+            from_email='smymmukkoottuthara@gmail.com',
+            recipient_list=[profile_to_approve.user.email],
+        )
+
+        
+        # messages.success(request, 'Profile approved successfully!')
+    except Exception as e:
+        messages.error(request, f'Error sending approval email: {str(e)}')
+
     return redirect('virtual_id_approval')
+
+
+
+
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
