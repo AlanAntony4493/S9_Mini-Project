@@ -243,3 +243,22 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+
+
+
+# ###### Executive -image and details on index page ##########
+
+
+from django.db import models
+
+class Executives(models.Model):
+    name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=12)
+    email = models.EmailField()
+    position = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='executive_images/', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
