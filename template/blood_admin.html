@@ -185,6 +185,25 @@
     background-color:#b3d8ff; 
 }
 
+
+.search-container {
+  width: 40%;
+  margin-left: 40%;
+  margin-top:27px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+#input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 3px solid blue; /* Border color and thickness */
+  border-radius: 20px; /* Border radius for a rounded shape */
+}
   </style>
 
 </head>
@@ -258,7 +277,7 @@
     <div class="filter-container" style="max-width: 200px; margin: 20px 20px 20px 40px; float: left;">
       <p>Filter by Blood Group</p>
       <div class="form-group">
-          <select id="filter-blood-group-select" onchange="filterDonors()">
+          <select id="filter-blood-group-select" onchange="filterDonors()" >
               <option value="" selected>Show All</option>
               <option value="A+">A+</option>
               <option value="A-">A-</option>
@@ -272,45 +291,53 @@
       </div>
   </div>
 
-  {% comment %} table display {% endcomment %}
-    <table>
-      <thead>
-          <tr>
+  <!-- Add this input field for live searching -->
+  <div class="search-container">
+    <label for="search">Search by Name:</label>
+    <input id="input" type="text" id="search" oninput="liveSearch()" placeholder="Type to search...">
+  </div>
+
+  <table>
+    <thead>
+        <tr>
+            <th>S.No</th>
             <th>Name</th>
-            <th>Age</th>
             <th>Gender</th>
+            <th>Age</th>
             <th>Blood Group</th>
             <th>Contact</th>
             {% if user.registration.is_media_manager %}
             <th>Actions</th>
             {% endif %}
-          </tr>
-      </thead>
-      <tbody id="donor-table">
+        </tr>
+    </thead>
+    <tbody id="donor-table">
         {% for donor in donors %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ donor.name }}</td>
-                <td>{{ donor.age }}</td>
                 <td>{{ donor.get_gender_display }}</td>
+                <td>{{ donor.age }}</td>
                 <td>{{ donor.get_blood_group_display }}</td>
                 <td>{{ donor.contact }}</td>
                 {% if user.registration.is_media_manager %}
                 <td>
-                  <form method="post" action="{% url 'soft_delete_donor' donor.id %}">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this donor?')" style="border: none; background: none;">
-                      <i class="fa fa-trash-o" style="font-size: 24px;"></i>
-                  </button>
-                  </form>
+                    <form method="post" action="{% url 'soft_delete_donor' donor.id %}">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this donor?')" style="border: none; background: none;">
+                            <i class="fa fa-trash-o" style="font-size: 24px;"></i>
+                        </button>
+                    </form>
                 </td>
                 {% endif %}
             </tr>
         {% endfor %}
         <tr id="no-results" style="display: none;">
-          <td colspan="6">Sorry, no donors with the searched blood group found.</td>
+            <td colspan="7">Sorry, no donors with the searched blood group found.</td>
         </tr>
     </tbody>
-    </table>
+</table>
+
 
 {% if user.registration.is_media_manager %}
 
@@ -492,6 +519,35 @@ function filterDonors() {
   }
 });
 </script>
+
+
+<!-- Updated script for more flexible live searching -->
+<script>
+  function liveSearch() {
+      var input, filter, table, tbody, tr, td, i, txtValue;
+      input = document.getElementById("search");
+      filter = input.value.toUpperCase().replace(/\s/g, ''); // Remove spaces from the filter
+      table = document.querySelector("table");
+      tbody = table.getElementsByTagName("tbody");
+      tr = tbody[0].getElementsByTagName("tr");
+
+      for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[1]; // Assuming the second column (index 1) is the Name column
+
+          if (td) {
+              txtValue = td.textContent || td.innerText;
+              txtValue = txtValue.replace(/\s/g, ''); // Remove spaces from the name for comparison
+
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                  tr[i].style.display = "";
+              } else {
+                  tr[i].style.display = "none";
+              }
+          }
+      }
+  }
+</script>
+
 
 
 </body>

@@ -805,7 +805,7 @@ if (initialRetrieveErrorMessage) {
 <!-- Add this script section for live search -->
 <script>
   document.getElementById("liveSearchInput").addEventListener("input", function() {
-      var input = this.value.toLowerCase();
+      var input = this.value.toLowerCase().replace(/\s/g, ''); // Remove spaces from input
       var tbody = document.getElementById("parish-directory-table");
       var rows = tbody.getElementsByTagName("tr");
 
@@ -814,7 +814,7 @@ if (initialRetrieveErrorMessage) {
           var matchFound = false;
 
           for (var j = 1; j < cells.length; j++) {  // Start from 1 to skip the first column (Serial Number)
-              var cellText = cells[j].innerText.toLowerCase();
+              var cellText = cells[j].innerText.toLowerCase().replace(/\s/g, ''); // Remove spaces from cell text
               if (cellText.includes(input)) {
                   matchFound = true;
                   break;
@@ -825,6 +825,7 @@ if (initialRetrieveErrorMessage) {
       }
   });
 </script>
+
 
 
 </body>
