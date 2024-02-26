@@ -155,9 +155,11 @@
   /* CSS for the filter container */
 .filter-container {
     max-width: 200px;
-    margin: 20px 20px 20px 40px;
+    margin: 0 60px 5px 40px;
     float: left;
+    margin-left: 75%;
 }
+
 
 .filter-container p {
     font-weight: bold;
@@ -167,9 +169,11 @@
 .filter-container .form-group select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    {% comment %} border: 1px solid #ccc;
+    border-radius: 4px; {% endcomment %}
     font-size: 16px;
+    border: 3px solid blue; 
+    border-radius: 15px;
 }
 
 /* Style for the selected option in the filter dropdown */
@@ -190,7 +194,7 @@
     color: #ccc;
 }
 section {
-  padding: 19px 0;
+  padding: 10px 0;
   overflow: hidden;
 }
 /* Custom CSS for the Delete Button */
@@ -244,6 +248,32 @@ section {
 /* Hover effect */
 .update-button:hover {
     background-color: #0056b3; /* Darker blue on hover */
+}
+
+#liveSearchInput {
+  width: 40%;
+  padding: 10px;
+  margin: 10px 0 10px 39px;
+  border: 2px solid #007BFF; /* Solid blue border */
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: #e6f7ff; /* Light blue background color */
+  background-image: url('path-to-search-icon.png');
+  background-size: 20px;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding-left: 40px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+#liveSearchInput:hover {
+  background-color: #cfe9ff; /* Darker version of the default background color on hover */
+}
+
+#liveSearchInput:focus {
+  outline: none;
+  border-color: #0056b3; /* Darker blue border color on focus */
+  background-color: #fff; /* White background color on focus */
 }
 
   </style>
@@ -423,7 +453,16 @@ section {
           </div>
         </section>
         <!-- End Breadcrumbs -->
+      
+      <!-- Parish Directory -->
+
+      <!-- Add this input field for live search -->
+      {% comment %} <input type="text" id="liveSearchInput" placeholder="Search by Name, House Name, or Phone Number"> {% endcomment %}
+
+      
+
       <section style="margin-bottom: 0px !important;">
+        
         <div class="filter-container" style="max-width: 200px; margin-bottom:0; float: left;">
           <p>Filter by Prayer Group</p>
           <div class="form-group">
@@ -434,9 +473,11 @@ section {
                   {% endfor %}
               </select>
           </div>
+          
       </div>
+      <input type="text" id="liveSearchInput" placeholder="&#128269; Search by Name, House Name, or Phone Number">
       </section>
-      <!-- Parish Directory -->
+      
       <section id="parish-directory" style="margin-top:0px !important;">
         {% block content %}
           <table class="table">
@@ -759,6 +800,32 @@ if (initialRetrieveErrorMessage) {
 
 
 </script>
+
+
+<!-- Add this script section for live search -->
+<script>
+  document.getElementById("liveSearchInput").addEventListener("input", function() {
+      var input = this.value.toLowerCase();
+      var tbody = document.getElementById("parish-directory-table");
+      var rows = tbody.getElementsByTagName("tr");
+
+      for (var i = 0; i < rows.length; i++) {
+          var cells = rows[i].getElementsByTagName("td");
+          var matchFound = false;
+
+          for (var j = 1; j < cells.length; j++) {  // Start from 1 to skip the first column (Serial Number)
+              var cellText = cells[j].innerText.toLowerCase();
+              if (cellText.includes(input)) {
+                  matchFound = true;
+                  break;
+              }
+          }
+
+          rows[i].style.display = matchFound ? "" : "none";
+      }
+  });
+</script>
+
 
 </body>
 
