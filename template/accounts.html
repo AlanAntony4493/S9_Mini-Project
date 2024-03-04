@@ -163,7 +163,7 @@
     </tfoot>
 </table>
 
-
+{% if user.registration.is_accounted_user %}
     <form id="transactionForm" method="post" action="{% url 'add_transaction' %}">
         {% csrf_token %}
         <h2>ADD TRANSACTIONS</h2>
@@ -208,6 +208,7 @@
 
         <button type="submit">Add Transaction</button>
     </form>
+ {% endif %}
 
     <script>
         function handleDescriptionChange() {
