@@ -294,8 +294,9 @@ label {
   <!-- Add this input field for live searching -->
   <div class="search-container">
     <label for="search">Search by Name:</label>
-    <input id="input" type="text" id="search" oninput="liveSearch()" placeholder="Type to search...">
+    <input id="search" type="text" oninput="liveSearch()" placeholder="Type to search...">
   </div>
+
 
   <table>
     <thead>
@@ -520,35 +521,32 @@ function filterDonors() {
 });
 </script>
 
-
 <!-- Updated script for more flexible live searching -->
 <script>
-  function liveSearch() {
-      var input, filter, table, tbody, tr, td, i, txtValue;
-      input = document.getElementById("search");
-      filter = input.value.toUpperCase().replace(/\s/g, ''); // Remove spaces from the filter
-      table = document.querySelector("table");
-      tbody = table.getElementsByTagName("tbody");
-      tr = tbody[0].getElementsByTagName("tr");
+function liveSearch() {
+  var input, filter, table, tbody, tr, td, i, txtValue;
+  input = document.getElementById("search");
+  filter = input.value.toUpperCase().replace(/\s/g, ''); // Remove spaces from the filter
+  table = document.querySelector("table");
+  tbody = table.getElementsByTagName("tbody");
+  tr = tbody[0].getElementsByTagName("tr");
 
-      for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[1]; // Assuming the second column (index 1) is the Name column
+  for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1]; // Assuming the second column (index 1) is the Name column
 
-          if (td) {
-              txtValue = td.textContent || td.innerText;
-              txtValue = txtValue.replace(/\s/g, ''); // Remove spaces from the name for comparison
+      if (td) {
+          txtValue = td.textContent || td.innerText;
+          txtValue = txtValue.replace(/\s/g, ''); // Remove spaces from the name for comparison
 
-              if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                  tr[i].style.display = "";
-              } else {
-                  tr[i].style.display = "none";
-              }
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+          } else {
+              tr[i].style.display = "none";
           }
       }
   }
+}
 </script>
-
-
 
 </body>
 

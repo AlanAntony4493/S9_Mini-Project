@@ -96,6 +96,9 @@ urlpatterns = [
     path('virtual_id_approval/reject/<int:id>/', views.reject_id, name='reject_id'),
     # path('virtual_id_approval/reject/<int:id>/', views.reject_id, name='reject_id'),
 
+    # Accountant
+    path('accounts/', views.accounts, name='accounts'),
+
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

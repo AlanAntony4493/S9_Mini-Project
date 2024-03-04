@@ -1359,3 +1359,10 @@ def reject_id(request, id):
 
     return render(request, 'virtual_id_approval.html')  # Use a separate template for the prompt
 
+
+
+
+# Account user
+
+def accounts(request):
+    return render(request, 'accounts.html')
