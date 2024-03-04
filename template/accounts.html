@@ -121,6 +121,7 @@
     <table id="transactionTable">
         <thead>
             <tr>
+                <th>Sl.No</th>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Credit</th>
@@ -129,22 +130,25 @@
             </tr>
         </thead>
         <tbody>
-           {% for transaction in transactions %}
-    <tr>
-        <td>{{ transaction.date }}</td>
-        <td>{{ transaction.description }}</td>
-        <td>{{ transaction.credit }}</td>
-        <td>{{ transaction.debit }}</td>
-        <td>{{ transaction.bill_number }}</td>
-    </tr>
-{% endfor %}
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>{{ transaction.credit }}</td>
+                    <td>{{ transaction.debit }}</td>
+                    <td>{{ transaction.bill_number }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
+        
         <tfoot>
             <tr>
                 <td><strong>Total:</strong></td>
                 <td></td>
-                <td id="totalCredit">0</td>
-                <td id="totalDebit">0</td>
+                <td></td>
+                <td id="totalCredit">{{ total_credit }}</td>
+                <td id="totalDebit">{{ total_debit }}</td>
                 <td></td>
             </tr>
         </tfoot>
@@ -206,18 +210,34 @@
         }
         
         function validateCreditDebit() {
-            var credit = document.getElementById('credit').value;
-            var debit = document.getElementById('debit').value;
-
-            if (credit !== '') {
-                document.getElementById('debit').disabled = true;
-            } else if (debit !== '') {
-                document.getElementById('credit').disabled = true;
+            var creditInput = document.getElementById('credit');
+            var debitInput = document.getElementById('debit');
+        
+            var credit = parseFloat(creditInput.value);
+            var debit = parseFloat(debitInput.value);
+        
+            if (isNaN(credit) || credit < 0) {
+                // Invalid or negative credit value
+                creditInput.value = '';
+                credit = 0;
+            }
+        
+            if (isNaN(debit) || debit < 0) {
+                // Invalid or negative debit value
+                debitInput.value = '';
+                debit = 0;
+            }
+        
+            if (credit !== 0) {
+                debitInput.disabled = true;
+            } else if (debit !== 0) {
+                creditInput.disabled = true;
             } else {
-                document.getElementById('credit').disabled = false;
-                document.getElementById('debit').disabled = false;
+                creditInput.disabled = false;
+                debitInput.disabled = false;
             }
         }
+        
 
         function validateTransactionDate() {
             var dateInput = document.getElementById('date');

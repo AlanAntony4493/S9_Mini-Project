@@ -1366,27 +1366,33 @@ from .models import Transaction
 from datetime import datetime
 
 def accounts(request):
-    # Get the current year
+    # Get the current year and month
     current_year = datetime.now().year
+    current_month = datetime.now().month
 
-    # Fetch transactions for the current year from the database
-    transactions = Transaction.objects.filter(date__year=current_year)
+    # Fetch transactions for the current year and month from the database
+    transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
 
-    # Pass the transactions to the template
-    context = {'transactions': transactions}
+    # Calculate total credit and debit for the current month
+    total_credit = transactions.aggregate(Sum('credit'))['credit__sum'] or 0
+    total_debit = transactions.aggregate(Sum('debit'))['debit__sum'] or 0
+
+    # Pass the transactions and total values to the template
+    context = {
+        'transactions': transactions,
+        'total_credit': total_credit,
+        'total_debit': total_debit,
+    }
     return render(request, 'accounts.html', context)
-
-
-
 
 from django.shortcuts import render, redirect
 from .models import Transaction
 from django.views.decorators.http import require_POST
+from django.db.models import Sum  # Import Sum from django.db.models
 
 def transaction_list(request):
     transactions = Transaction.objects.all()
     return render(request, 'accounts.html', {'transactions': transactions})
-
 
 @require_POST
 def add_transaction(request):
@@ -1410,7 +1416,14 @@ def add_transaction(request):
 
     # Perform any additional logic if needed
 
-    # Fetch all transactions to display on the same page
-    transactions = Transaction.objects.all()
+    # Fetch all transactions for the current month to display on the same page
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+    transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
 
-    return render(request, 'accounts.html', {'transactions': transactions})
+    # Calculate total credit and debit for the current month
+    total_credit = transactions.aggregate(Sum('credit'))['credit__sum'] or 0
+    total_debit = transactions.aggregate(Sum('debit'))['debit__sum'] or 0
+
+    return render(request, 'accounts.html', {'transactions': transactions, 'total_credit': total_credit, 'total_debit': total_debit})
+
