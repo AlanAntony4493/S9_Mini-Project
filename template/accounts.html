@@ -29,7 +29,8 @@
             margin-bottom: 8px;
         }
     
-        #transactionForm input {
+        #transactionForm input
+         {
             width: calc(100% - 10px);
             padding: 10px;
             margin-bottom: 15px;
@@ -101,6 +102,14 @@
             color: #007bff;
             font-family: 'Helvetica', sans-serif;
         }
+        .desc{
+            width: calc(100% - 10px);
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
     </style>
     
 </head>
@@ -117,42 +126,43 @@
 </section>
 <!-- End Breadcrumbs -->
 
-    <!-- Transaction Table -->
-    <table id="transactionTable">
-        <thead>
+<!-- Transaction Table -->
+<table id="transactionTable">
+    <thead>
+        <tr>
+            <th>Sl.No</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Credit</th>
+            <th>Debit</th>
+            <th>Bill/Invoice Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions|dictsort:"date" %}
             <tr>
-                <th>Sl.No</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Credit</th>
-                <th>Debit</th>
-                <th>Bill/Invoice Number</th>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.description }}{% if transaction.specify_transaction %} - {{ transaction.specify_transaction }}{% endif %}</td>
+                <td>{{ transaction.credit }}</td>
+                <td>{{ transaction.debit }}</td>
+                <td>{{ transaction.bill_number }}</td>
             </tr>
-        </thead>
-        <tbody>
-            {% for transaction in transactions %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.description }}</td>
-                    <td>{{ transaction.credit }}</td>
-                    <td>{{ transaction.debit }}</td>
-                    <td>{{ transaction.bill_number }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        
-        <tfoot>
-            <tr>
-                <td><strong>Total:</strong></td>
-                <td></td>
-                <td></td>
-                <td id="totalCredit">{{ total_credit }}</td>
-                <td id="totalDebit">{{ total_debit }}</td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
+        {% endfor %}
+    </tbody>
+    
+    <tfoot>
+        <tr>
+            <td><strong>Total:</strong></td>
+            <td></td>
+            <td></td>
+            <td id="totalCredit">{{ total_credit }}</td>
+            <td id="totalDebit">{{ total_debit }}</td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
 
     <form id="transactionForm" method="post" action="{% url 'add_transaction' %}">
         {% csrf_token %}
@@ -160,20 +170,25 @@
         <label for="date">Date:</label>
         <input type="date" id="date" onchange="validateTransactionDate()" required placeholder="Select date" name="date">
 
-        <label for="description">Description:</label>
-        <select id="description" onchange="handleDescriptionChange()" required name="description">
-            <option value="" disabled selected>Select Description</option>
+        <label for="description">Category:</label>
+        <select id="description" class="desc" onchange="handleDescriptionChange()" required name="description">
+            <option value="" disabled selected>Select Category</option>
             <option value="Food">Food</option>
-            <option value="Groceries">Groceries</option>
+            <option value="Groceries">Stationaries</option>
             <option value="perunnal">Perunnal</option>
             <option value="carol">Carol</option>
             <option value="christmas_tree">Christmas Tree</option>
+            <option value="bank">Bank</option>
+            <option value="bank">Donation</option>
+            <option value="bank">Church</option>
+            <option value="bank">Pilgrimage</option>
+            <option value="bank">Fuel</option>
             <option value="Other">Other</option>
         </select>
 
         <div id="specifyTransactionDiv">
-            <label for="specifyTransaction">Specify Transaction:</label>
-            <input type="text" id="specifyTransaction" placeholder="Enter transaction details" name="specifyTransaction" required>
+            <label for="specifyTransaction">Description:</label>
+            <input type="text" id="specifyTransaction" placeholder="Enter the description" name="specifyTransaction" required>
         </div>
 
         <div style="display: flex; gap: 10px;">
