@@ -1362,6 +1362,7 @@ def reject_id(request, id):
 
 
 from django.shortcuts import render
+from django.db.models import Sum
 from .models import Transaction
 from datetime import datetime
 
@@ -1370,20 +1371,34 @@ def accounts(request):
     current_year = datetime.now().year
     current_month = datetime.now().month
 
-    # Fetch transactions for the current year and month from the database
-    transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
+    # Fetch distinct months with transactions
+    months_with_transactions = Transaction.objects.dates('date', 'month', order='DESC').distinct()
 
-    # Calculate total credit and debit for the current month
+    # Handle the selected month from the form
+    selected_month = request.GET.get('month', None)
+    
+    if selected_month:
+        # Parse the selected month and filter transactions accordingly
+        selected_month = datetime.strptime(selected_month, '%Y-%m')
+        transactions = Transaction.objects.filter(date__year=selected_month.year, date__month=selected_month.month)
+    else:
+        # Fetch transactions for the current year and month by default
+        transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
+
+    # Calculate total credit and debit for the selected or current month
     total_credit = transactions.aggregate(Sum('credit'))['credit__sum'] or 0
     total_debit = transactions.aggregate(Sum('debit'))['debit__sum'] or 0
 
-    # Pass the transactions and total values to the template
+    # Pass the transactions, total values, and month options to the template
     context = {
         'transactions': transactions,
         'total_credit': total_credit,
         'total_debit': total_debit,
+        'months': [(month.strftime('%Y-%m'), month.strftime('%B %Y')) for month in months_with_transactions],
+        'selected_month': selected_month.strftime('%Y-%m') if selected_month else None,
     }
     return render(request, 'accounts.html', context)
+
 
 from django.shortcuts import render, redirect
 from .models import Transaction
@@ -1414,8 +1429,6 @@ def add_transaction(request):
         bill_number=bill_number
     )
 
-    # Perform any additional logic if needed
-
     # Fetch all transactions for the current month to display on the same page
     current_year = datetime.now().year
     current_month = datetime.now().month
@@ -1425,5 +1438,19 @@ def add_transaction(request):
     total_credit = transactions.aggregate(Sum('credit'))['credit__sum'] or 0
     total_debit = transactions.aggregate(Sum('debit'))['debit__sum'] or 0
 
-    return render(request, 'accounts.html', {'transactions': transactions, 'total_credit': total_credit, 'total_debit': total_debit})
+    # Fetch distinct months with transactions
+    months_with_transactions = Transaction.objects.dates('date', 'month', order='DESC').distinct()
+
+    # Handle the selected month from the form
+    selected_month = request.GET.get('month', None)
+    
+    if selected_month:
+        # Parse the selected month and filter transactions accordingly
+        selected_month = datetime.strptime(selected_month, '%Y-%m')
+        transactions = Transaction.objects.filter(date__year=selected_month.year, date__month=selected_month.month)
+    else:
+        # Fetch transactions for the current year and month by default
+        transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
+
+    return render(request, 'accounts.html', {'transactions': transactions, 'total_credit': total_credit, 'total_debit': total_debit, 'months': [(month.strftime('%Y-%m'), month.strftime('%B %Y')) for month in months_with_transactions], 'selected_month': selected_month.strftime('%Y-%m') if selected_month else None})
 

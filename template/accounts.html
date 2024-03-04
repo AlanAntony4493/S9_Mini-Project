@@ -110,6 +110,48 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        /* Style for the form container */
+#monthFilterForm {
+    margin-top: 20px;
+    margin-left: 10%;
+}
+
+/* Style for the label */
+#monthFilterForm label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* Style for the select dropdown */
+#monthFilter {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style for the selected option */
+#monthFilter option[selected] {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Style for the form submit button (if needed) */
+#monthFilterForm button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#monthFilterForm button:hover {
+    background-color: #0056b3;
+}
+
     </style>
     
 </head>
@@ -125,6 +167,27 @@
     </div>
 </section>
 <!-- End Breadcrumbs -->
+
+
+<!-- Add the following code before the table -->
+
+<form id="monthFilterForm" method="get" action="{% url 'accounts' %}">
+    <label for="monthFilter">Select Month:</label>
+    <select id="monthFilter" name="month" onchange="submitMonthFilter()">
+        {% for month in months %}
+            <option value="{{ month.0 }}" {% if month.0 == selected_month %}selected{% endif %}>
+                {{ month.1 }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<script>
+    function submitMonthFilter() {
+        document.getElementById('monthFilterForm').submit();
+    }
+</script>
+
 
 <!-- Transaction Table -->
 <table id="transactionTable">
@@ -164,12 +227,12 @@
 </table>
 
 {% if user.registration.is_accounted_user %}
-    <form id="transactionForm" method="post" action="{% url 'add_transaction' %}">
+<form id="transactionForm" method="post" action="{% url 'add_transaction' %}">
         {% csrf_token %}
         <h2>ADD TRANSACTIONS</h2>
         <label for="date">Date:</label>
-        <input type="date" id="date" onchange="validateTransactionDate()" required placeholder="Select date" name="date">
-
+        <input type="date" id="date"  required placeholder="Select date" name="date">
+    {% comment %} onchange="validateTransactionDate()" {% endcomment %}
         <label for="description">Category:</label>
         <select id="description" class="desc" onchange="handleDescriptionChange()" required name="description">
             <option value="" disabled selected>Select Category</option>
