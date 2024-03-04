@@ -262,3 +262,21 @@ class Executives(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# #### Accounts ########
+    
+    # YourApp/models.py
+
+from django.db import models
+
+class Transaction(models.Model):
+    date = models.DateField()
+    description = models.CharField(max_length=255)
+    specify_transaction = models.CharField(max_length=255, blank=True, null=True)
+    credit = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    debit = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    bill_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.date} - {self.description}"

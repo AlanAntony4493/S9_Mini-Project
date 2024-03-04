@@ -1361,8 +1361,56 @@ def reject_id(request, id):
 
 
 
-
-# Account user
+from django.shortcuts import render
+from .models import Transaction
+from datetime import datetime
 
 def accounts(request):
-    return render(request, 'accounts.html')
+    # Get the current year
+    current_year = datetime.now().year
+
+    # Fetch transactions for the current year from the database
+    transactions = Transaction.objects.filter(date__year=current_year)
+
+    # Pass the transactions to the template
+    context = {'transactions': transactions}
+    return render(request, 'accounts.html', context)
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import Transaction
+from django.views.decorators.http import require_POST
+
+def transaction_list(request):
+    transactions = Transaction.objects.all()
+    return render(request, 'accounts.html', {'transactions': transactions})
+
+
+@require_POST
+def add_transaction(request):
+    date = request.POST.get('date')
+    description = request.POST.get('description')
+    specify_transaction = request.POST.get('specifyTransaction')
+    credit = request.POST.get('credit')
+    debit = request.POST.get('debit')
+    bill_number = request.POST.get('billNumber')
+
+    # Perform any additional validation if needed
+
+    transaction = Transaction.objects.create(
+        date=date,
+        description=description,
+        specify_transaction=specify_transaction,
+        credit=credit,
+        debit=debit,
+        bill_number=bill_number
+    )
+
+    # Perform any additional logic if needed
+
+    # Fetch all transactions to display on the same page
+    transactions = Transaction.objects.all()
+
+    return render(request, 'accounts.html', {'transactions': transactions})

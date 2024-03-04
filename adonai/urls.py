@@ -98,6 +98,7 @@ urlpatterns = [
 
     # Accountant
     path('accounts/', views.accounts, name='accounts'),
+    path('add_transaction/', views.add_transaction, name='add_transaction'),
 
     ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 if settings.DEBUG:
