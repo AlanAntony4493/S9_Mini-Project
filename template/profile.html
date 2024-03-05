@@ -241,6 +241,20 @@
   </div>
 </section>
 
+{% if error_message %}
+  <script>
+    alert("Error: {{ error_message }}");
+  </script>
+{% endif %}
+
+{% if success_message %}
+  <script>
+    alert("Success: {{ success_message }}");
+  </script>
+{% endif %}
+
+<!-- Rest of your HTML content -->
+
 <!-- Include jQuery, Popper.js, and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -294,5 +308,8 @@
   alert('Error: {{ error_message }}');
   {% endif %}
 </script>
+
+
+
 
 {% endblock %}

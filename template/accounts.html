@@ -151,6 +151,21 @@
 #monthFilterForm button:hover {
     background-color: #0056b3;
 }
+.button1 {
+    padding: 10px 20px;
+    margin-left:10%;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50; /* Green background color */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Optional: Rounded corners */
+}
+
+/* Hover effect for the button */
+.button1:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
 
     </style>
     
@@ -226,7 +241,9 @@
     </tfoot>
 </table>
 
-<button onclick="generateBalanceSheet()">Generate Balance Sheet</button>
+
+{% comment %} Button for generating balance sheet {% endcomment %}
+<button class="button1" onclick="generateBalanceSheet()">Generate Balance Sheet of this year</button>
 
 <script>
     function generateBalanceSheet() {
@@ -239,8 +256,7 @@
         {% csrf_token %}
         <h2>ADD TRANSACTIONS</h2>
         <label for="date">Date:</label>
-        <input type="date" id="date"  required placeholder="Select date" name="date">
-    {% comment %} onchange="validateTransactionDate()" {% endcomment %}
+        <input type="date" id="date" onchange="validateTransactionDate()" required placeholder="Select date" name="date">
         <label for="description">Category:</label>
         <select id="description" class="desc" onchange="handleDescriptionChange()" required name="description">
             <option value="" disabled selected>Select Category</option>
