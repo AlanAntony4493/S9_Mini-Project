@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Sheet</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        #balanceSheetTable {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-bottom: 40px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tfoot {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Breadcrumbs section -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Balance Sheet</h2>
+            </div>
+        </div>
+    </section>
+    <!-- End Breadcrumbs -->
+
+    <!-- Balance Sheet Table -->
+    <table id="balanceSheetTable">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Credit Amount</th>
+                <th>Debit Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category, values in categories.items %}
+                <tr>
+                    <td>{{ category }}</td>
+                    <td>{{ values.credit }}</td>
+                    <td>{{ values.debit }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td><strong>Total:</strong></td>
+                <td>{{ total_credit }}</td>
+                <td>{{ total_debit }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Add your additional styling or content as needed -->
+
+</body>
+
+</html>
+{% endblock %}

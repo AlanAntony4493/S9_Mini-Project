@@ -226,8 +226,16 @@
     </tfoot>
 </table>
 
+<button onclick="generateBalanceSheet()">Generate Balance Sheet</button>
+
+<script>
+    function generateBalanceSheet() {
+        window.location.href = "{% url 'balance_sheet' %}";
+    }
+</script>
+
 {% if user.registration.is_accounted_user %}
-<form id="transactionForm" method="post" action="{% url 'add_transaction' %}">
+<form id="transactionForm" method="post" action="{% url 'add_transaction' %}" onsubmit="return checkBillNumber()">
         {% csrf_token %}
         <h2>ADD TRANSACTIONS</h2>
         <label for="date">Date:</label>
@@ -238,17 +246,17 @@
             <option value="" disabled selected>Select Category</option>
             <option value="Food">Food</option>
             <option value="Groceries">Stationaries</option>
-            <option value="perunnal">Perunnal</option>
-            <option value="carol">Carol</option>
-            <option value="christmas_tree">Christmas Tree</option>
-            <option value="bank">Bank</option>
-            <option value="bank">Donation</option>
-            <option value="bank">Church</option>
-            <option value="bank">Pilgrimage</option>
-            <option value="bank">Fuel</option>
+            <option value="Perunnal">Perunnal</option>
+            <option value="Carol">Carol</option>
+            <option value="Christmas_Tree">Christmas Tree</option>
+            <option value="Bank">Bank</option>
+            <option value="Donation">Donation</option>
+            <option value="Church">Church</option>
+            <option value="Pilgrimage">Pilgrimage</option>
+            <option value="Fuel">Fuel</option>
             <option value="Other">Other</option>
         </select>
-
+    
         <div id="specifyTransactionDiv">
             <label for="specifyTransaction">Description:</label>
             <input type="text" id="specifyTransaction" placeholder="Enter the description" name="specifyTransaction" required>
@@ -270,7 +278,10 @@
             placeholder="Enter bill/invoice number" name="billNumber">
 
         <button type="submit">Add Transaction</button>
+        <input type="hidden" id="existingBillNumbers" value="{{ existing_bill_numbers }}">
     </form>
+    
+
  {% endif %}
 
     <script>
@@ -330,6 +341,26 @@
                 dateInput.value = '';
             }
         }
+
+            function checkBillNumber() {
+                var billNumberInput = document.getElementById('billNumber');
+                var billNumber = billNumberInput.value.trim();
+        
+                // Check if the bill number already exists in the hidden input's value
+                var existingBillNumbers = document.getElementById('existingBillNumbers').value;
+                var billNumbersArray = existingBillNumbers.split(',');
+        
+                if (billNumbersArray.includes(billNumber)) {
+                    // Bill number already exists, show an alert
+                    alert('Bill number already exists. Please enter a different one.');
+                    return false;  // Prevent the form submission
+                } else {
+                    // Bill number is unique, allow form submission
+                    return true;
+                }
+            }
+      
+        
     </script>
 </body>
 

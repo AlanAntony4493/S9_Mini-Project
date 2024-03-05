@@ -1454,3 +1454,55 @@ def add_transaction(request):
 
     return render(request, 'accounts.html', {'transactions': transactions, 'total_credit': total_credit, 'total_debit': total_debit, 'months': [(month.strftime('%Y-%m'), month.strftime('%B %Y')) for month in months_with_transactions], 'selected_month': selected_month.strftime('%Y-%m') if selected_month else None})
 
+
+
+from django.shortcuts import render
+from django.db.models import Sum
+from .models import Transaction
+from datetime import datetime, timedelta
+
+def balance_sheet(request):
+    # Get the current year and month
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+    # Calculate the start date as April 1st of the last year
+    start_date = datetime(current_year - 1, 4, 1)
+
+    # Calculate the end date as March 31st of the current year
+    end_date = datetime(current_year, 3, 31)
+
+    # Fetch transactions for the specified date range
+    transactions = Transaction.objects.filter(date__range=(start_date, end_date))
+
+    # Organize transactions by category for the balance sheet
+    categories = {'other': {'credit': 0, 'debit': 0}}
+    for transaction in transactions:
+        category = transaction.description.lower()
+
+        # Exclude the "other" category
+        if category != 'other':
+            if category not in categories:
+                categories[category] = {'credit': 0, 'debit': 0}
+
+            categories[category]['credit'] += transaction.credit or 0
+            categories[category]['debit'] += transaction.debit or 0
+        else:
+            categories['other']['credit'] += transaction.credit or 0
+            categories['other']['debit'] += transaction.debit or 0
+
+    # Calculate total credit and debit for the selected date range excluding the "other" category
+    total_credit = sum(category['credit'] for key, category in categories.items() if key != 'other')
+    total_debit = sum(category['debit'] for key, category in categories.items() if key != 'other')
+
+    # Pass the transactions, total values, categories to the template
+    context = {
+        'categories': categories,
+        'total_credit': total_credit,
+        'total_debit': total_debit,
+    }
+
+    return render(request, 'balance_sheet.html', context)
+
+
+
