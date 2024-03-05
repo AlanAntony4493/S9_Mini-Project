@@ -276,7 +276,6 @@
         <label for="billNumber">Bill/Invoice Number:</label>
         <input type="text" id="billNumber" pattern="[a-zA-Z0-9]+" title="Should contain only letters and numbers" required
             placeholder="Enter bill/invoice number" name="billNumber">
-
         <button type="submit">Add Transaction</button>
         <input type="hidden" id="existingBillNumbers" value="{{ existing_bill_numbers }}">
     </form>
@@ -362,6 +361,13 @@
       
         
     </script>
+    <!-- Add the following script at the end of the accounts.html template -->
+<script>
+    {% if error_message %}
+        alert('{{ error_message }}');
+    {% endif %}
+</script>
+
 </body>
 
 </html>

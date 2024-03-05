@@ -1361,6 +1361,11 @@ def reject_id(request, id):
 
 
 
+
+
+
+# #########-----------------ACCOUNTING PAGE - BALANCE SHEET GENERATION-------------------##############
+
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Transaction
@@ -1409,6 +1414,8 @@ def transaction_list(request):
     transactions = Transaction.objects.all()
     return render(request, 'accounts.html', {'transactions': transactions})
 
+from django.db import IntegrityError
+
 @require_POST
 def add_transaction(request):
     date = request.POST.get('date')
@@ -1418,17 +1425,55 @@ def add_transaction(request):
     debit = request.POST.get('debit')
     bill_number = request.POST.get('billNumber')
 
-    # Perform any additional validation if needed
+    try:
+        # Perform any additional validation if needed
 
-    transaction = Transaction.objects.create(
-        date=date,
-        description=description,
-        specify_transaction=specify_transaction,
-        credit=credit,
-        debit=debit,
-        bill_number=bill_number
-    )
+        transaction = Transaction.objects.create(
+            date=date,
+            description=description,
+            specify_transaction=specify_transaction,
+            credit=credit,
+            debit=debit,
+            bill_number=bill_number
+        )
 
+    except IntegrityError as e:
+        # Handle the IntegrityError (unique key violation)
+        error_message = 'Error: Bill number already exists. Please enter a different one.'
+        
+        # Fetch all transactions for the current month to display on the same page
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
+
+        # Calculate total credit and debit for the current month
+        total_credit = transactions.aggregate(Sum('credit'))['credit__sum'] or 0
+        total_debit = transactions.aggregate(Sum('debit'))['debit__sum'] or 0
+
+        # Fetch distinct months with transactions
+        months_with_transactions = Transaction.objects.dates('date', 'month', order='DESC').distinct()
+
+        # Handle the selected month from the form
+        selected_month = request.GET.get('month', None)
+
+        if selected_month:
+            # Parse the selected month and filter transactions accordingly
+            selected_month = datetime.strptime(selected_month, '%Y-%m')
+            transactions = Transaction.objects.filter(date__year=selected_month.year, date__month=selected_month.month)
+        else:
+            # Fetch transactions for the current year and month by default
+            transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
+
+        return render(request, 'accounts.html', {
+            'transactions': transactions,
+            'total_credit': total_credit,
+            'total_debit': total_debit,
+            'months': [(month.strftime('%Y-%m'), month.strftime('%B %Y')) for month in months_with_transactions],
+            'selected_month': selected_month.strftime('%Y-%m') if selected_month else None,
+            'error_message': error_message,  # Include the error message in the context
+        })
+
+    # If no IntegrityError occurs, continue with the normal flow
     # Fetch all transactions for the current month to display on the same page
     current_year = datetime.now().year
     current_month = datetime.now().month
@@ -1443,7 +1488,7 @@ def add_transaction(request):
 
     # Handle the selected month from the form
     selected_month = request.GET.get('month', None)
-    
+
     if selected_month:
         # Parse the selected month and filter transactions accordingly
         selected_month = datetime.strptime(selected_month, '%Y-%m')
@@ -1452,8 +1497,13 @@ def add_transaction(request):
         # Fetch transactions for the current year and month by default
         transactions = Transaction.objects.filter(date__year=current_year, date__month=current_month)
 
-    return render(request, 'accounts.html', {'transactions': transactions, 'total_credit': total_credit, 'total_debit': total_debit, 'months': [(month.strftime('%Y-%m'), month.strftime('%B %Y')) for month in months_with_transactions], 'selected_month': selected_month.strftime('%Y-%m') if selected_month else None})
-
+    return render(request, 'accounts.html', {
+        'transactions': transactions,
+        'total_credit': total_credit,
+        'total_debit': total_debit,
+        'months': [(month.strftime('%Y-%m'), month.strftime('%B %Y')) for month in months_with_transactions],
+        'selected_month': selected_month.strftime('%Y-%m') if selected_month else None,
+    })
 
 
 from django.shortcuts import render
@@ -1495,14 +1545,24 @@ def balance_sheet(request):
     total_credit = sum(category['credit'] for key, category in categories.items() if key != 'other')
     total_debit = sum(category['debit'] for key, category in categories.items() if key != 'other')
 
+    # Calculate the difference between total credit and total debit for the month of March
+    march_transactions = Transaction.objects.filter(date__year=current_year, date__month=3)
+    march_credit = march_transactions.aggregate(Sum('credit'))['credit__sum'] or 0
+    march_debit = march_transactions.aggregate(Sum('debit'))['debit__sum'] or 0
+    cash_in_hand = march_credit - march_debit
+
+    # Add "Cash in Hand" to the debit section
+    categories['cash_in_hand'] = {'credit': 0, 'debit': cash_in_hand}
+
     # Pass the transactions, total values, categories to the template
     context = {
         'categories': categories,
         'total_credit': total_credit,
-        'total_debit': total_debit,
+        'total_debit': total_debit + cash_in_hand,
     }
 
     return render(request, 'balance_sheet.html', context)
+
 
 
 
