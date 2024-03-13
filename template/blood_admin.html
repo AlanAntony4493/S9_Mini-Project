@@ -489,27 +489,30 @@ function filterDonors() {
   var rows = tbody.getElementsByTagName("tr");
   var noResultsRow = document.getElementById("no-results");
 
+  console.log("Blood Group:", bloodGroup);
+
   // Assume no results initially
   var hasResults = false;
 
   for (var i = 0; i < rows.length; i++) {
-      var row = rows[i];
-      var cells = row.getElementsByTagName("td");
+    var row = rows[i];
+    var cells = row.getElementsByTagName("td");
 
-      if (cells.length >= 4) {  // Ensure there's a cell with blood group data (4th column)
-          var cell = cells[3];  // 4th column (Blood Group)
+    if (cells.length >= 5) {  // Ensure there's a cell with blood group data (5th column)
+        var cell = cells[4];  // 5th column (Blood Group)
 
-          if (bloodGroup === "" || cell.innerHTML === bloodGroup) {
-              row.style.display = "";  // Show the row
-              hasResults = true;      // Mark that results were found
-          } else {
-              row.style.display = "none";  // Hide the row
-          }
-      }
-  }
+        if (bloodGroup === "" || cell.innerHTML.trim() === bloodGroup.trim()) {
+            row.style.display = "";  // Show the row
+            hasResults = true;      // Mark that results were found
+        } else {
+            row.style.display = "none";  // Hide the row
+        }
+    }
+}
 
   // Show or hide the "No results" message based on whether results were found
   noResultsRow.style.display = hasResults ? "none" : "";
+  console.log("Rows:", rows);
 }
 
  // Check if the page was reloaded due to the back button click
