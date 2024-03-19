@@ -132,6 +132,25 @@
     background-color: red;
     color:white;
   }
+
+  .download-button {
+    margin-left:170px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.download-button:hover {
+    background-color: #45a049;
+}
+
 </style>
 
 <section class="inner-page">
@@ -195,9 +214,9 @@
           
           </div>
         </div>
-
+<div id="printable-div">
                 <!-- Virtual ID Card Section -->
-        <div class="card id-card-container" style="display: none; background: url('{% static "img/id_back.jpg" %}') center center/cover no-repeat;">
+        <div class="card id-card-container"  style="display: none; background: url('{% static "img/id_back.jpg" %}') center center/cover no-repeat;">
           {% if user_profile.admin_approval %}
           <!-- Display ID Card details here -->
           <div class="card-header text-white">
@@ -226,6 +245,8 @@
           </table>
           <p class="card-text" style="font-size: smaller" >ID: {{ user_profile.virtual_id }}</p>
           </div>
+
+          
           {% else %}
           <!-- Display message if ID Card is not approved by admin -->
           <div class="alert alert-warning text-center" role="alert">
@@ -236,6 +257,8 @@
           </div>
           {% endif %}
         </div>
+        <button onclick="printDiv()" class="download-button">Download Virtual ID Card</button>
+      </div>
       </div>
     </div>
   </div>
@@ -308,8 +331,48 @@
   alert('Error: {{ error_message }}');
   {% endif %}
 </script>
+<!-- JavaScript function to handle printing -->
+<script>
+  function printDiv() {
+    // Get the content of the printable div
+    var divContents = document.getElementById("printable-div").cloneNode(true); // Cloning the node to avoid manipulating the original DOM
+    
+    // Remove the button element from the cloned content
+    var buttonElement = divContents.querySelector('button');
+    if (buttonElement) {
+      buttonElement.remove();
+    }
+
+    // Open a new window for printing
+    var printWindow = window.open('', '', 'width=400,height=400');
+    
+    // Write the div content to the new window
+    printWindow.document.write('<html><head><title>Print</title>');
+    printWindow.document.write('<style>body { margin: 0; }</style>'); // Reset body margin
+    copyStyles(document, printWindow.document);
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(divContents.innerHTML); // Get the HTML content of the cloned node
+    printWindow.document.write('</body></html>');
+    
+    // Close the document writing
+    printWindow.document.close();
+    
+    // Print the contents of the new window
+    printWindow.print();
+  }
+
+  function copyStyles(sourceDoc, targetDoc) {
+    var styleTags = sourceDoc.querySelectorAll('style');
+    for (var i = 0; i < styleTags.length; i++) {
+      targetDoc.write(styleTags[i].outerHTML);
+    }
+  }
+</script>
 
 
+
+
+  
 
 
 {% endblock %}

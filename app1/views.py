@@ -1545,7 +1545,6 @@ from django.shortcuts import render
 from django.db.models import Sum
 from .models import Transaction
 from datetime import datetime, timedelta
-
 def balance_sheet(request):
     # Get the current year and month
     current_year = datetime.now().year
@@ -1560,25 +1559,22 @@ def balance_sheet(request):
     # Fetch transactions for the specified date range
     transactions = Transaction.objects.filter(date__range=(start_date, end_date))
 
-    # Organize transactions by category for the balance sheet
-    categories = {'other': {'credit': 0, 'debit': 0}}
+    # Initialize dictionary to store categories
+    categories = {}
+
+    # Iterate through transactions and categorize them
     for transaction in transactions:
         category = transaction.description.lower()
 
-        # Exclude the "other" category
-        if category != 'other':
-            if category not in categories:
-                categories[category] = {'credit': 0, 'debit': 0}
+        if category not in categories:
+            categories[category] = {'credit': 0, 'debit': 0}
 
-            categories[category]['credit'] += transaction.credit or 0
-            categories[category]['debit'] += transaction.debit or 0
-        else:
-            categories['other']['credit'] += transaction.credit or 0
-            categories['other']['debit'] += transaction.debit or 0
+        categories[category]['credit'] += transaction.credit or 0
+        categories[category]['debit'] += transaction.debit or 0
 
-    # Calculate total credit and debit for the selected date range excluding the "other" category
-    total_credit = sum(category['credit'] for key, category in categories.items() if key != 'other')
-    total_debit = sum(category['debit'] for key, category in categories.items() if key != 'other')
+    # Calculate total credit and debit for the selected date range
+    total_credit = sum(category['credit'] for category in categories.values())
+    total_debit = sum(category['debit'] for category in categories.values())
 
     # Calculate the difference between total credit and total debit for the month of March
     march_transactions = Transaction.objects.filter(date__year=current_year, date__month=3)
@@ -1597,6 +1593,7 @@ def balance_sheet(request):
     }
 
     return render(request, 'balance_sheet.html', context)
+
 
 
 
