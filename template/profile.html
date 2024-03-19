@@ -257,7 +257,7 @@
           </div>
           {% endif %}
         </div>
-        <button onclick="printDiv()" class="download-button">Download Virtual ID Card</button>
+        <button onclick="printDiv()" class="download-button" style="display:none;">Download Virtual ID Card</button>
       </div>
       </div>
     </div>
@@ -289,7 +289,7 @@
 
     $("#viewIdCardBtn").click(function () {
       // Toggle visibility of the profile and ID card containers
-      $("#profile-container, .id-card-container").toggle();
+      $("#profile-container, .id-card-container, .download-button").toggle();
 
       // Update button text based on the current state
       if (isProfileVisible) {
@@ -302,26 +302,23 @@
       isProfileVisible = !isProfileVisible;
     });
 
-  $("#viewGuidelinesBtn").click(function () {
-    var guidelinesMessage = 'Image Requirements:\n' +
-                            '1. Ensure the photo is clear, well-lit, and in color.\n' +
-                            '2. The image should be in a standard passport-style format.\n' +
-                            '3. Make sure your face is prominently visible without any obstructions (e.g., sunglasses, hats).\n\n' +
-                            'File Format:\n' +
-                            '1. Upload a JPEG or PNG file for the best quality.\n\n' +
-                            'Resolution:\n' +
-                            '1. Use a high-resolution image to ensure clarity and accuracy.\n\n' +
-                            'Background:\n' +
-                            '1. Choose a plain, neutral background for the photo.\n';
+    $("#viewGuidelinesBtn").click(function () {
+      var guidelinesMessage = 'Image Requirements:\n' +
+        '1. Ensure the photo is clear, well-lit, and in color.\n' +
+        '2. The image should be in a standard passport-style format.\n' +
+        '3. Make sure your face is prominently visible without any obstructions (e.g., sunglasses, hats).\n\n' +
+        'File Format:\n' +
+        '1. Upload a JPEG or PNG file for the best quality.\n\n' +
+        'Resolution:\n' +
+        '1. Use a high-resolution image to ensure clarity and accuracy.\n\n' +
+        'Background:\n' +
+        '1. Choose a plain, neutral background for the photo.\n';
 
-    // Display the guidelines in an alert box
-    alert(guidelinesMessage);
+      // Display the guidelines in an alert box
+      alert(guidelinesMessage);
     });
   });
 
-</script>
-
-<script>
   // Show success or error messages in an alert box if they exist
   {% if success_message %}
   alert('Success: {{ success_message }}');
@@ -330,13 +327,12 @@
   {% if error_message %}
   alert('Error: {{ error_message }}');
   {% endif %}
-</script>
-<!-- JavaScript function to handle printing -->
-<script>
+
+  // JavaScript function to handle printing
   function printDiv() {
     // Get the content of the printable div
     var divContents = document.getElementById("printable-div").cloneNode(true); // Cloning the node to avoid manipulating the original DOM
-    
+
     // Remove the button element from the cloned content
     var buttonElement = divContents.querySelector('button');
     if (buttonElement) {
@@ -345,7 +341,7 @@
 
     // Open a new window for printing
     var printWindow = window.open('', '', 'width=400,height=400');
-    
+
     // Write the div content to the new window
     printWindow.document.write('<html><head><title>Print</title>');
     printWindow.document.write('<style>body { margin: 0; }</style>'); // Reset body margin
@@ -353,10 +349,10 @@
     printWindow.document.write('</head><body>');
     printWindow.document.write(divContents.innerHTML); // Get the HTML content of the cloned node
     printWindow.document.write('</body></html>');
-    
+
     // Close the document writing
     printWindow.document.close();
-    
+
     // Print the contents of the new window
     printWindow.print();
   }
@@ -369,10 +365,6 @@
   }
 </script>
 
-
-
-
-  
 
 
 {% endblock %}
