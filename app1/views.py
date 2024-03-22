@@ -1597,4 +1597,7 @@ def balance_sheet(request):
 
 
 
+def help(request):
+    return render(request, "help.html")
+
 
