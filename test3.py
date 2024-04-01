@@ -41,7 +41,7 @@ class Hosttest(TestCase):
         date_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "date")))
 
         # Execute JavaScript to set the date value
-        date = "2024-03-21"  # Make sure to adjust the format if needed
+        date = "2024-04-01"  # Make sure to adjust the format if needed
         driver.execute_script("arguments[0].value = arguments[1]", date_input, date)
 
         # Optionally, trigger any onchange events after setting the date
@@ -65,7 +65,7 @@ class Hosttest(TestCase):
         # time.sleep(2)
 
         bill_number = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "billNumber")))
-        bill_number.send_keys("1799")
+        bill_number.send_keys("184")
         time.sleep(2)
 
         # Instead of clicking on a button with text, find the submit button by ID
@@ -73,14 +73,14 @@ class Hosttest(TestCase):
         submit_button.submit()
         time.sleep(2)
 
-        # # Wait for the success message or page reload
-        # WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "successMessage")))
+        # # # Wait for the success message or page reload
+        # # WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, "successMessage")))
 
-        # Wait for the button to be clickable
-        button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "b1")))
-        # Click the button
-        button.click()
-        time.sleep(5)
+        # # Wait for the button to be clickable
+        # submit_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "button1")))
+
+        # # Click the button
+        # submit_button.click()
 
         print("Testing Success")
 
