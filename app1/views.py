@@ -1600,4 +1600,30 @@ def balance_sheet(request):
 def help(request):
     return render(request, "help.html")
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.mail import send_mail
+
+def send_message(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        recipient_email = 'alanantony96696@gmail.com'  # Specify the recipient's email address
+        
+        try:
+            send_mail(
+                subject,
+                f'From: {name}\nEmail: {email}\n\n{message}',
+                email,  # Sender's email address
+                [recipient_email],  # Recipient's email address
+            )
+            messages.success(request, 'Your message has been sent successfully!')
+        except Exception as e:
+            messages.error(request, f'Error sending message: {str(e)}')
+
+        return redirect('help')  # Redirect to a thank you page or any desired page
+
+    return render(request, 'help.html')  # Render the template containing the contact form
 

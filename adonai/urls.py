@@ -30,6 +30,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
 
      path('help', views.help, name='help'),
+     path('send-message/', views.send_message, name='send_message'),
 
     path('report_admin/', views.report_admin, name='report_admin'),
     path('generate-pdf/<str:year>/', views.generate_pdf, name='generate_pdf'),

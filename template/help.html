@@ -80,6 +80,44 @@
     .support-team-list li strong {
       font-weight: bold;
     }
+
+    /* Style for the support team contacts */
+.support-heading {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.support-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.support-card h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.support-card p {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.support-card p strong {
+    font-weight: bold;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .col-lg-6 {
+        width: 100%;
+    }
+}
+
   </style>
 </head>
 
@@ -87,7 +125,8 @@
   <div class="support-container">
     <div class="row">
       <div class="col-lg-6">
-        <form action="forms/contact.php" method="post" role="form" class="support-form">
+        <form action="{% url 'send_message' %}" method="post" role="form" class="support-form">
+          {% csrf_token %}
           <div class="form-group">
             <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
           </div>
@@ -106,19 +145,19 @@
       <div class="col-lg-6">
         <h2 class="support-heading">Support Team Contacts</h2>
         <div class="support-card">
-          <h3>John Doe</h3>
-          <p><strong>Email:</strong> john.doe@example.com</p>
-          <p><strong>Phone:</strong> +1234567890</p>
+          <h3>Alan Antony</h3>
+          <p><strong>Email:</strong> alanantony96696@gmail.com</p>
+          <p><strong>Phone:</strong> +91 8078529691</p>
         </div>
         <div class="support-card">
-          <h3>Jane Smith</h3>
-          <p><strong>Email:</strong> jane.smith@example.com</p>
-          <p><strong>Phone:</strong> +1987654321</p>
+          <h3>Minto Kuruvila</h3>
+          <p><strong>Email:</strong> mintokuruvila@gmail.com</p>
+          <p><strong>Phone:</strong> +91 8094920138</p>
         </div>
         <div class="support-card">
-          <h3>David Johnson</h3>
-          <p><strong>Email:</strong> david.johnson@example.com</p>
-          <p><strong>Phone:</strong> +1122334455</p>
+          <h3>Anite Maria</h3>
+          <p><strong>Email:</strong> anitemariaa@gmail.com</p>
+          <p><strong>Phone:</strong> +01 7306593124</p>
         </div>
       </div>
     </div>
