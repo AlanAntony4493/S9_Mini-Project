@@ -70,7 +70,7 @@
     <section class="breadcrumbs">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>Balance Sheet</h2>
+                {% comment %} <h2>Balance Sheet</h2> {% endcomment %}
             </div>
         </div>
     </section>
@@ -80,29 +80,45 @@
     <table id="balanceSheetTable">
         <thead>
             <tr>
-                <th>Category</th>
+                <th>Credit Category</th>
                 <th>Credit Amount</th>
+                <th>Debit Category</th>
                 <th>Debit Amount</th>
             </tr>
         </thead>
         <tbody>
             {% for category, values in categories.items %}
                 <tr>
-                    <td>{{ category }}</td>
-                    <td>{{ values.credit }}</td>
-                    <td>{{ values.debit }}</td>
+                    <!-- Check if there is any credit in the category -->
+                    {% if values.credit %}
+                        <td>{{ category }}</td>
+                        <td>{{ values.credit }}</td>
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+                    <!-- Check if there is any debit in the category -->
+                    {% if values.debit %}
+                        <td>{{ category }}</td>
+                        <td>{{ values.debit }}</td>
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
-
+    
         <tfoot>
             <tr>
                 <td><strong>Total:</strong></td>
                 <td>{{ total_credit }}</td>
+                <td><strong>Total:</strong></td>
                 <td>{{ total_debit }}</td>
             </tr>
         </tfoot>
     </table>
+    
 
     <!-- Add your additional styling or content as needed -->
 
