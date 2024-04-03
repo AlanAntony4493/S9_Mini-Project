@@ -117,7 +117,10 @@
         width: 100%;
     }
 }
-
+  .error-message {
+    font-size: smaller;
+    color: red;
+  }
   </style>
 </head>
 
@@ -125,22 +128,100 @@
   <div class="support-container">
     <div class="row">
       <div class="col-lg-6">
-        <form action="{% url 'send_message' %}" method="post" role="form" class="support-form">
+        <form action="{% url 'send_message' %}" method="post" role="form" class="support-form" onsubmit="return validateForm()">
           {% csrf_token %}
           <div class="form-group">
             <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+            <span class="error-message" id="name-error"></span>
           </div>
           <div class="form-group">
             <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+            <span class="error-message" id="email-error"></span>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            <span class="error-message" id="subject-error"></span>
           </div>
           <div class="form-group">
             <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+            <span class="error-message" id="message-error"></span>
           </div>
           <div class="text-center"><button type="submit">Send Message</button></div>
         </form>
+        
+        <script>
+          // Function to validate the name field
+          function validateName() {
+            var nameInput = document.getElementById("name");
+            var name = nameInput.value.trim();
+            var nameError = document.getElementById("name-error");
+        
+            if (!/^[A-Za-z][A-Za-z\s]*[A-Za-z]$/.test(name)) {
+              nameError.textContent = "Name should start and end with letters and should not contain numbers.";
+              return false;
+            } else {
+              nameError.textContent = "";
+              return true;
+            }
+          }
+        
+          // Function to validate the email field
+          function validateEmail() {
+            var emailInput = document.getElementById("email");
+            var email = emailInput.value.trim();
+            var emailError = document.getElementById("email-error");
+        
+            if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+              emailError.textContent = "Invalid email address";
+              return false;
+            } else {
+              emailError.textContent = "";
+              return true;
+            }
+          }
+        
+          // Function to validate the subject field
+          function validateSubject() {
+            var subjectInput = document.getElementById("subject");
+            var subject = subjectInput.value.trim();
+            var subjectError = document.getElementById("subject-error");
+        
+            if (subject.length === 0) {
+              subjectError.textContent = "Subject cannot be empty.";
+              return false;
+            } else {
+              subjectError.textContent = "";
+              return true;
+            }
+          }
+        
+          // Function to validate the message field
+          function validateMessage() {
+            var messageInput = document.getElementsByName("message")[0];
+            var message = messageInput.value.trim();
+            var messageError = document.getElementById("message-error");
+        
+            if (message.length === 0) {
+              messageError.textContent = "Message cannot be empty.";
+              return false;
+            } else {
+              messageError.textContent = "";
+              return true;
+            }
+          }
+        
+          // Function to validate the entire form
+          function validateForm() {
+            return validateName() && validateEmail() && validateSubject() && validateMessage();
+          }
+        
+          // Add event listeners for live validation
+          document.getElementById("name").addEventListener("input", validateName);
+          document.getElementById("email").addEventListener("input", validateEmail);
+          document.getElementById("subject").addEventListener("input", validateSubject);
+          document.getElementsByName("message")[0].addEventListener("input", validateMessage);
+        </script>
+            
       </div>
       <div class="col-lg-6">
         <h2 class="support-heading">Support Team Contacts</h2>

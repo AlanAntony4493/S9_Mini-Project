@@ -1541,20 +1541,76 @@ def add_transaction(request):
     })
 
 
+# from django.shortcuts import render
+# from django.db.models import Sum
+# from .models import Transaction
+# from datetime import datetime, timedelta
+# def balance_sheet(request):
+#     # Get the current year and month
+#     current_year = datetime.now().year
+#     current_month = datetime.now().month
+
+#     # Calculate the start date as April 1st of the last year
+#     start_date = datetime(current_year - 1, 4, 1)
+
+#     # Calculate the end date as March 31st of the current year
+#     end_date = datetime(current_year, 3, 31)
+
+#     # Fetch transactions for the specified date range
+#     transactions = Transaction.objects.filter(date__range=(start_date, end_date))
+
+#     # Initialize dictionary to store categories
+#     categories = {}
+
+#     # Iterate through transactions and categorize them
+#     for transaction in transactions:
+#         category = transaction.description.lower()
+
+#         if category not in categories:
+#             categories[category] = {'credit': 0, 'debit': 0}
+
+#         categories[category]['credit'] += transaction.credit or 0
+#         categories[category]['debit'] += transaction.debit or 0
+
+#     # Calculate total credit and debit for the selected date range
+#     total_credit = sum(category['credit'] for category in categories.values())
+#     total_debit = sum(category['debit'] for category in categories.values())
+
+#     # Calculate the difference between total credit and total debit for the month of March
+#     march_transactions = Transaction.objects.filter(date__year=current_year, date__month=3)
+#     march_credit = march_transactions.aggregate(Sum('credit'))['credit__sum'] or 0
+#     march_debit = march_transactions.aggregate(Sum('debit'))['debit__sum'] or 0
+#     cash_in_hand = march_credit - march_debit
+
+#     # Add "Cash in Hand" to the debit section
+#     categories['cash_in_hand'] = {'credit': 0, 'debit': cash_in_hand}
+
+#     # Pass the transactions, total values, categories to the template
+#     context = {
+#         'categories': categories,
+#         'total_credit': total_credit,
+#         'total_debit': total_debit + cash_in_hand,
+#     }
+
+#     return render(request, 'balance_sheet.html', context)
+
+
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Transaction
 from datetime import datetime, timedelta
+
 def balance_sheet(request):
-    # Get the current year and month
-    current_year = datetime.now().year
-    current_month = datetime.now().month
+    # Get today's date
+    today = datetime.now()
 
-    # Calculate the start date as April 1st of the last year
-    start_date = datetime(current_year - 1, 4, 1)
-
-    # Calculate the end date as March 31st of the current year
-    end_date = datetime(current_year, 3, 31)
+    # Determine the start date and end date for the fiscal year
+    if today.month >= 4:  # If the current month is April or later
+        start_date = datetime(today.year, 4, 1)  # April 1st of the current year
+        end_date = datetime(today.year + 1, 3, 31)  # March 31st of the next year
+    else:
+        start_date = datetime(today.year - 1, 4, 1)  # April 1st of the last year
+        end_date = datetime(today.year, 3, 31)  # March 31st of the current year
 
     # Fetch transactions for the specified date range
     transactions = Transaction.objects.filter(date__range=(start_date, end_date))
@@ -1577,7 +1633,7 @@ def balance_sheet(request):
     total_debit = sum(category['debit'] for category in categories.values())
 
     # Calculate the difference between total credit and total debit for the month of March
-    march_transactions = Transaction.objects.filter(date__year=current_year, date__month=3)
+    march_transactions = Transaction.objects.filter(date__year=end_date.year - 1, date__month=3)
     march_credit = march_transactions.aggregate(Sum('credit'))['credit__sum'] or 0
     march_debit = march_transactions.aggregate(Sum('debit'))['debit__sum'] or 0
     cash_in_hand = march_credit - march_debit
@@ -1593,7 +1649,6 @@ def balance_sheet(request):
     }
 
     return render(request, 'balance_sheet.html', context)
-
 
 
 
