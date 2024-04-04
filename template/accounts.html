@@ -265,8 +265,7 @@
         {% csrf_token %}
         <h2>ADD TRANSACTIONS</h2>
         <label for="date">Date:</label>
-        <input type="date" id="date"  required placeholder="Select date" name="date">
-        {% comment %} onchange="validateTransactionDate()" {% endcomment %}
+        <input type="date" id="date" onchange="validateTransactionDate()" required placeholder="Select date" name="date">
         <label for="description">Category:</label>
         <select id="description" class="desc" onchange="handleDescriptionChange()" required name="description">
             <option value="" disabled selected>Select Category</option>

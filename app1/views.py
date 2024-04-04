@@ -1556,8 +1556,8 @@ def add_transaction(request):
 
 
 from django.shortcuts import render
-from django.db.models import Sum
-from .models import Transaction
+from django.db.models import F
+from .models import Transaction, MonthlySummary
 from datetime import datetime, timedelta
 
 def balance_sheet(request):
@@ -1592,20 +1592,19 @@ def balance_sheet(request):
     total_credit = sum(category['credit'] for category in categories.values())
     total_debit = sum(category['debit'] for category in categories.values())
 
-    # Calculate the difference between total credit and total debit for the month of March
-    march_transactions = Transaction.objects.filter(date__year=end_date.year - 1, date__month=3)
-    march_credit = march_transactions.aggregate(Sum('credit'))['credit__sum'] or 0
-    march_debit = march_transactions.aggregate(Sum('debit'))['debit__sum'] or 0
-    cash_in_hand = march_credit - march_debit
+    # Fetch the latest MonthlySummary object
+    latest_summary = MonthlySummary.objects.latest('month')
 
-    # Add "Cash in Hand" to the debit section
-    categories['cash_in_hand'] = {'credit': 0, 'debit': cash_in_hand}
+    # Calculate Cash in Hand
+    cash_in_hand = latest_summary.total_credit - latest_summary.total_debit
 
+    total_credit += cash_in_hand
     # Pass the transactions, total values, categories to the template
     context = {
         'categories': categories,
         'total_credit': total_credit,
         'total_debit': total_debit + cash_in_hand,
+        'cash_in_hand': cash_in_hand,  # Adding cash in hand to the context
     }
 
     return render(request, 'balance_sheet.html', context)
