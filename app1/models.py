@@ -277,6 +277,7 @@ class Transaction(models.Model):
     credit = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     debit = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     bill_number = models.CharField(max_length=255, unique=True)  # Add unique constraint
+    cash_in_hand = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return f"{self.date} - {self.description}"

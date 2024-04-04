@@ -217,6 +217,13 @@
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan=""><strong>Cash in Hand:</strong></td>
+            <td colspan="">{{ cash_in_hand }}</td>
+            <td></td>
+        </tr>
         {% for transaction in transactions|dictsort:"date" %}
             <tr>
                 <td>{{ forloop.counter }}</td>
@@ -238,6 +245,7 @@
             <td id="totalDebit">{{ total_debit }}</td>
             <td></td>
         </tr>
+
     </tfoot>
 </table>
 
