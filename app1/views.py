@@ -1564,11 +1564,15 @@ def balance_sheet(request):
     # Get today's date
     today = datetime.now()
 
-    # Determine the start date and end date for the current month
-    start_date = datetime(today.year, today.month, 1)  # Start of the current month
-    end_date = start_date + timedelta(days=30)  # Assuming a month has 30 days for simplicity
+    # Determine the start date and end date for the fiscal year
+    if today.month >= 4:  # If the current month is April or later
+        start_date = datetime(today.year, 4, 1)  # April 1st of the current year
+        end_date = datetime(today.year + 1, 3, 31)  # March 31st of the next year
+    else:
+        start_date = datetime(today.year - 1, 4, 1)  # April 1st of the last year
+        end_date = datetime(today.year, 3, 31)  # March 31st of the current year
 
-    # Fetch transactions for the current month
+    # Fetch transactions for the specified date range
     transactions = Transaction.objects.filter(date__range=(start_date, end_date))
 
     # Initialize dictionary to store categories
@@ -1584,21 +1588,24 @@ def balance_sheet(request):
         categories[category]['credit'] += transaction.credit or 0
         categories[category]['debit'] += transaction.debit or 0
 
-    # Calculate total credit and debit for the current month
+    # Calculate total credit and debit for the selected date range
     total_credit = sum(category['credit'] for category in categories.values())
     total_debit = sum(category['debit'] for category in categories.values())
 
-    # Calculate Cash in Hand as the difference between total credit and total debit
-    cash_in_hand = total_credit - total_debit
+    # Calculate the difference between total credit and total debit for the month of March
+    march_transactions = Transaction.objects.filter(date__year=end_date.year - 1, date__month=3)
+    march_credit = march_transactions.aggregate(Sum('credit'))['credit__sum'] or 0
+    march_debit = march_transactions.aggregate(Sum('debit'))['debit__sum'] or 0
+    cash_in_hand = march_credit - march_debit
 
-    # Add "Cash in Hand" to the categories dictionary
-    categories['cash_in_hand'] = {'credit': cash_in_hand, 'debit': 0}
+    # Add "Cash in Hand" to the debit section
+    categories['cash_in_hand'] = {'credit': 0, 'debit': cash_in_hand}
 
     # Pass the transactions, total values, categories to the template
     context = {
         'categories': categories,
         'total_credit': total_credit,
-        'total_debit': total_debit,
+        'total_debit': total_debit + cash_in_hand,
     }
 
     return render(request, 'balance_sheet.html', context)

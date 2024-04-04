@@ -283,3 +283,12 @@ class Transaction(models.Model):
         return f"{self.date} - {self.description}"
 
 
+from django.db import models
+
+class MonthlySummary(models.Model):
+    month = models.DateField(unique=True)
+    total_credit = models.DecimalField(max_digits=10, decimal_places=2)
+    total_debit = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.month.strftime('%B %Y')
